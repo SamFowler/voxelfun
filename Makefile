@@ -1,5 +1,5 @@
 CXX       := g++
-CXX_FLAGS := -std=c++17 -ggdb -Wall -g -Wno-unused-function
+CXX_FLAGS := -std=c++17 -ggdb -Wall -g -Wno-unused
 C_FLAGS   := `sdl2-config --cflags --libs`
 LINKER_FLAGS := -lSDL2 -lSDL2main -lGL -lGLEW
 
