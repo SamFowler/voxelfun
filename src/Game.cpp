@@ -10,16 +10,18 @@ bool Game::Init() {
 bool Game::Update(Input& input) {
     //std::cout << "Updating game" << std::endl;
 
-
-    if (input.wasKeyPressed(SDLK_ESCAPE) || input.isQuit()) {
+    if (input.WasKeyPressed(SDLK_ESCAPE) || input.IsQuit()) {
         m_isRunning = false;
     }
 
-    if (input.isKeyHeld(SDLK_SPACE)) {
-        std::cout << "Space bar held" << std::endl;
+    if (input.IsKeyHeld(SDLK_SPACE)) {
+        std::cout << "Space bar helds" << std::endl;
     }
 
-
+    if (input.WasButtonPressed(SDL_BUTTON_LEFT)) {
+        pos2d mouse_pos = input.GetMousePos();
+        std::cout << "Left mouse button pressed at position: " << mouse_pos.x << "," << mouse_pos.y << std::endl;
+    }
 
     return m_isRunning;
 }
