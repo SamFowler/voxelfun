@@ -3,9 +3,10 @@ int main(int argc, char* argv[]) {
     
     Engine engine;
 
-    if (engine.init(640, 480)) {
-        
-        engine.run();
+
+
+    if (engine.Init()) {
+        engine.Run();
     }
 
     return 0;
