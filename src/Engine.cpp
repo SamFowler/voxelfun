@@ -33,4 +33,6 @@ void Engine::Run() {
     }
 
     //engine clear up here
+    
+    m_renderer.Destroy();
 }

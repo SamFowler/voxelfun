@@ -6,17 +6,18 @@
 #include <GL/glu.h>
 #include <memory>
 #include "sdl2_shared.cpp"
-
+#include "Shader.hpp"
 
 class Renderer {
 
 public:
     bool Init(int win_width, int win_height);
     void Draw();
+    void Destroy();
 
 private:
     std::shared_ptr<SDL_Window> m_window;
-    //SDL_GLContext m_context;
+    SDL_GLContext m_context;
 
     //temp variables for first shader draw
     float m_positions[6] = {
@@ -25,5 +26,9 @@ private:
          0.5f, -0.5f,
     };
     unsigned int m_buffer;
+
+    Shader m_shader; //TODO: will probably be a map of shaders eventually
+
+
 
 };
