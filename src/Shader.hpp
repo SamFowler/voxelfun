@@ -12,6 +12,9 @@ public:
     void Destroy();
     void Use();
 
+    GLint GetAttributeLocation(const char* name);
+    GLint GetUniformLocation(const char* name);
+
 private:
     GLuint m_programId;
 

@@ -75,6 +75,27 @@ void Shader::Use()
     glUseProgram(m_programId);
 }
 
+GLint Shader::GetAttributeLocation(const char* name)
+{
+    GLint attributeLocation = glGetAttribLocation(m_programId, name);
+    if (attributeLocation == -1) 
+    {
+        std::cout << "Could not bind attribute: " << name << std::endl;
+    }
+    return attributeLocation;
+}
+
+GLint Shader::GetUniformLocation(const char* name) 
+{
+    GLint uniformLocation = glGetUniformLocation(m_programId, name);
+    if (uniformLocation == -1) 
+    {
+        std::cout << "Could not bind uniform: " << name << std::endl;
+    }
+    return uniformLocation;
+}
+
+
 GLuint Shader::CompileShader(GLuint shaderType, const std::string& shaderSourcePath) 
 {
     unsigned int id = glCreateShader(shaderType);

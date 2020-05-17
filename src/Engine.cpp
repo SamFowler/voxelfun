@@ -27,7 +27,7 @@ void Engine::Run() {
         if (!m_game.Update(m_input)) {
             m_isRunning = false;
         }
-
+        m_renderer.TempUpdate();
         m_renderer.Draw();
 
     }

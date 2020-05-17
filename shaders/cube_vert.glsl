@@ -1,8 +1,12 @@
 #version 330 core
-     
-in vec2 position;
 
-void main()
+attribute vec3 coord3d;
+attribute vec3 v_colour;
+uniform mat4 mvp;
+varying vec3 f_colour;
+
+void main(void)
 {
-    gl_Position = vec4(position, 0.0, 1.0);
+    gl_Position = mvp * vec4(coord3d, 1.0);
+    f_colour = v_colour;
 }
