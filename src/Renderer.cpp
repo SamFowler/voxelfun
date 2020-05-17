@@ -1,11 +1,43 @@
 #include "Renderer.hpp"
 #include <iostream>
 
-static unsigned int CompileShader(unsigned int type, const std::string& source) 
+#include <fstream>
+#include <iostream>
+
+struct ShaderReader
+{
+    ShaderReader(std::string path);
+    std::string source;
+};
+
+ShaderReader::ShaderReader(std::string path) 
+{   
+    std::ifstream inFile(path);
+    std::string line;
+    std::cout << "reading file: " << path << std::endl;
+    if (inFile.is_open())
+    {
+        while (std::getline(inFile, line))
+        {   
+            source = source + line + "\n";
+        }
+        inFile.close();
+    }
+    else
+    {
+        std::cout << "Could not open file " << path << std::endl;
+    }
+}
+
+static unsigned int CompileShader(unsigned int type, const std::string& sourcePath) 
 {
     unsigned int id = glCreateShader(type);
-    const char* src = source.c_str();
-    glShaderSource(id, 1, &src, nullptr);
+
+    ShaderReader reader = ShaderReader(sourcePath);
+    const GLchar* const shaderSourcePtr = reader.source.c_str();
+    //const GLint shaderSourceLength = source.length();
+
+    glShaderSource(id, 1, &shaderSourcePtr, nullptr);
     glCompileShader(id);
 
     int result;
@@ -19,16 +51,19 @@ static unsigned int CompileShader(unsigned int type, const std::string& source)
         std::cout << "Failed to compile" << (type == GL_VERTEX_SHADER ? "vertex" : "fragment") << " shader: " << std::endl << message << std::endl;
         glDeleteShader(id);
         return 0;
+    } else {
+        std::cout << (type == GL_VERTEX_SHADER ? "vertex" : "fragment") << " shader compiled successfully" << std::endl;
     }
 
     return id;
 }
 
-static unsigned int CreateShader(const std::string& vertexShader, const std::string& fragmentShader)
+static unsigned int CreateShader(std::string vertexShaderPath, std::string fragmentShaderPath)
 {
     unsigned int program = glCreateProgram();
-    unsigned int vs = CompileShader(GL_VERTEX_SHADER, vertexShader);
-    unsigned int fs = CompileShader(GL_FRAGMENT_SHADER, fragmentShader);
+
+    unsigned int vs = CompileShader(GL_VERTEX_SHADER, vertexShaderPath);
+    unsigned int fs = CompileShader(GL_FRAGMENT_SHADER, fragmentShaderPath);
 
     glAttachShader(program, vs);
     glAttachShader(program, fs);
@@ -82,14 +117,16 @@ bool Renderer::Init(int win_width = 640, int win_height = 480) {
     }
 
     //Set vsync
-    //if (SDL_GL_SetSwapInterval(1) < 0) {
-     //   std::cout << "Unable to set VSync. SDL error: " << SDL_GetError() << std::endl;
-    //}
+    if (SDL_GL_SetSwapInterval(1) < 0) {
+       std::cout << "Unable to set VSync. SDL error: " << SDL_GetError() << std::endl;
+    }
 
+    //Vertex Array Object to store links between attributes and VBOs
     GLuint vao;
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
 
+    //Vertex Buffer Object to send vertex data to GPU
     glGenBuffers(1, &m_buffer);
     glBindBuffer(GL_ARRAY_BUFFER, m_buffer);
     glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(float), m_positions, GL_STATIC_DRAW); //6 because positions is triangle at the moment
@@ -114,38 +151,13 @@ bool Renderer::Init(int win_width = 640, int win_height = 480) {
             outColour = vec4(1.0, 1.0, 1.0, 1.0);
         }
         )glsl";
-   
-    GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertexShader, 1, &vertexSrc, NULL);
-    glCompileShader(vertexShader);
-    GLint status;
-    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &status);
 
-    if (status) {
-        std::cout << "vertex compiled successfully" << std::endl;
-    }
-
-    GLuint fragShader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragShader, 1, &fragSrc, NULL);
-    glCompileShader(fragShader);
-    GLint fstatus;
-    glGetShaderiv(fragShader, GL_COMPILE_STATUS, &fstatus);
-    if (fstatus) {
-        std::cout << "frag compiled successfully" << std::endl;
-    }
-
-    GLuint shaderProgram = glCreateProgram();
-    glAttachShader(shaderProgram, vertexShader);
-    glAttachShader(shaderProgram, fragShader);
-
-    glLinkProgram(shaderProgram);
+    //unsigned int shaderProgram = CreateShader(vertexSrc, fragSrc);
+    unsigned int shaderProgram = CreateShader("shaders/cube_vert.glsl", "shaders/cube_frag.glsl");
     glUseProgram(shaderProgram);
-
-    //TEMP: initial attempt to draw, sending vertex positions to opengl
     
-    
-    glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0);
+    glEnableVertexAttribArray(0);
 
 
     //glBindBuffer(GL_ARRAY_BUFFER, 0);
