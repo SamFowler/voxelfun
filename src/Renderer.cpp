@@ -6,6 +6,68 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+
+VertexArrayObject makeIt()
+{
+
+    std::vector<GLfloat> verts = {
+        //front
+        -0.5f, -0.5f, 0.5f,
+         0.5f, -0.5f, 0.5f,
+         0.5f,  0.5f, 0.5f,
+        -0.5f,  0.5f, 0.5f,
+
+        //back
+        -0.5f, -0.5f, -0.5f,
+         0.5f, -0.5f, -0.5f,
+         0.5f,  0.5f, -0.5f,
+        -0.5f,  0.5f, -0.5f,
+    };
+
+     std::vector<GLfloat> colours = {
+        //front colours
+        1.0f, 0.0f, 0.0f,
+        0.0f, 1.0f, 0.0f,
+        0.0f, 0.0f, 1.0f,
+        1.0f, 1.0f, 1.0f,
+        //back colours
+        1.0f, 0.0f, 0.0f,
+        0.0f, 1.0f, 0.0f,
+        0.0f, 0.0f, 1.0f,
+        1.0f, 1.0f, 1.0f,
+    };
+
+    std::vector<GLuint> elements = {
+        //front
+        0, 1, 2,
+        2, 3, 0,
+        //right
+        1, 5, 6,
+        6, 2, 1,
+        //back 
+        7, 6, 5,
+        5, 4, 7,
+        // left
+        4, 0, 3,
+        3, 7, 4,
+        //bottom
+        4, 5, 1,
+        1, 0, 4,
+        //top
+        3, 2, 6,
+        6, 7, 3,
+    };
+
+    VertexArrayObject vao;
+    vao.Create();
+    vao.Bind();
+    vao.AddVertexBuffer(3, verts);
+    vao.AddVertexBuffer(3, colours);
+    vao.AddElementBuffer(elements);
+    return vao;
+}
+
+
 bool Renderer::Init(int win_width = 640, int win_height = 480) {
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
         std::cout << "SDL could not initialise. SDL_Error: " << SDL_GetError() << std::endl;
@@ -54,63 +116,22 @@ bool Renderer::Init(int win_width = 640, int win_height = 480) {
     glEnable(GL_MULTISAMPLE);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    std::cout << "Renderer successfully initialised with window width " << win_width << " and height " << win_height << std::endl;
-
-
     //Set vsync
     if (SDL_GL_SetSwapInterval(1) < 0) {
        std::cout << "Unable to set VSync. SDL error: " << SDL_GetError() << std::endl;
     }
 
-    
-    
-    
-    //Vertex Array Object to store links between attributes and VBOs
-    GLuint vao;
-    glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao);
-
-    //Vertex Buffer Object to send vertex data to GPU
-    //glGenBuffers(1, &m_buffer);
-    //glBindBuffer(GL_ARRAY_BUFFER, m_buffer);
-    //glBufferData(GL_ARRAY_BUFFER, 8 * sizeof(float), m_positions, GL_STATIC_DRAW); //6 because positions is triangle at the moment
-
-    //Send cube model data to GPU
-    //send vertices
-    glGenBuffers(1, &m_vbo_cube_vertices);
-    glBindBuffer(GL_ARRAY_BUFFER, m_vbo_cube_vertices);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(m_cube_vertices), m_cube_vertices, GL_STATIC_DRAW);
-    //send colours
-    glGenBuffers(1, &m_vbo_cube_colours);
-    glBindBuffer(GL_ARRAY_BUFFER, m_vbo_cube_colours);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(m_cube_colours), m_cube_colours, GL_STATIC_DRAW);
-    //send vertices element information
-    glGenBuffers(1, &m_ibo_cube_elements);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ibo_cube_elements);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(m_cube_elements), m_cube_elements, GL_STATIC_DRAW);
-
+    std::cout << "Renderer successfully initialised with window width " << win_width << " and height " << win_height << std::endl;
     
 
-
-
-    //unsigned int shaderProgram = CreateShader("shaders/cube_vert.glsl", "shaders/cube_frag.glsl");
     m_shader.Create("cube", "cube");
     m_shader.Use();
-    
-    attribute_coord3d = m_shader.GetAttributeLocation("coord3d");
-    attribute_v_colour = m_shader.GetAttributeLocation("v_colour");
+
+  
+    mycube = makeIt();
+ 
+
     uniform_mvp = m_shader.GetUniformLocation("mvp");
-
-    //glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0);
-    //glEnableVertexAttribArray(0);
-
-    //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_buffer);
-    //int size;
-    //glGetBufferParameteriv(GL_ELEMENT_ARRAY_BUFFER, GL_BUFFER_SIZE, &size);
-    //glDrawElements(GL_TRIANGLES, size/sizeof(GLushort), GL_UNSIGNED_SHORT, 0);
-
-
-    //glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     return true;
 
@@ -118,7 +139,7 @@ bool Renderer::Init(int win_width = 640, int win_height = 480) {
 
 void Renderer::TempUpdate()
 {
-    float angle = SDL_GetTicks() / 1000.0 * 45; //45deg per second
+    float angle = SDL_GetTicks() / 1000.0 * 90; //45deg per second
     glm::vec3 axis_y(0,1,0);
     glm::mat4 anim = glm::rotate(glm::mat4(1.0f), glm::radians(angle), axis_y);
     
@@ -139,40 +160,7 @@ void Renderer::Draw()
 
     m_shader.Use();
 
-    glEnableVertexAttribArray(attribute_coord3d);
-    glBindBuffer(GL_ARRAY_BUFFER, m_vbo_cube_vertices);
-    glVertexAttribPointer(
-        attribute_coord3d,
-        3,
-        GL_FLOAT,
-        GL_FALSE,
-        0,
-        0
-    );
-
-    glEnableVertexAttribArray(attribute_v_colour);
-    glBindBuffer(GL_ARRAY_BUFFER, m_vbo_cube_colours);
-    glVertexAttribPointer(
-        attribute_v_colour,
-        3,
-        GL_FLOAT,
-        GL_FALSE,
-        0,
-        0
-    );
-
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ibo_cube_elements);
-    int size;
-    glGetBufferParameteriv(GL_ELEMENT_ARRAY_BUFFER, GL_BUFFER_SIZE, &size);
-    glDrawElements(GL_TRIANGLES, size/sizeof(GLushort), GL_UNSIGNED_SHORT, 0);
-
-    glDisableVertexAttribArray(attribute_coord3d);
-    glDisableVertexAttribArray(attribute_v_colour);
-    //int size;
-    //glGetBufferParameteriv(GL_ELEMENT_ARRAY_BUFFER, GL_BUFFER_SIZE, &size);
-    //glDrawElements(GL_TRIANGLES, size/sizeof(GLushort), GL_UNSIGNED_SHORT, 0);
-    //glDrawArrays(GL_TRIANGLES, 0, 4);
-    
+    mycube.GetDrawable().BindAndDraw();
 
     SDL_GL_SwapWindow(m_window.get());
 }

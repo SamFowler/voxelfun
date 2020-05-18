@@ -43,25 +43,6 @@ void Shader::Create(const std::string vertexShaderFile, const std::string fragme
     GLuint fs = CompileShader(GL_FRAGMENT_SHADER, fragmentShaderPath);
 
     m_programId = LinkProgram(vs, fs);
-
-    /*
-    unsigned int programId = glCreateProgram();
-    glAttachShader(programId, vs);
-    glAttachShader(programId, fs);
-    glLinkProgram(programId);
-    glValidateProgram(programId);
-
-    glDeleteShader(vs);
-    glDeleteShader(fs);
-    */
-
-    //return programId;
-
-    //compile vertex shader
-    //compile fragment shader
-    // link shaders to program (getting m_programId)
-        //m_programId = LinkProgram(vertexShaderId, fragmentShaderId);
-    //check for compile / link errors
 }
 
 void Shader::Destroy() 
