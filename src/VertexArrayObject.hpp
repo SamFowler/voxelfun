@@ -6,17 +6,18 @@
 #include <vector>
 
 
-class DrawableVAO {
+class DrawableVAO 
+{
 public:
     DrawableVAO(GLuint vao_id, GLsizei num_elements);
 
-    void BindAndDraw(GLenum drawMode = GL_TRIANGLES) const;
-    void Bind() const;
-    void Draw(GLenum drawMode = GL_TRIANGLES) const;
+    void bindAndDraw(GLenum draw_mode = GL_TRIANGLES) const;
+    void bind() const;
+    void draw(GLenum draw_mode = GL_TRIANGLES) const;
 
 private:
     const GLuint m_id = 0;
-    const GLsizei m_numElements = 0;
+    const GLsizei m_num_elements = 0;
 };
 
 class VertexArrayObject 
@@ -31,25 +32,24 @@ public:
     VertexArrayObject(const VertexArrayObject&) = delete;
     VertexArrayObject& operator=(const VertexArrayObject&) = delete;
 
-    void Create();
-    void Destroy();
-    void Bind();
-    void Draw(GLenum drawMode = GL_TRIANGLES);
-    void DrawArrays(GLenum drawMode = GL_TRIANGLES);
+    void create();
+    void destroy();
+    void bind() const;
+    void draw(GLenum draw_mode = GL_TRIANGLES) const;
 
-    DrawableVAO GetDrawable() const;
+    DrawableVAO getDrawable() const;
 
 
-    void AddVertexBuffer(int num_elements_per_vertex, const std::vector<GLfloat>& vertex_data);
-    void AddVertexBuffer(int num_elements_per_vertex, const std::vector<GLuint>& vertex_data);
+    void addVertexBuffer(int num_elements_per_vertex, const std::vector<GLfloat>& vertices);
+    void addVertexBuffer(int num_elements_per_vertex, const std::vector<GLuint>& vertices);
 
-    void AddElementBuffer(const std::vector<GLuint>& vertex_data);
+    void addElementBuffer(const std::vector<GLuint>& vertex_data);
 
 private:
-    void Reset();
+    void reset();
 
     GLuint m_id = 0;
-    GLsizei m_numElements = 0;
-    std::vector<GLuint> m_bufferObjects;
+    GLsizei m_num_elements = 0;
+    std::vector<GLuint> m_buffer_objects;
 
 };

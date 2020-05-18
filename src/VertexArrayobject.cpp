@@ -4,37 +4,42 @@
 
 
 /* 
-    --------------------------------------------------------------------------
+    ---------------------------------------------------------------------------------------------------------------
+    ---------------------------------------------------------------------------------------------------------------
     Drawable VAO functions
-    --------------------------------------------------------------------------
+    ---------------------------------------------------------------------------------------------------------------
+    ---------------------------------------------------------------------------------------------------------------
 */ 
 DrawableVAO::DrawableVAO(GLuint vao_id, GLsizei num_elements)
-: m_id(vao_id), m_numElements(num_elements)
+: m_id(vao_id), m_num_elements(num_elements)
 {
+    
 }
 
-void DrawableVAO::BindAndDraw(GLenum drawMode) const
+void DrawableVAO::bindAndDraw(GLenum draw_mode) const
 {
-    Bind();
-    Draw(drawMode);
+    bind();
+    draw(draw_mode);
 }
 
-void DrawableVAO::Bind() const
+void DrawableVAO::bind() const
 {
     glBindVertexArray(m_id);
 }
 
-void DrawableVAO::Draw(GLenum drawMode) const
+void DrawableVAO::draw(GLenum drawMode) const
 {
-    glDrawElements(drawMode, m_numElements, GL_UNSIGNED_INT, nullptr);
+    glDrawElements(drawMode, m_num_elements, GL_UNSIGNED_INT, nullptr);
 }
 
 
 
 /* 
-    --------------------------------------------------------------------------
+    ---------------------------------------------------------------------------------------------------------------
+    ---------------------------------------------------------------------------------------------------------------
     VertexArrayObject functions
-    --------------------------------------------------------------------------
+    ---------------------------------------------------------------------------------------------------------------
+    ---------------------------------------------------------------------------------------------------------------
 */ 
 
 VertexArrayObject::VertexArrayObject()
@@ -43,7 +48,7 @@ VertexArrayObject::VertexArrayObject()
 }
 VertexArrayObject::~VertexArrayObject()
 {
-    Destroy();
+    destroy();
 } 
 
 VertexArrayObject::VertexArrayObject(VertexArrayObject&& other) 
@@ -53,17 +58,17 @@ VertexArrayObject::VertexArrayObject(VertexArrayObject&& other)
 
 VertexArrayObject& VertexArrayObject::operator=(VertexArrayObject&& other)
 {
-    Destroy();
-    m_bufferObjects = std::move(other.m_bufferObjects);
+    destroy();
+    m_buffer_objects = std::move(other.m_buffer_objects);
     m_id = other.m_id;
-    m_numElements = other.m_numElements;
-    other.Reset();
+    m_num_elements = other.m_num_elements;
+    other.reset();
     return *this;
 }
 
     
 
-void VertexArrayObject::Create()
+void VertexArrayObject::create()
 {
     if (!m_id)
     {
@@ -71,39 +76,33 @@ void VertexArrayObject::Create()
     }
 }   
 
-void VertexArrayObject::Destroy()
+void VertexArrayObject::destroy()
 {
     glDeleteVertexArrays(1, &m_id);
-    glDeleteBuffers(m_bufferObjects.size(), m_bufferObjects.data());
-    Reset();
+    glDeleteBuffers(m_buffer_objects.size(), m_buffer_objects.data());
+    reset();
 }
 
-void VertexArrayObject::Bind()
+void VertexArrayObject::bind() const
 {
     glBindVertexArray(m_id);
 }
 
-DrawableVAO VertexArrayObject::GetDrawable() const
+DrawableVAO VertexArrayObject::getDrawable() const
 {
-    return {m_id, m_numElements};
+    return {m_id, m_num_elements};
 }
 
-void VertexArrayObject::Draw(GLenum drawMode)
+void VertexArrayObject::draw(GLenum draw_mode) const
 {
-    glDrawElements(drawMode, m_numElements, GL_UNSIGNED_INT, nullptr);
-
-}
-
-void VertexArrayObject::DrawArrays(GLenum drawMode)
-{
-    glDrawArrays(drawMode, 0, 4);
+    glDrawElements(draw_mode, m_num_elements, GL_UNSIGNED_INT, nullptr);
 
 }
 
-void VertexArrayObject::AddVertexBuffer(int num_elements_per_vertex, const std::vector<GLfloat>& vertices)
+void VertexArrayObject::addVertexBuffer(int num_elements_per_vertex, const std::vector<GLfloat>& vertices)
 {
     
-    Bind(); //set this VAO as "active"
+    bind(); //set this VAO as "active"
 
     GLuint vbo_id;
     glGenBuffers(1, &vbo_id); //generate VBO and get identifier
@@ -115,7 +114,7 @@ void VertexArrayObject::AddVertexBuffer(int num_elements_per_vertex, const std::
 
     //tell the buffer what our VBO data is
     glVertexAttribPointer(
-        m_bufferObjects.size(), //id of this VBO within the VAO. Set as m_bufferObjects.size() as that represents the current number of VBOs within VAO
+        m_buffer_objects.size(), //id of this VBO within the VAO. Set as m_buffer_objects.size() as that represents the current number of VBOs within VAO
         num_elements_per_vertex, // i.e. x,y = 2, x,y,z = 3, r,g,b,a = 4
         GL_FLOAT, //type of the element within the vertex data (float/int/etc)
         GL_FALSE, //whether to get openGL to normalise fixed point data values (e.g. 0 to 255) to between 0.0 and 1.0 when accessed by glsl
@@ -123,16 +122,16 @@ void VertexArrayObject::AddVertexBuffer(int num_elements_per_vertex, const std::
         nullptr //offset of first element. not used as assuming one attribute as above
     );
 
-    glEnableVertexAttribArray(m_bufferObjects.size()); //set VBO to used for rendering calls
+    glEnableVertexAttribArray(m_buffer_objects.size()); //set VBO to used for rendering calls
 
-    m_bufferObjects.push_back(vbo_id); // add VBO id to list of VBOs within VAO
+    m_buffer_objects.push_back(vbo_id); // add VBO id to list of VBOs within VAO
 
 }
 
-void VertexArrayObject::AddVertexBuffer(int num_elements_per_vertex, const std::vector<GLuint>& vertices)
+void VertexArrayObject::addVertexBuffer(int num_elements_per_vertex, const std::vector<GLuint>& vertices)
 {
     
-    Bind(); //set this VAO as "active"
+    bind(); //set this VAO as "active"
 
     GLuint vbo_id;
     glGenBuffers(1, &vbo_id); //generate VBO and get identifier
@@ -144,22 +143,22 @@ void VertexArrayObject::AddVertexBuffer(int num_elements_per_vertex, const std::
 
     //tell the buffer what our VBO data is
     glVertexAttribIPointer(
-        m_bufferObjects.size(), //id of this VBO within the VAO. Set as m_bufferObjects.size() as that represents the current number of VBOs within VAO
+        m_buffer_objects.size(), //id of this VBO within the VAO. Set as m_buffer_objects.size() as that represents the current number of VBOs within VAO
         num_elements_per_vertex, // i.e. x,y = 2, x,y,z = 3, r,g,b,a = 4
         GL_UNSIGNED_INT, //type of the element within the vertex data (float/int/etc)
         0,  // byte offset between vertex attributes. Set to 0 as assuming each input data holds only one attribute (i.e vertex_data holds vertex positons OR vertex colours OR vertex normals, etc)
         nullptr //offset of first element. not used as assuming one attribute as above
     );
 
-    glEnableVertexAttribArray(m_bufferObjects.size()); //set VBO to used for rendering calls
+    glEnableVertexAttribArray(m_buffer_objects.size()); //set VBO to used for rendering calls
 
-    m_bufferObjects.push_back(vbo_id); // add VBO id to list of VBOs within VAO
+    m_buffer_objects.push_back(vbo_id); // add VBO id to list of VBOs within VAO
 
 }
 
-void VertexArrayObject::AddElementBuffer(const std::vector<GLuint>& elements)
+void VertexArrayObject::addElementBuffer(const std::vector<GLuint>& elements)
 {
-    Bind();
+    bind();
     GLuint eb_id;
     glGenBuffers(1, &eb_id);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eb_id);
@@ -167,14 +166,14 @@ void VertexArrayObject::AddElementBuffer(const std::vector<GLuint>& elements)
 
     std::cout << "Adding element VBO with id " << eb_id << ", size " << elements.size() << std::endl;
 
-    m_bufferObjects.push_back(eb_id);
-    m_numElements = elements.size();
+    m_buffer_objects.push_back(eb_id);
+    m_num_elements = elements.size();
 }
 
-void VertexArrayObject::Reset() 
+void VertexArrayObject::reset() 
 {
-    m_bufferObjects.clear();
+    m_buffer_objects.clear();
     m_id = 0;
-    m_numElements = 0;
+    m_num_elements = 0;
 }
 

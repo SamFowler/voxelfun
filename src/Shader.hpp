@@ -4,21 +4,21 @@
 #include <SDL2/SDL_opengl.h>
 #include <string>
 
-class Shader {
+class Shader 
+{
 
 public:
-    //void Create(const std::string vertexShaderFile, std::string fragmentShaderFile);
-    void Create(const std::string vertexShaderFile, std::string fragmentShaderFile);
-    void Destroy();
-    void Use();
+    void create(const std::string vertex_shader_file, std::string fragment_shader_file);
+    void destroy();
+    void use();
 
-    GLint GetAttributeLocation(const char* name);
-    GLint GetUniformLocation(const char* name);
+    GLint getAttributeLocation(const char* name);
+    GLint getUniformLocation(const char* name);
 
 private:
-    GLuint m_programId;
+    GLuint m_program_id;
 
-    GLuint CompileShader(GLuint shaderType, const std::string& shaderSourcePath) ;
-    GLuint LinkProgram(GLuint verterShaderID, GLuint fragmentShaderID);
+    GLuint compileShader(GLuint shader_type, const std::string& shader_source_path) ;
+    GLuint linkProgram(GLuint verter_shader_id, GLuint fragment_shader_id);
     
 };

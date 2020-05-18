@@ -59,17 +59,19 @@ VertexArrayObject makeIt()
     };
 
     VertexArrayObject vao;
-    vao.Create();
-    vao.Bind();
-    vao.AddVertexBuffer(3, verts);
-    vao.AddVertexBuffer(3, colours);
-    vao.AddElementBuffer(elements);
+    vao.create();
+    vao.bind();
+    vao.addVertexBuffer(3, verts);
+    vao.addVertexBuffer(3, colours);
+    vao.addElementBuffer(elements);
     return vao;
 }
 
 
-bool Renderer::Init(int win_width = 640, int win_height = 480) {
-    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
+bool Renderer::init(int win_width = 640, int win_height = 480)
+{
+    if (SDL_Init(SDL_INIT_VIDEO) != 0)
+    {
         std::cout << "SDL could not initialise. SDL_Error: " << SDL_GetError() << std::endl;
         return 0;
     }
@@ -88,7 +90,8 @@ bool Renderer::Init(int win_width = 640, int win_height = 480) {
             //| SDL_WINDOW_RESIZABLE
             ));
 
-    if (m_window == nullptr) {
+    if (m_window == nullptr)
+    {
         std::cout << "Could not create window. SDL error: " << SDL_GetError() << std::endl;
         return 0;
     }
@@ -100,14 +103,16 @@ bool Renderer::Init(int win_width = 640, int win_height = 480) {
     
     m_context = SDL_GL_CreateContext(m_window.get());
 
-    if (m_context == NULL) {
+    if (m_context == NULL)
+    {
         std::cout << "OpenGL context could not be created. SDL error: " << SDL_GetError() << std::endl;
     }
 
     //Initialise GLEW
     glewExperimental = GL_TRUE;
     GLenum glewError = glewInit();
-    if (glewError != GLEW_OK) {
+    if (glewError != GLEW_OK)
+    {
         std::cout << "Glew could not be initialised. Glew error: " << glewGetErrorString(glewError) << std::endl;
     }
 
@@ -117,27 +122,30 @@ bool Renderer::Init(int win_width = 640, int win_height = 480) {
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     //Set vsync
-    if (SDL_GL_SetSwapInterval(1) < 0) {
+    if (SDL_GL_SetSwapInterval(1) < 0)
+    {
        std::cout << "Unable to set VSync. SDL error: " << SDL_GetError() << std::endl;
     }
 
     std::cout << "Renderer successfully initialised with window width " << win_width << " and height " << win_height << std::endl;
     
 
-    m_shader.Create("cube", "cube");
-    m_shader.Use();
 
-  
-    mycube = makeIt();
- 
 
-    uniform_mvp = m_shader.GetUniformLocation("mvp");
+    m_shader.create("cube", "cube");
+    m_shader.use();
+
+    my_cube = makeIt();
+
+    uniform_mvp = m_shader.getUniformLocation("mvp");
+
+
 
     return true;
 
 }
 
-void Renderer::TempUpdate()
+void Renderer::tempUpdate()
 {
     float angle = SDL_GetTicks() / 1000.0 * 90; //45deg per second
     glm::vec3 axis_y(0,1,0);
@@ -149,25 +157,25 @@ void Renderer::TempUpdate()
 
     glm::mat4 mvp = projection * view * model * anim;
 
-    m_shader.Use();
+    m_shader.use();
     glUniformMatrix4fv(uniform_mvp, 1, GL_FALSE, glm::value_ptr(mvp));
 }
 
-void Renderer::Draw() 
+void Renderer::draw() 
 {
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    m_shader.Use();
+    m_shader.use();
 
-    mycube.GetDrawable().BindAndDraw();
+    my_cube.getDrawable().bindAndDraw();
 
     SDL_GL_SwapWindow(m_window.get());
 }
 
-void Renderer::Destroy()
+void Renderer::destroy()
 {
-    m_shader.Destroy(); // TODO: destroy all shaders when changed to multiple
+    m_shader.destroy(); // TODO: destroy all shaders when changed to multiple
     SDL_GL_DeleteContext(m_context);
     SDL_DestroyWindow(m_window.get());
     SDL_Quit();

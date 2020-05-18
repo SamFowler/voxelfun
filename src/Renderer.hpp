@@ -13,15 +13,16 @@
 #include "Shader.hpp"
 #include "VertexArrayObject.hpp"
 
-class Renderer {
+class Renderer 
+{
 
 public:
 
 
-    bool Init(int win_width, int win_height);
-    void Draw();
-    void Destroy();
-    void TempUpdate();
+    bool init(int win_width, int win_height);
+    void draw();
+    void destroy();
+    void tempUpdate();
 private:
     std::shared_ptr<SDL_Window> m_window;
     SDL_GLContext m_context;
@@ -36,7 +37,7 @@ private:
     GLint attribute_coord3d, attribute_v_colour;
     GLint uniform_mvp;
 
-    VertexArrayObject mycube;
+    VertexArrayObject my_cube;
     Shader m_shader; //TODO: will probably be a map of shaders eventually
 
 

@@ -1,12 +1,12 @@
 #pragma once
 #include "Input.hpp"
 
-class Game {
-
+class Game 
+{
 public:
-    bool Init();
-    bool Update(Input& input);
+    bool init();
+    bool update(Input& input);
 
 private:
-    bool m_isRunning;
+    bool m_is_running;
 };

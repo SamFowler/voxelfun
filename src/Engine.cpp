@@ -1,38 +1,41 @@
 #include "Engine.hpp"
 #include <iostream>
 
-bool Engine::Init() {
+bool Engine::init()
+{
     
-    if (!m_game.Init()) {
+    if (!m_game.init())
+    {
         return false;
     }
 
-    if( !m_renderer.Init(680, 480) ) {
+    if( !m_renderer.init(680, 480) )
+    {
         return false;
     }
 
-    m_isRunning = true;
+    m_is_running = true;
 
     return true;
-
 }
 
-void Engine::Run() {
+void Engine::run() 
+{
     std::cout << "Starting engine..." << std::endl;
 
-    while (m_isRunning) {
-        
-        m_input.Collect();
+    while (m_is_running) 
+    {
+        m_input.collect();
 
-        if (!m_game.Update(m_input)) {
-            m_isRunning = false;
+        if (!m_game.update(m_input)) 
+        {
+            m_is_running = false;
         }
-        m_renderer.TempUpdate();
-        m_renderer.Draw();
-
+        m_renderer.tempUpdate();
+        m_renderer.draw();
     }
 
     //engine clear up here
     
-    m_renderer.Destroy();
+    m_renderer.destroy();
 }

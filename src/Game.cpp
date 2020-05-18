@@ -1,27 +1,31 @@
 #include "Game.hpp"
 #include <iostream>
 
-bool Game::Init() {
-    m_isRunning = true;
+bool Game::init() 
+{
+    m_is_running = true;
 
     return true;
 }
 
-bool Game::Update(Input& input) {
-    //std::cout << "Updating game" << std::endl;
+bool Game::update(Input& input) 
+{
 
-    if (input.WasKeyPressed(SDLK_ESCAPE) || input.IsQuit()) {
-        m_isRunning = false;
+    if (input.wasKeyPressed(SDLK_ESCAPE) || input.isQuit())
+    {
+        m_is_running = false;
     }
 
-    if (input.IsKeyHeld(SDLK_SPACE)) {
+    if (input.isKeyHeld(SDLK_SPACE))
+    {
         std::cout << "Space bar helds" << std::endl;
     }
 
-    if (input.WasButtonPressed(SDL_BUTTON_LEFT)) {
-        pos2d mouse_pos = input.GetMousePos();
+    if (input.wasButtonPressed(SDL_BUTTON_LEFT))
+    {
+        pos2d mouse_pos = input.getMousePos();
         std::cout << "Left mouse button pressed at position: " << mouse_pos.x << "," << mouse_pos.y << std::endl;
     }
 
-    return m_isRunning;
+    return m_is_running;
 }

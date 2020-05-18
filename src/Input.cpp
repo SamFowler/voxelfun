@@ -1,115 +1,137 @@
 #include "Input.hpp"
 #include <iostream>
 
-Input::Input( ) {
+Input::Input( )
+{
 }
 
-Input::~Input( ) {
+Input::~Input( )
+{
     
 }
 
-void Input::Collect() {
-    BeginNewFrame();
-    PollEvents();
+void Input::collect()
+{
+    beginNewFrame();
+    pollEvents();
 }
 
-void Input::BeginNewFrame() {
-    m_isQuit = false;
+void Input::beginNewFrame()
+{
+    m_is_quit = false;
     m_pressed_keys.clear();
 	m_released_keys.clear();
 
-    m_mouse.BeginNewFrame();
+    m_mouse.beginNewFrame();
 }
 
-void Input::PollEvents() {
-    while (SDL_PollEvent( &m_event ) != 0) {
-        switch (m_event.type) {
+void Input::pollEvents()
+{
+    while (SDL_PollEvent( &m_event ) != 0) 
+    {
+        switch (m_event.type) 
+        {
             case SDL_QUIT:
-                QuitEvent();
+                quitEvent();
                 break;
             case SDL_KEYDOWN:
-                KeyDownEvent();
+                keyDownEvent();
                 break;
             case SDL_KEYUP:
-                KeyUpEvent();
+                keyUpEvent();
                 break;
             case SDL_MOUSEMOTION:
-                MouseMotionEvent();
+                mouseMotionEvent();
                 break;
             case SDL_MOUSEBUTTONDOWN:
-                MouseButtonDownEvent();
+                mouseButtonDownEvent();
                 break;
             case SDL_MOUSEBUTTONUP:
-                MouseButtonUpEvent();
+                mouseButtonUpEvent();
                 break;
         }
     }
 }
 
-bool Input::WasKeyPressed(SDL_Keycode key) {
+bool Input::wasKeyPressed(SDL_Keycode key)
+{
 	return m_pressed_keys[key];
 }
 
-bool Input::WasKeyReleased(SDL_Keycode key) {
+bool Input::wasKeyReleased(SDL_Keycode key)
+{
 	return m_released_keys[key];
 }
 
-bool Input::IsKeyHeld(SDL_Keycode key) {
+bool Input::isKeyHeld(SDL_Keycode key)
+{
 	return m_held_keys[key];
 }
 
-bool Input::IsQuit() {
-    return m_isQuit;
+bool Input::isQuit()
+{
+    return m_is_quit;
 }
 
-void Input::QuitEvent() {
-    m_isQuit = true;
+void Input::quitEvent()
+{
+    m_is_quit = true;
 }
 
-bool Input::WasButtonPressed(mbutton buttonEnum) {
-    return m_mouse.buttonStates[buttonEnum].pressed;
+bool Input::wasButtonPressed(mbutton buttonEnum)
+{
+    return m_mouse.button_states[buttonEnum].pressed;
 }
-bool Input::WasButtonReleased(mbutton buttonEnum) {
-    return m_mouse.buttonStates[buttonEnum].released;
+bool Input::wasButtonReleased(mbutton buttonEnum)
+{
+    return m_mouse.button_states[buttonEnum].released;
 }
-bool Input::IsButtonHeld(mbutton buttonEnum) {
-    return m_mouse.buttonStates[buttonEnum].held;
+bool Input::isButtonHeld(mbutton buttonEnum)
+{
+    return m_mouse.button_states[buttonEnum].held;
 }
 
-Uint8 Input::ButtonClicks(mbutton buttonEnum) {
-    return m_mouse.buttonStates[buttonEnum].clicks;
+Uint8 Input::buttonClicks(mbutton buttonEnum)
+{
+    return m_mouse.button_states[buttonEnum].clicks;
 }
 
-pos2d Input::GetMousePos() {
+pos2d Input::getMousePos()
+{
     return m_mouse.pos;
 }
 
 
-void Input::KeyDownEvent() {
+void Input::keyDownEvent()
+{
 	m_pressed_keys[m_event.key.keysym.sym] = true;
 	m_held_keys[m_event.key.keysym.sym] = true;
 }
 
-void Input::KeyUpEvent() {
+void Input::keyUpEvent()
+{
 	m_released_keys[m_event.key.keysym.sym] = true;
 	m_held_keys[m_event.key.keysym.sym] = false;
 }
 
-void Input::MouseButtonDownEvent() {
-    m_mouse.buttonStates[m_event.button.button].pressed = true;
-    m_mouse.buttonStates[m_event.button.button].clicks = m_event.button.clicks;
-    m_mouse.buttonStates[m_event.button.button].held = true;
-    m_mouse.buttonStates[m_event.button.button].state = true;
+void Input::mouseButtonDownEvent()
+{
+    m_mouse.button_states[m_event.button.button].pressed = true;
+    m_mouse.button_states[m_event.button.button].clicks = m_event.button.clicks;
+    m_mouse.button_states[m_event.button.button].held = true;
+    m_mouse.button_states[m_event.button.button].state = true;
 }
 
-void Input::MouseButtonUpEvent() {
-    m_mouse.buttonStates[m_event.button.button].released = true;
-    m_mouse.buttonStates[m_event.button.button].clicks = m_event.button.clicks;
-    m_mouse.buttonStates[m_event.button.button].held = false;
-    m_mouse.buttonStates[m_event.button.button].state = false;
+void Input::mouseButtonUpEvent()
+{
+    m_mouse.button_states[m_event.button.button].released = true;
+    m_mouse.button_states[m_event.button.button].clicks = m_event.button.clicks;
+    m_mouse.button_states[m_event.button.button].held = false;
+    m_mouse.button_states[m_event.button.button].state = false;
 }
 
-void Input::MouseMotionEvent() {
+void Input::mouseMotionEvent()
+{
     SDL_GetMouseState(&m_mouse.pos.x, &m_mouse.pos.y);
 }
 

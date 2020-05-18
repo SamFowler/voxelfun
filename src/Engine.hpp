@@ -8,21 +8,18 @@
 #include "Renderer.hpp"
 #include "Input.hpp"
 
-class Engine {
+class Engine 
+{
 
 public:
 
-    bool Init();
-    void Run();
+    bool init();
+    void run();
     Game m_game;
     Renderer m_renderer;
     Input m_input;
 
 private:
-    //void handleInput();
-    //void update();
-    //void render();
-
-    bool m_isRunning;
+    bool m_is_running;
 
 };

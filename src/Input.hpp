@@ -9,12 +9,17 @@
 
 typedef Uint8 mbutton;
 
-struct pos2d {
+struct pos2d 
+{
     int x = 0;
     int y = 0;
 };
 
-struct ButtonState {
+/*
+    --------- ButtonState struct --------------------------------------------------------
+*/
+struct ButtonState 
+{
     bool state;
     Uint8 clicks;
     bool pressed;
@@ -22,62 +27,73 @@ struct ButtonState {
     bool held;
 };
 
-class Mouse {
+/*
+    --------- Mouse class --------------------------------------------------------
+*/
+class Mouse 
+{
 public:
-    inline void BeginNewFrame() {
-        for (auto & x : buttonStates) {
+    inline void beginNewFrame() 
+    {
+        for (auto & x : button_states) 
+        {
             x.second.pressed = false;
             x.second.released = false;
         }
     }
 
-    inline void PrintButtonState(mbutton button) {
-        std::cout << "S:" << buttonStates[button].state << " C:" << unsigned(buttonStates[button].clicks) << " P:" << buttonStates[button].pressed
-                << " R:" << buttonStates[button].released << " H:" << buttonStates[button].held << " x:" << pos.x << " y:" << pos.y << std::endl;
+    inline void printButtonState(mbutton button) 
+    {
+        std::cout << "S:" << button_states[button].state << " C:" << unsigned(button_states[button].clicks) << " P:" << button_states[button].pressed
+                << " R:" << button_states[button].released << " H:" << button_states[button].held << " x:" << pos.x << " y:" << pos.y << std::endl;
     }
 
     pos2d pos;
-    std::map<mbutton, ButtonState> buttonStates;
+    std::map<mbutton, ButtonState> button_states;
 };
 
 
-class Input {
+/*
+    --------- Input class --------------------------------------------------------
+*/
+class Input 
+{
 
 public:
 
     Input();
     ~Input();
 
-    void Collect();
+    void collect();
 
-	bool WasKeyPressed(SDL_Keycode);
-	bool WasKeyReleased(SDL_Keycode);
-	bool IsKeyHeld(SDL_Keycode);
+	bool wasKeyPressed(SDL_Keycode);
+	bool wasKeyReleased(SDL_Keycode);
+	bool isKeyHeld(SDL_Keycode);
 
-    bool IsQuit();
+    bool isQuit();
 
-    bool WasButtonPressed(mbutton);
-    bool WasButtonReleased(mbutton);
-    bool IsButtonHeld(mbutton);
-    Uint8 ButtonClicks(mbutton);
-    pos2d GetMousePos();
+    bool wasButtonPressed(mbutton);
+    bool wasButtonReleased(mbutton);
+    bool isButtonHeld(mbutton);
+    Uint8 buttonClicks(mbutton);
+    pos2d getMousePos();
 
 
 private:
     SDL_Event m_event;
 
-    void BeginNewFrame();
-    void PollEvents();
+    void beginNewFrame();
+    void pollEvents();
 
-    void QuitEvent();
-    void KeyDownEvent();
-	void KeyUpEvent();
+    void quitEvent();
+    void keyDownEvent();
+	void keyUpEvent();
 
-    void MouseButtonUpEvent();
-    void MouseButtonDownEvent();
-    void MouseMotionEvent();
+    void mouseButtonUpEvent();
+    void mouseButtonDownEvent();
+    void mouseMotionEvent();
 
-    bool m_isQuit;
+    bool m_is_quit;
     std::map<SDL_Keycode, bool> m_held_keys;
 	std::map<SDL_Keycode, bool> m_pressed_keys;
 	std::map<SDL_Keycode, bool> m_released_keys;
