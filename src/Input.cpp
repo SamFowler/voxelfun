@@ -10,6 +10,18 @@ Input::~Input( )
     
 }
 
+bool Input::init()
+{
+    SDL_SetRelativeMouseMode(SDL_TRUE);
+    if (SDL_SetRelativeMouseMode(SDL_TRUE) < 0)
+    {
+        std::cout << "Could not set SDL relative mouse mode" << std::endl;
+       return false;
+    }
+
+    return true;
+}
+
 void Input::collect()
 {
     beginNewFrame();
@@ -96,9 +108,14 @@ Uint8 Input::buttonClicks(mbutton buttonEnum)
     return m_mouse.button_states[buttonEnum].clicks;
 }
 
-pos2d Input::getMousePos()
+glm::ivec2 Input::getMousePos()
 {
     return m_mouse.pos;
+}
+
+glm::ivec2 Input::getRelMousePos()
+{
+    return m_mouse.rel_pos;
 }
 
 
@@ -132,6 +149,8 @@ void Input::mouseButtonUpEvent()
 
 void Input::mouseMotionEvent()
 {
+    m_mouse.rel_pos.x += m_event.motion.xrel;
+    m_mouse.rel_pos.y += m_event.motion.yrel;
     SDL_GetMouseState(&m_mouse.pos.x, &m_mouse.pos.y);
 }
 

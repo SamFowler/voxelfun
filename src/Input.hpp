@@ -2,6 +2,7 @@
 #include <SDL2/SDL.h>
 #include <map>
 #include <iostream>
+#include <glm/glm.hpp>
 
 //TODO: Mouse input needs work - not collecting relative mouse motion and only taking one mouse position per update frame. 
 //      Need to explore updating mouse position multiple times per update.
@@ -40,16 +41,20 @@ public:
             x.second.pressed = false;
             x.second.released = false;
         }
+        rel_pos.x = 0;
+        rel_pos.y = 0;
     }
 
     inline void printButtonState(mbutton button) 
     {
         std::cout << "S:" << button_states[button].state << " C:" << unsigned(button_states[button].clicks) << " P:" << button_states[button].pressed
-                << " R:" << button_states[button].released << " H:" << button_states[button].held << " x:" << pos.x << " y:" << pos.y << std::endl;
+                << " R:" << button_states[button].released << " H:" << button_states[button].held << " x:" << pos.x << " y:" << pos.y 
+                << " xrel:" << rel_pos.x << " yrel:" << rel_pos.y << std::endl;
     }
 
-    pos2d pos;
+    glm::ivec2 pos;
     std::map<mbutton, ButtonState> button_states;
+    glm::ivec2 rel_pos;
 };
 
 
@@ -64,6 +69,7 @@ public:
     Input();
     ~Input();
 
+    bool init();
     void collect();
 
 	bool wasKeyPressed(SDL_Keycode);
@@ -76,7 +82,9 @@ public:
     bool wasButtonReleased(mbutton);
     bool isButtonHeld(mbutton);
     Uint8 buttonClicks(mbutton);
-    pos2d getMousePos();
+    glm::ivec2 getMousePos();
+    glm::ivec2 getRelMousePos();
+    inline void printMouse(mbutton button) {m_mouse.printButtonState(button);}
 
 
 private:

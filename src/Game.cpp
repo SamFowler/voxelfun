@@ -4,7 +4,6 @@
 bool Game::init() 
 {
     m_is_running = true;
-
     return true;
 }
 
@@ -23,7 +22,7 @@ bool Game::update(Input& input)
 
     if (input.wasButtonPressed(SDL_BUTTON_LEFT))
     {
-        pos2d mouse_pos = input.getMousePos();
+        glm::ivec2 mouse_pos = input.getMousePos();
         std::cout << "Left mouse button pressed at position: " << mouse_pos.x << "," << mouse_pos.y << std::endl;
     }
 

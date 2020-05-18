@@ -14,6 +14,11 @@ bool Engine::init()
         return false;
     }
 
+    if (!m_input.init())
+    {
+        return false;
+    }
+
     m_is_running = true;
 
     return true;
@@ -31,7 +36,7 @@ void Engine::run()
         {
             m_is_running = false;
         }
-        m_renderer.tempUpdate();
+        m_renderer.tempUpdate(m_input);
         m_renderer.draw();
     }
 
