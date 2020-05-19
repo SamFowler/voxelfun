@@ -11,6 +11,7 @@ PerspectiveCamera::PerspectiveCamera(float fov, float aspect_ratio, float z_near
 void PerspectiveCamera::setProjection(float fov, float aspect_ratio, float z_near, float z_far)
 {
     m_projection = glm::perspective(fov, aspect_ratio, z_near, z_far);
+    m_projection_view = m_projection * m_view;
 }
 
 void PerspectiveCamera::setDirection(const glm::vec3& rotation)
