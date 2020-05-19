@@ -4,14 +4,14 @@
 PerspectiveCamera::PerspectiveCamera(float fov, float aspect_ratio, float z_near, float z_far) 
 : m_projection(glm::perspective(fov, aspect_ratio, z_near, z_far)), m_view(1.0f)
 {
-    m_projection_view = m_projection * m_view;
+    updateProjectionViewMatrix();
     std::cout << "fov:" << fov << ", ar: " << aspect_ratio << "zn:" << z_near << "zf:" << z_far << std::endl;
 }
 
 void PerspectiveCamera::setProjection(float fov, float aspect_ratio, float z_near, float z_far)
 {
     m_projection = glm::perspective(fov, aspect_ratio, z_near, z_far);
-    m_projection_view = m_projection * m_view;
+    updateProjectionViewMatrix();
 }
 
 void PerspectiveCamera::setDirection(const glm::vec3& rotation)
@@ -33,5 +33,10 @@ void PerspectiveCamera::updateViewMatrix()
 
 	//m_view = glm::inverse(m_view);
 
+    updateProjectionViewMatrix();
+}
+
+void PerspectiveCamera::updateProjectionViewMatrix()
+{
     m_projection_view = m_projection * m_view;
 }

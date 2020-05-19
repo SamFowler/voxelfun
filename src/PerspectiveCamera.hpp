@@ -22,6 +22,7 @@ public:
 
 private:
     void updateViewMatrix();
+    void updateProjectionViewMatrix();
 
     glm::mat4 m_projection;
     glm::mat4 m_view; 
