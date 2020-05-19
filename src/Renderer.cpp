@@ -163,9 +163,11 @@ void Renderer::tempUpdate(Input& input)
     float ticks = (SDL_GetTicks() / 1000.0);
     float timestep = (last_ticks - ticks);
 
-    m_cameraController.update(input, timestep);
+    //m_cameraController.update(input, timestep);
+    //glm::mat4 mvp = m_cameraController.GetCamera().getViewProjection() * model * anim;
 
-    glm::mat4 mvp = m_cameraController.GetCamera().getViewProjection() * model * anim;
+    m_ortho_camera_controller.update(input, timestep);
+    glm::mat4 mvp = m_ortho_camera_controller.getCamera().getProjectionViewMatrix() * model; // * anim;
 
     m_shader.use();
     glUniformMatrix4fv(uniform_mvp, 1, GL_FALSE, glm::value_ptr(mvp));
