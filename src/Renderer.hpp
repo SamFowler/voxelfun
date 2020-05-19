@@ -12,7 +12,7 @@
 #include "sdl2_shared.cpp"
 #include "Shader.hpp"
 #include "VertexArrayObject.hpp"
-#include "Camera.hpp"
+#include "PerspectiveCameraController.hpp"
 #include "Input.hpp" // temp
 
 class Renderer 
@@ -20,7 +20,7 @@ class Renderer
 
 public:
 
-
+   // Renderer(int win_width, int win_height, int fov);
     bool init(int win_width, int win_height);
     void draw();
     void destroy();
@@ -29,7 +29,7 @@ private:
     std::shared_ptr<SDL_Window> m_window;
     SDL_GLContext m_context;
 
-    Camera camera;
+    PerspectiveCameraController m_cameraController = {45, (640.0f/480.0f)};
     float last_ticks = 0; //temp
 
     //temp variables for first shader draw
