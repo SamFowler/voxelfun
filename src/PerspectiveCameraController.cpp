@@ -35,11 +35,11 @@ void PerspectiveCameraController::update(Input& input, const float timestep)
        moveSideways(-camera_move_speed * timestep);
     }
 
-    if (input.isKeyHeld(SDLK_r)) 
+    if (input.isKeyHeld(SDLK_SPACE)) 
     {   
         moveUpwards(m_camera_speed * timestep);
     }
-    else if (input.isKeyHeld(SDLK_f)) 
+    else if (input.isKeyHeld(SDLK_LSHIFT)) 
     {   
         moveUpwards(-m_camera_speed * timestep);
     }
