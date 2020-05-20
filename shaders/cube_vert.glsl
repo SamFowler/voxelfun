@@ -9,4 +9,5 @@ void main(void)
 {
     gl_Position = mvp * vec4(coord3d, 1.0);
     f_colour = v_colour;
+    gl_PointSize = 10.0;
 }

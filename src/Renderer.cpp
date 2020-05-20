@@ -8,6 +8,8 @@
 
 #include <math.h>
 
+#include "Chunk.hpp"
+
 VertexArrayObject makeIt()
 {
 
@@ -127,6 +129,9 @@ bool Renderer::init(int win_width = 640, int win_height = 480)
     glEnable(GL_BLEND);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_MULTISAMPLE);
+    glEnable(GL_PROGRAM_POINT_SIZE);
+    glEnable(GL_LINE_SMOOTH);
+    glLineWidth(3.0);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     //Set vsync
@@ -143,9 +148,13 @@ bool Renderer::init(int win_width = 640, int win_height = 480)
 
     my_cube = makeIt();
 
+
     uniform_mvp = m_shader.getUniformLocation("mvp");
 
 
+    Chunk chunk({1,0,0}, 32);
+    chunk.makeChunkMesh();
+    my_chunk = chunk.createVao();
 
     return true;
 
@@ -155,22 +164,19 @@ void Renderer::tempUpdate(Input& input)
 {
     float angle = SDL_GetTicks() / 1000.0 * 30; //30deg per second
     glm::vec3 axis_y(0,1,0);
-    glm::mat4 anim = glm::rotate(glm::mat4(1.0f), glm::radians(angle), axis_y);
+    //glm::mat4 anim = glm::rotate(glm::mat4(1.0f), glm::radians(angle), axis_y);
     
-    glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, 0.0, -4.0));
 
 
     float ticks = (SDL_GetTicks() / 1000.0);
     float timestep = (last_ticks - ticks);
 
-    //m_cameraController.update(input, timestep);
-    //glm::mat4 mvp = m_cameraController.GetCamera().getViewProjection() * model * anim;
+    m_cameraController.update(input, timestep);
 
-    m_ortho_camera_controller.update(input, timestep);
-    glm::mat4 mvp = m_ortho_camera_controller.getCamera().getProjectionViewMatrix() * model; // * anim;
+    //m_ortho_camera_controller.update(input, timestep);
+    //glm::mat4 mvp = m_ortho_camera_controller.getCamera().getProjectionViewMatrix() * model * anim;
 
     m_shader.use();
-    glUniformMatrix4fv(uniform_mvp, 1, GL_FALSE, glm::value_ptr(mvp));
 
     last_ticks = ticks;
 
@@ -178,12 +184,37 @@ void Renderer::tempUpdate(Input& input)
 
 void Renderer::draw() 
 {
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     m_shader.use();
 
+    glm::mat4 vp = m_cameraController.GetCamera().getViewProjection();
+    
+
+    //glm::mat4 mvp = vp * model;
+
+    glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, 0.0, -4.0));
+    glUniformMatrix4fv(uniform_mvp, 1, GL_FALSE, glm::value_ptr(vp * model));
+    my_chunk.getDrawable().bindAndDraw(GL_POINTS);
+
+
+    //model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, 0.0, -4.0));
+    //glUniformMatrix4fv(uniform_mvp, 1, GL_FALSE, glm::value_ptr(vp * model));
+    //my_cube.getDrawable().bindAndDraw();
+/*
+    model = glm::translate(glm::mat4(1.0f), glm::vec3(1.0, 0.0, -4.0));
+    glUniformMatrix4fv(uniform_mvp, 1, GL_FALSE, glm::value_ptr(vp * model));
+    my_cube.getDrawable().bindAndDraw(GL_LINES);
+
+    model = glm::translate(glm::mat4(1.0f), glm::vec3(1.0, 0.0, -3.0));
+    glUniformMatrix4fv(uniform_mvp, 1, GL_FALSE, glm::value_ptr(vp * model));
     my_cube.getDrawable().bindAndDraw();
+
+    model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, 0.0, -3.0));
+    glUniformMatrix4fv(uniform_mvp, 1, GL_FALSE, glm::value_ptr(vp * model));
+    my_cube.getDrawable().bindAndDraw(GL_LINES);
+*/
 
     SDL_GL_SwapWindow(m_window.get());
 }

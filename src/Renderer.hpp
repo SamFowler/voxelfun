@@ -39,6 +39,7 @@ private:
     GLint uniform_mvp;
 
     VertexArrayObject my_cube;
+    VertexArrayObject my_chunk;
     Shader m_shader; //TODO: will probably be a map of shaders eventually
 
 
