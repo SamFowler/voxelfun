@@ -20,7 +20,7 @@ enum voxel_type
 class ChunkMesh
 {
 public:
-    std::vector<GLfloat> vertices;
+    std::vector<GLuint> vertices;
     std::vector<GLfloat> colours;
     std::vector<GLuint> elements;
 private:
@@ -41,6 +41,7 @@ public:
     
     int getVoxelIndex(const pos3d& voxel_position);
     void makeChunkMesh();
+    void makeEfficientChunkMesh();
     VertexArrayObject createVao();
 
 private:

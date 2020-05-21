@@ -15,18 +15,17 @@ int Chunk::getVoxelIndex(const pos3d& voxel_position)
 
  void Chunk::makeChunkMesh()
  {
-     std::vector<GLfloat> verts = {
-        //front
-        -0.5f, -0.5f, 0.5f, // 0
-         0.5f, -0.5f, 0.5f, // 1
-         0.5f,  0.5f, 0.5f, // 2
-        -0.5f,  0.5f, 0.5f, // 3
 
-        //back
-        -0.5f, -0.5f, -0.5f, // 4
-         0.5f, -0.5f, -0.5f, // 5
-         0.5f,  0.5f, -0.5f, // 6
-        -0.5f,  0.5f, -0.5f, // 7
+    std::vector<GLuint> verts = {
+        0, 0, 1, 
+        1, 0, 1,
+        1, 1, 1,
+        0, 1, 1,
+
+        0, 0, 0,
+        1, 0, 0,
+        1, 1, 0,
+        0, 1, 0
     };
 
      std::vector<GLfloat> colours = {
@@ -88,40 +87,6 @@ int Chunk::getVoxelIndex(const pos3d& voxel_position)
         2, 6, 7
         */
     };
-     /*
-     std::vector<GLuint> cube_verts = {
-        0, 0, 0, 
-        0, 0, 1,
-        0, 1, 0,
-        0, 1, 1,
-
-        1, 0, 0,
-        1, 0, 1,
-        1, 1, 0,
-        1, 1, 1
-    };
-
-    std::vector<GLuint> cube_elements = {
-        //front
-        0, 1, 3,
-        3, 2, 0,
-        //right
-        4, 0, 2,
-        2, 6, 4,
-        //back 
-        5, 4, 6,
-        6, 7, 5,
-        // left
-        1, 2, 7,
-        7, 3, 1,
-        //bottom
-        0, 4, 5,
-        5, 1, 0,
-        //top
-        2, 3, 7,
-        7, 7, 2
-    };
-    */
 
      for (int y = 0; y < m_side; y++)
      {
@@ -173,12 +138,37 @@ int Chunk::getVoxelIndex(const pos3d& voxel_position)
      }
  }
 
+  void Chunk::makeEfficientChunkMesh()
+ {
+
+     for (int y = 0; y < m_side; y++)
+     {
+         for (int z = 0; z < m_side; z++)
+        {
+            for (int x = 0; x < m_side; x++)
+            {
+
+                int voxel_index = getVoxelIndex({x,y,z});
+                voxel_type type = m_voxels[voxel_index];
+
+                if (type == BLOCK)
+                {
+
+                }
+
+            }
+        }
+     }
+
+ }
+
  VertexArrayObject Chunk::createVao()
  {
     std::cout << "creating chunk VAO with numverts " << m_mesh.vertices.size() << " and numElements " << m_mesh.elements.size() << std::endl;
     VertexArrayObject vao;
     vao.create();
     vao.bind();
+    //vao.addVertexBuffer(3, m_mesh.vertices);
     vao.addVertexBuffer(3, m_mesh.vertices);
     vao.addVertexBuffer(3, m_mesh.colours);
     vao.addElementBuffer(m_mesh.elements);
