@@ -8,7 +8,6 @@
 
 #include <math.h>
 
-#include "Chunk.hpp"
 
 VertexArrayObject makeIt()
 {
@@ -132,6 +131,7 @@ bool Renderer::init(int win_width = 640, int win_height = 480)
     glEnable(GL_PROGRAM_POINT_SIZE);
     glEnable(GL_LINE_SMOOTH);
     glLineWidth(3.0);
+    glPointSize(10.0);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     //Set vsync
@@ -146,16 +146,61 @@ bool Renderer::init(int win_width = 640, int win_height = 480)
     m_shader.create("cube", "cube");
     m_shader.use();
 
-    my_cube = makeIt();
+    //my_cube = makeIt();
 
 
     uniform_mvp = m_shader.getUniformLocation("mvp");
 
 
-    Chunk chunk({1,0,0}, 8);
     //chunk.makeChunkMesh();
+    
+    Chunk chunk({2.0f,0.0f,0.0f}, 32);
+    chunk.removeVoxel({1,1,1});
+    chunk.removeVoxel({2,2,2});
+    chunk.removeVoxel({0, 1, 1});
     chunk.makeEfficientChunkMesh();
-    my_chunk = chunk.createVao();
+    //chunk.createVao();
+    //m_chunks.push_back(chunk);
+    //c1.vao = chunk.createAndGetVao();
+    //c1.position = chunk.getPosition();
+    m_chunk_renderables.push_back({chunk.getPosition(), chunk.createAndGetVao()});
+
+    
+    Chunk chunk2({0.0f,0.0f,0.0f}, 32);
+    chunk2.removeVoxel({3,3,3});
+    chunk2.removeVoxel({5,5,5});
+    chunk2.removeVoxel({0, 1, 1});
+    chunk2.removeVoxel({0, 1, 2});
+    chunk2.removeVoxel({0, 1, 3});
+    chunk2.removeVoxel({0, 2, 2});
+    chunk2.makeEfficientChunkMesh();
+    //chunk2.createVao();
+    m_chunk_renderables.push_back({chunk2.getPosition(), chunk2.createAndGetVao()});
+    //c2.vao = chunk2.createAndGetVao();
+    //c2.position = chunk2.getPosition();
+    //m_chunks.push_back(chunk2);
+    
+    Chunk chunk3({0.0f,0.0f,-3.0f}, 32);
+    chunk3.removeVoxel({10,10,11});
+    chunk3.removeVoxel({10,10,12});
+    chunk3.removeVoxel({10,10,13});
+    chunk3.removeVoxel({10,10,14});
+    chunk3.removeVoxel({10,10,15});
+    chunk3.removeVoxel({10,10,16});
+    chunk3.makeEfficientChunkMesh();
+    m_chunk_renderables.push_back({chunk3.getPosition(), chunk3.createAndGetVao()});
+
+
+    Chunk chunk4({0.0f,0.0f,-2.0f}, 32);
+    chunk4.removeVoxel({10,1,25});
+    chunk4.removeVoxel({10,2,25});
+    chunk4.removeVoxel({10,3,25});
+    chunk4.removeVoxel({10,4,25});
+    chunk4.removeVoxel({10,5,25});
+    chunk4.removeVoxel({10,6,25});
+    chunk4.makeEfficientChunkMesh();
+    m_chunk_renderables.push_back({chunk4.getPosition(), chunk4.createAndGetVao()});
+
 
     return true;
 
@@ -173,7 +218,7 @@ void Renderer::tempUpdate(Input& input)
     float timestep = (last_ticks - ticks);
 
     m_cameraController.update(input, timestep);
-
+ 
     //m_ortho_camera_controller.update(input, timestep);
     //glm::mat4 mvp = m_ortho_camera_controller.getCamera().getProjectionViewMatrix() * model * anim;
 
@@ -195,10 +240,31 @@ void Renderer::draw()
 
     //glm::mat4 mvp = vp * model;
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, 0.0, -4.0));
+    glm::mat4 model(0.0f);
+    /*
+    model = glm::translate(glm::mat4(1.0f), c1.position * 32.0f);
     glUniformMatrix4fv(uniform_mvp, 1, GL_FALSE, glm::value_ptr(vp * model));
-    my_chunk.getDrawable().bindAndDraw();
+    c1.vao.getDrawable().bindAndDraw();
 
+    model = glm::translate(glm::mat4(1.0f), c2.position * 32.0f);
+    glUniformMatrix4fv(uniform_mvp, 1, GL_FALSE, glm::value_ptr(vp * model));
+    c2.vao.getDrawable().bindAndDraw();
+    */
+    //my_chunk.getDrawable().bindAndDraw();
+    
+    
+    for (auto it = m_chunk_renderables.begin(); it != m_chunk_renderables.end(); ++it)
+    {
+        
+        //model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, 0.0, -4.0));
+
+        //model = glm::translate(glm::mat4(1.0f), it->getPosition());
+        model = glm::translate(glm::mat4(1), it->position * 32.0f);
+        glUniformMatrix4fv(uniform_mvp, 1, GL_FALSE, glm::value_ptr(vp * model));
+        it->vao.getDrawable().bindAndDraw();
+    }
+    
+    
 
     //model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, 0.0, -4.0));
     //glUniformMatrix4fv(uniform_mvp, 1, GL_FALSE, glm::value_ptr(vp * model));

@@ -44,8 +44,9 @@ void DrawableVAO::draw(GLenum drawMode) const
 
 VertexArrayObject::VertexArrayObject()
 {
-
+    glGenVertexArrays(1, &m_id);
 }
+
 VertexArrayObject::~VertexArrayObject()
 {
     destroy();
@@ -132,7 +133,7 @@ void VertexArrayObject::addVertexBuffer(int num_elements_per_vertex, const std::
 {
     
     bind(); //set this VAO as "active"
-
+    
     GLuint vbo_id;
     glGenBuffers(1, &vbo_id); //generate VBO and get identifier
     glBindBuffer(GL_ARRAY_BUFFER, vbo_id); //set VBO as "active"

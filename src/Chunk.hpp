@@ -3,6 +3,8 @@
 #include <vector>
 #include "VertexArrayObject.hpp"
 
+#include <glm/vec3.hpp>
+
 struct pos3d
 {
     int x = 0;
@@ -14,6 +16,8 @@ struct colour
 {
     float r = 1.0f, g = 0.0f, b = 1.0f;
 };
+
+
 
 enum voxel_type 
 {
@@ -33,27 +37,48 @@ private:
      
 };
 
+struct ChunkRenderable final {
+    glm::vec3 position;
+    VertexArrayObject vao;
+};
+
 class Chunk
 {
 public:
-    Chunk(const pos3d position, const int& side_size = 16);
+    Chunk(const glm::vec3 position, const int& side_size = 16);
 
     int getVolume() {return m_volume;}
-    int getSizeSize() {return m_side;}
+    int getSideSize() {return m_side;}
     int getVoxelVectorLength() {return m_voxels.size();}
-    pos3d getPosition() {return m_position;}
+    glm::vec3 getPosition() {return m_position;}
 
-    voxel_type getVoxelType(const pos3d& position);
-    bool isVoxelThere(const pos3d& position);
-    
-    int getVoxelIndex(const pos3d& voxel_position);
-    void addFace(const std::vector<GLuint>& faceVerts, const pos3d& voxelPos, int& element_count, const colour& col);
+    void changeVoxel(const glm::ivec3& position, const voxel_type type);
+    void removeVoxel(const glm::ivec3& position);
+
+
+    voxel_type getVoxelType(const glm::ivec3& position);
+    bool isVoxelThere(const glm::ivec3& position);
+    bool isVoxelThere_Safe(const glm::ivec3& position);
+
+    //bool isChunkEdge(const glm::ivec3& position, const chunk_edge& edge);
+    bool isOutsideChunk(const glm::ivec3& position);
+    bool isChunkEdge(const glm::ivec3& position);
+
+     VertexArrayObject getInitialVao();
+
+    int getVoxelIndex(const glm::ivec3& voxel_position);
+    void addFace(const std::vector<GLuint>& faceVerts, const glm::ivec3& voxelPos, int& element_count, const glm::vec3& col);
     void makeChunkMesh();
     void makeEfficientChunkMesh();
-    VertexArrayObject createVao();
+    void createVao();
+
+    VertexArrayObject createAndGetVao();
+    ChunkRenderable getChunkRenderable();
+
+    void bindAndDraw();
 
 private:
-    pos3d m_position;
+    glm::vec3 m_position;
 
     ChunkMesh m_mesh;
     //VertexArrayObject m_vao;
@@ -64,4 +89,5 @@ private:
     int m_volume;
 
     std::vector<voxel_type> m_voxels;
+    //VertexArrayObject m_vao;
 };
