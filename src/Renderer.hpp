@@ -15,6 +15,10 @@
 #include "PerspectiveCameraController.hpp"
 #include "OrthographicCameraController.hpp"
 #include "Input.hpp" // temp
+#include "Chunk.hpp"
+
+
+
 
 class Renderer 
 {
@@ -30,7 +34,7 @@ private:
     std::shared_ptr<SDL_Window> m_window;
     SDL_GLContext m_context;
 
-    PerspectiveCameraController m_cameraController = {45, (640.0f/480.0f)};
+    PerspectiveCameraController m_cameraController = {45, (640.0f/480.0f), 0.1f, 500.0f};
     OrthographicCameraController m_ortho_camera_controller = {(640.0f/480.0f)};
 
     float last_ticks = 0; //temp
@@ -38,8 +42,14 @@ private:
     //temp variables for first shader draw
     GLint uniform_mvp;
 
-    VertexArrayObject my_cube;
-    VertexArrayObject my_chunk;
+    //VertexArrayObject my_cube;
+    //std::vector<VertexArrayObject> m_chunkVAOs;
+    //std::vector<Chunk> m_chunks;
+    //Renderable c1;
+    //Renderable c2;
+    std::vector<Chunk> m_chunks;
+    std::vector<ChunkRenderable> m_chunk_renderables;
+    //VertexArrayObject my_chunk;
     Shader m_shader; //TODO: will probably be a map of shaders eventually
 
 
