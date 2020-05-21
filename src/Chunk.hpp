@@ -10,6 +10,11 @@ struct pos3d
     int z = 0;
 };
 
+struct colour
+{
+    float r = 1.0f, g = 0.0f, b = 1.0f;
+};
+
 enum voxel_type 
 {
     AIR = 0,
@@ -38,8 +43,11 @@ public:
     int getVoxelVectorLength() {return m_voxels.size();}
     pos3d getPosition() {return m_position;}
 
+    voxel_type getVoxelType(const pos3d& position);
+    bool isVoxelThere(const pos3d& position);
     
     int getVoxelIndex(const pos3d& voxel_position);
+    void addFace(const std::vector<GLuint>& faceVerts, const pos3d& voxelPos, int& element_count, const colour& col);
     void makeChunkMesh();
     void makeEfficientChunkMesh();
     VertexArrayObject createVao();

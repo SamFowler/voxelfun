@@ -152,8 +152,9 @@ bool Renderer::init(int win_width = 640, int win_height = 480)
     uniform_mvp = m_shader.getUniformLocation("mvp");
 
 
-    Chunk chunk({1,0,0}, 32);
-    chunk.makeChunkMesh();
+    Chunk chunk({1,0,0}, 8);
+    //chunk.makeChunkMesh();
+    chunk.makeEfficientChunkMesh();
     my_chunk = chunk.createVao();
 
     return true;
@@ -193,10 +194,10 @@ void Renderer::draw()
     
 
     //glm::mat4 mvp = vp * model;
-
+    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, 0.0, -4.0));
     glUniformMatrix4fv(uniform_mvp, 1, GL_FALSE, glm::value_ptr(vp * model));
-    my_chunk.getDrawable().bindAndDraw(GL_POINTS);
+    my_chunk.getDrawable().bindAndDraw();
 
 
     //model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, 0.0, -4.0));
