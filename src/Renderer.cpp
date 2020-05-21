@@ -132,6 +132,7 @@ bool Renderer::init(int win_width = 640, int win_height = 480)
     glEnable(GL_LINE_SMOOTH);
     glLineWidth(3.0);
     glPointSize(10.0);
+    glEnable(GL_CULL_FACE);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     //Set vsync
@@ -153,8 +154,9 @@ bool Renderer::init(int win_width = 640, int win_height = 480)
 
 
     //chunk.makeChunkMesh();
-    
-    Chunk chunk({2.0f,0.0f,0.0f}, 32);
+    int i = rand() % 4;
+
+    Chunk chunk({2.0f,0.0f,0.0f}, 16);
     chunk.removeVoxel({1,1,1});
     chunk.removeVoxel({2,2,2});
     chunk.removeVoxel({0, 1, 1});
@@ -166,39 +168,39 @@ bool Renderer::init(int win_width = 640, int win_height = 480)
     m_chunk_renderables.push_back({chunk.getPosition(), chunk.createAndGetVao()});
 
     
-    Chunk chunk2({0.0f,0.0f,0.0f}, 32);
+    Chunk chunk2({0.0f,0.0f,0.0f}, {{1.0f, 0.86f, 0.50f}, {0.9f, 0.61f, 0.33f}, {0.39f, 0.83f, 0.74f}}, 8);
     chunk2.removeVoxel({3,3,3});
     chunk2.removeVoxel({5,5,5});
     chunk2.removeVoxel({0, 1, 1});
     chunk2.removeVoxel({0, 1, 2});
     chunk2.removeVoxel({0, 1, 3});
     chunk2.removeVoxel({0, 2, 2});
-    chunk2.makeEfficientChunkMesh();
+    chunk2.makeColouredEfficientChunkMesh();
     //chunk2.createVao();
     m_chunk_renderables.push_back({chunk2.getPosition(), chunk2.createAndGetVao()});
     //c2.vao = chunk2.createAndGetVao();
     //c2.position = chunk2.getPosition();
     //m_chunks.push_back(chunk2);
     
-    Chunk chunk3({0.0f,0.0f,-3.0f}, 32);
+    Chunk chunk3({0.0f,0.0f,-3.0f}, {{1.0f, 0.86f, 0.50f}, {0.9f, 0.61f, 0.33f}, {0.39f, 0.83f, 0.74f}}, 32);
     chunk3.removeVoxel({10,10,11});
     chunk3.removeVoxel({10,10,12});
     chunk3.removeVoxel({10,10,13});
     chunk3.removeVoxel({10,10,14});
     chunk3.removeVoxel({10,10,15});
     chunk3.removeVoxel({10,10,16});
-    chunk3.makeEfficientChunkMesh();
+    chunk3.makeColouredEfficientChunkMesh();
     m_chunk_renderables.push_back({chunk3.getPosition(), chunk3.createAndGetVao()});
 
 
-    Chunk chunk4({0.0f,0.0f,-2.0f}, 32);
+    Chunk chunk4({0.0f,0.0f,-2.0f}, {{1.0f, 0.86f, 0.50f}, {0.9f, 0.61f, 0.33f}, {0.39f, 0.83f, 0.74f}}, 32);
     chunk4.removeVoxel({10,1,25});
     chunk4.removeVoxel({10,2,25});
     chunk4.removeVoxel({10,3,25});
     chunk4.removeVoxel({10,4,25});
     chunk4.removeVoxel({10,5,25});
     chunk4.removeVoxel({10,6,25});
-    chunk4.makeEfficientChunkMesh();
+    chunk4.makeColouredEfficientChunkMesh();
     m_chunk_renderables.push_back({chunk4.getPosition(), chunk4.createAndGetVao()});
 
 

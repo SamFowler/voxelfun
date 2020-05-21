@@ -45,18 +45,19 @@ struct ChunkRenderable final {
 class Chunk
 {
 public:
-    Chunk(const glm::vec3 position, const int& side_size = 16);
+    Chunk(const glm::vec3 position, const int side_size = 16);
+    Chunk(const glm::vec3 position, const std::vector<glm::vec3> colours, const int side_size = 16);
 
     int getVolume() {return m_volume;}
     int getSideSize() {return m_side;}
     int getVoxelVectorLength() {return m_voxels.size();}
     glm::vec3 getPosition() {return m_position;}
 
-    void changeVoxel(const glm::ivec3& position, const voxel_type type);
+    void changeVoxel(const glm::ivec3& position, const unsigned int type);
     void removeVoxel(const glm::ivec3& position);
 
 
-    voxel_type getVoxelType(const glm::ivec3& position);
+    unsigned int getVoxelType(const glm::ivec3& position);
     bool isVoxelThere(const glm::ivec3& position);
     bool isVoxelThere_Safe(const glm::ivec3& position);
 
@@ -70,10 +71,10 @@ public:
     void addFace(const std::vector<GLuint>& faceVerts, const glm::ivec3& voxelPos, int& element_count, const glm::vec3& col);
     void makeChunkMesh();
     void makeEfficientChunkMesh();
+    void makeColouredEfficientChunkMesh();
     void createVao();
 
     VertexArrayObject createAndGetVao();
-    ChunkRenderable getChunkRenderable();
 
     void bindAndDraw();
 
@@ -81,13 +82,12 @@ private:
     glm::vec3 m_position;
 
     ChunkMesh m_mesh;
-    //VertexArrayObject m_vao;
 
     int m_side;
     int m_side_sq;
 
     int m_volume;
 
-    std::vector<voxel_type> m_voxels;
-    //VertexArrayObject m_vao;
+    std::vector<glm::vec3> m_colours;
+    std::vector<unsigned int> m_voxels;
 };

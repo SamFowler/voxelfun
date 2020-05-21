@@ -4,11 +4,38 @@
 
 
 
-Chunk::Chunk(glm::vec3 position, const int& side_size)
- : m_position(position), m_side(side_size), m_side_sq(side_size * side_size), m_volume(side_size * side_size * side_size), m_voxels(m_volume, BLOCK)
+Chunk::Chunk(const glm::vec3 position, const int side_size)
+ : m_position(position), m_side(side_size), m_side_sq(side_size * side_size), m_volume(side_size * side_size * side_size), 
+    m_voxels(m_volume, 1)
 {
-std::cout << "chunk created" << std::endl;
+    std::cout << "chunk created" << std::endl;
+    m_colours.push_back({1.0f, 0.0f, 1.0f});
+    
+    
 }
+
+
+Chunk::Chunk(const glm::vec3 position, const std::vector<glm::vec3> colours, const int side_size)
+ : m_position(position), m_side(side_size), m_side_sq(side_size * side_size), 
+    m_volume(side_size * side_size * side_size), m_colours(colours)//, m_voxels(m_volume, BLOCK)
+{
+    for (int i = 0; i < m_volume; i ++)
+    {
+        int vox = (rand() % 4);
+        m_voxels.push_back(vox);
+    }
+    /*
+    for (auto i : m_voxels)
+    {
+        *i = rand() % 4;
+        std::cout << i << "|" ;
+    }*/
+    std::cout << std::endl;
+}
+
+
+
+
 
  VertexArrayObject Chunk::getInitialVao()
  {
@@ -17,7 +44,7 @@ std::cout << "chunk created" << std::endl;
     return vao;
  }
 
-void Chunk::changeVoxel(const glm::ivec3& position, const voxel_type type)
+void Chunk::changeVoxel(const glm::ivec3& position, const unsigned int type)
 {
     //TODO: may be worth having a "safe" and "not-safe" version of this, where the check isn't made
     //      to improve performance if it can be guaranteed that position is always within the voxel
@@ -29,18 +56,18 @@ void Chunk::changeVoxel(const glm::ivec3& position, const voxel_type type)
 
 void Chunk::removeVoxel(const glm::ivec3& position)
 {
-    changeVoxel(position, AIR);
+    changeVoxel(position, 0);
 }
 
 
-voxel_type Chunk::getVoxelType(const glm::ivec3& position)
+unsigned int Chunk::getVoxelType(const glm::ivec3& position)
 {
     return m_voxels[getVoxelIndex(position)];
 }
 
 bool Chunk::isVoxelThere(const glm::ivec3& position)
 {
-    if (getVoxelType(position) == AIR)
+    if (getVoxelType(position) == 0)
         return false;
 
     return true;
@@ -52,7 +79,7 @@ bool Chunk::isVoxelThere_Safe(const glm::ivec3& position)
         return false;
         //TODO: in future should check if voxel in neighbouring chunk is present?
     }
-    if (getVoxelType(position) == AIR)
+    if (getVoxelType(position) == 0)
         return false;
 
     return true;
@@ -158,7 +185,7 @@ int Chunk::getVoxelIndex(const glm::ivec3& voxel_position)
             {
 
                 int voxel_index = getVoxelIndex({x,y,z});
-                voxel_type type = m_voxels[voxel_index];
+                unsigned int type = m_voxels[voxel_index];
 
                 if (type == BLOCK)
                 {
@@ -230,95 +257,12 @@ void Chunk::addFace(const std::vector<GLuint>& faceVerts, const glm::ivec3& voxe
 
 void Chunk::makeEfficientChunkMesh()
 {
-     /*
-    std::vector<GLuint> verts = {
-        0, 0, 1, 
-        1, 0, 1,
-        1, 1, 1,
-        0, 1, 1,
-
-        0, 0, 0,
-        1, 0, 0,
-        1, 1, 0,
-        0, 1, 0
-    };
-
-    std::vector<GLuint> elements = {
-        0, 3, 7,
-        7, 6, 5,
-
-        5, 4, 7,
-        7, 4, 0,
-
-        0, 4, 5,
-        5, 6, 2,
-
-        2, 1, 5,
-        5, 1, 0,
-
-        0, 1, 2,
-        2, 6, 7,
-
-        7, 3, 2,
-        2, 3, 0
-    };
-
-    std::vector<GLuint> elements = {
-        0, 0, 1, 0, 1, 1, 0, 1, 0,
-        0, 1, 0, 1, 1, 0, 1, 0, 0,
-
-        1, 0, 0, 0, 0, 0, 0, 1, 0,
-        0, 1, 0, 0, 0, 0, 0, 0, 1,
-
-        0, 0, 1, 0, 0, 0, 1, 0, 0,
-        1, 0, 0, 1, 1, 0, 1, 1, 1,
-
-        1, 1, 1, 1, 0, 1, 1, 0, 0,
-        1, 0, 0, 1, 0, 1, 0, 0, 1,
-
-        0, 0, 1, 1, 0, 1, 1, 1, 1,
-        1, 1, 1, 1, 1, 0, 0, 1, 0,
-
-        0, 1, 0, 0, 1, 1, 1, 1, 1,
-        1, 1, 1, 0, 1, 1, 0, 0, 1
-    };
-
-    std::vector<std::vector<GLuint>> verts2 = 
-    {
-        {0, 0, 1}, 
-        {1, 0, 1},
-        {1, 1, 1},
-        {0, 1, 1},
-        {0, 0, 0},
-        {1, 0, 0},
-        {1, 1, 0},
-        {0, 1, 0}
-    };
-    */
-
     std::vector<GLuint> xMinusFace = {0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 0};
     std::vector<GLuint> yMinusFace = {0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1};
     std::vector<GLuint> zMinusFace = {0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0};
     std::vector<GLuint> xPlusFace =  {1, 0, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1};
     std::vector<GLuint> yPlusFace =  {1, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1};
     std::vector<GLuint> zPlusFace =  {1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1};
-
-/*
-    std::vector<GLuint> elements2 = {
-        //x-1
-        0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 0,
-        //y-1
-        0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1,
-        //z-1
-        0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0,
-        //x+1
-        1, 0, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1,
-        //y+1
-        1, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1,
-        //z+1
-        1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1,
-    };*/
-
 
     int element_count = 0;
 
@@ -330,71 +274,11 @@ void Chunk::makeEfficientChunkMesh()
             {
                 glm::ivec3 voxelPos = {x, y, z};
                 int voxel_index = getVoxelIndex(voxelPos);
-                voxel_type type = m_voxels[voxel_index];
+                unsigned int type = m_voxels[voxel_index];
 
                 
                 if (getVoxelType(voxelPos) == BLOCK)
                 {
-                    /*
-                    if (x == 0 || y == 0 || z == 0)
-                    {
-                        if (!isVoxelThere({x+1, y, z}))
-                        {
-                            addFace(xPlusFace, voxelPos, element_count, {1.0, 0.0, 0.0});
-                        }
-                        if (!isVoxelThere({x, y+1, z}))
-                        {
-                            addFace(yPlusFace, voxelPos, element_count, {0.0, 0.0, 0.4});
-                        }
-                        if (!isVoxelThere({x, y, z+1}))
-                        {
-                            addFace(zPlusFace, voxelPos, element_count, {0.0, 0.0, 1.0});
-                        }
-                    }
-                    
-                    if (x+1 == m_side || y+1 == m_side || z+1 == m_side)
-                    {
-                        //draw voxel as on edge of the chunk
-                        
-                        addFace(xMinusFace, voxelPos, element_count, {0.4, 0.0, 0.0});
-                        addFace(xPlusFace, voxelPos, element_count, {1.0, 0.0, 0.0});
-                        addFace(yMinusFace, voxelPos, element_count, {0.0, 0.4, 0.0});
-                        addFace(yPlusFace, voxelPos, element_count, {0.0, 1.0, 0.0});
-                        addFace(zMinusFace, voxelPos, element_count, {0.0, 0.0, 0.4});
-                        addFace(zPlusFace, voxelPos, element_count, {0.0, 0.0, 1.0});
-
-                        //TODO: in future check to see if edge voxels are obscured by neighbouring chunks, and so do not need to be drawn
-                    }
-                    */
-                    //else 
-                    
-                        //check to see if voxel is surrounded by other "full" voxels
-                        /*
-                    if (!isChunkEdge(position.x))
-                    {
-                        if ( !isVoxelThere({x-1, y, z}))
-                        {
-                            addFace(xMinusFace, voxelPos, element_count, {0.4, 0.0, 0.0});
-                        }
-                        if (!isVoxelThere({x+1, y, z}))
-                        {
-                            //draw x+1 face
-                            addFace(xPlusFace, voxelPos, element_count, {1.0, 0.0, 0.0});
-                        }
-                    }
-                    else 
-                    {
-                        if (position.x == 0)
-                        {
-                            addFace(xMinusFace, voxelPos, element_count, {0.4, 0.0, 0.0});
-                            if (!isVoxelThere({x+1, y, z}))
-                            {
-                                addFace(xPlusFace, voxelPos, element_count, {1.0, 0.0, 0.0});
-                            }
-                        }
-                            
-                        if ( (position.x + 1) == m_side )
-                    */
                     if (isChunkEdge({x, y, z}))
                     {
                         if (!isVoxelThere_Safe({x-1, y, z}))
@@ -407,7 +291,6 @@ void Chunk::makeEfficientChunkMesh()
                         }
                         if (!isVoxelThere_Safe({x, y-1, z}))
                         {
-                            //draw y-1 face
                             addFace(yMinusFace, voxelPos, element_count, {0.0, 0.4, 0.0});
                         }
                         if (!isVoxelThere_Safe({x, y+1, z}))
@@ -435,7 +318,6 @@ void Chunk::makeEfficientChunkMesh()
                         }
                         if (!isVoxelThere({x, y-1, z}))
                         {
-                            //draw y-1 face
                             addFace(yMinusFace, voxelPos, element_count, {0.0, 0.4, 0.0});
                         }
                         if (!isVoxelThere({x, y+1, z}))
@@ -449,6 +331,94 @@ void Chunk::makeEfficientChunkMesh()
                         if (!isVoxelThere({x, y, z+1}))
                         {
                             addFace(zPlusFace, voxelPos, element_count, {0.0, 0.0, 1.0});
+                        }
+                    }
+
+                }
+
+            }
+        }
+    }
+
+ }
+
+ void Chunk::makeColouredEfficientChunkMesh()
+{
+    std::vector<GLuint> xMinusFace = {0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 0};
+    std::vector<GLuint> yMinusFace = {0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1};
+    std::vector<GLuint> zMinusFace = {0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0};
+    std::vector<GLuint> xPlusFace =  {1, 0, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1};
+    std::vector<GLuint> yPlusFace =  {1, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1};
+    std::vector<GLuint> zPlusFace =  {1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1};
+
+    int element_count = 0;
+
+    for (int y = 0; y < m_side; y++)
+    {
+        for (int z = 0; z < m_side; z++)
+        {
+            for (int x = 0; x < m_side; x++)
+            {
+                glm::ivec3 voxelPos = {x, y, z};
+                int voxel_index = getVoxelIndex(voxelPos);
+                //unsigned int type = m_voxels[voxel_index];
+
+                unsigned int type = getVoxelType(voxelPos);
+                unsigned int colour_ind = type - 1;
+                if (type != 0)
+                {
+                    if (isChunkEdge({x, y, z}))
+                    {
+                        if (!isVoxelThere_Safe({x-1, y, z}))
+                        {
+                            addFace(xMinusFace, voxelPos, element_count, m_colours[colour_ind]);
+                        }
+                        if (!isVoxelThere_Safe({x+1, y, z}))
+                        {
+                            addFace(xPlusFace, voxelPos, element_count, m_colours[colour_ind]);
+                        }
+                        if (!isVoxelThere_Safe({x, y-1, z}))
+                        {
+                            addFace(yMinusFace, voxelPos, element_count, m_colours[colour_ind]);
+                        }
+                        if (!isVoxelThere_Safe({x, y+1, z}))
+                        {
+                            addFace(yPlusFace, voxelPos, element_count, m_colours[colour_ind]);
+                        }
+                        if (!isVoxelThere_Safe({x, y, z-1}))
+                        {
+                            addFace(zMinusFace, voxelPos, element_count, m_colours[colour_ind]);
+                        }
+                        if (!isVoxelThere_Safe({x, y, z+1}))
+                        {
+                            addFace(zPlusFace, voxelPos, element_count, m_colours[colour_ind]);
+                        }
+                    }
+                    else
+                    {
+                        if (!isVoxelThere({x-1, y, z}))
+                        {
+                            addFace(xMinusFace, voxelPos, element_count, m_colours[colour_ind]);
+                        }
+                        if (!isVoxelThere({x+1, y, z}))
+                        {
+                            addFace(xPlusFace, voxelPos, element_count, m_colours[colour_ind]);
+                        }
+                        if (!isVoxelThere({x, y-1, z}))
+                        {
+                            addFace(yMinusFace, voxelPos, element_count, m_colours[colour_ind]);
+                        }
+                        if (!isVoxelThere({x, y+1, z}))
+                        {
+                            addFace(yPlusFace, voxelPos, element_count, m_colours[colour_ind]);
+                        }
+                        if (!isVoxelThere({x, y, z-1}))
+                        {
+                            addFace(zMinusFace, voxelPos, element_count, m_colours[colour_ind]);
+                        }
+                        if (!isVoxelThere({x, y, z+1}))
+                        {
+                            addFace(zPlusFace, voxelPos, element_count, m_colours[colour_ind]);
                         }
                     }
 
@@ -493,15 +463,3 @@ VertexArrayObject Chunk::createAndGetVao()
     return vao;
 }
 
-ChunkRenderable Chunk::getChunkRenderable()
-{
-    /*
-    VertexArrayObject vao;
-    vao.create();
-    vao.bind();
-    vao.addVertexBuffer(3, m_mesh.vertices);
-    vao.addVertexBuffer(3, m_mesh.colours);
-    vao.addElementBuffer(m_mesh.elements);
-    return {vao, m_position};
-    */
-}
