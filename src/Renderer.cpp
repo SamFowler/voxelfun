@@ -105,6 +105,8 @@ bool Renderer::init(int win_width = 640, int win_height = 480)
         return 0;
     }
 
+    //SDL_SetWindowFullscreen(m_window.get(), SDL_WINDOW_FULLSCREEN);
+
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
     SDL_GL_SetAttribute( SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE );
@@ -150,7 +152,14 @@ bool Renderer::init(int win_width = 640, int win_height = 480)
     //my_cube = makeIt();
 
 
-    uniform_mvp = m_shader.getUniformLocation("mvp");
+    uniform_vp = m_shader.getUniformLocation("vp");
+    uniform_model = m_shader.getUniformLocation("model");
+    uniform_normalMat = m_shader.getUniformLocation("normal_matrix");
+
+    uniform_lightpos = m_shader.getUniformLocation("lightPos");
+    glm::vec3 light_position = {10.0f, 5.0f, 10.0f};
+    glUniform3fv(uniform_lightpos, 1, glm::value_ptr(light_position));
+    //glUniformMatrixfv(uniform_mvp, 1, GL_FALSE, glm::value_ptr(vp * model));
 
 
     //chunk.makeChunkMesh();
@@ -219,7 +228,8 @@ void Renderer::tempUpdate(Input& input)
     float ticks = (SDL_GetTicks() / 1000.0);
     float timestep = (last_ticks - ticks);
 
-    m_cameraController.update(input, timestep);
+    m_perspectiveCameraController.update(input, timestep);
+    //m_ortho_camera_controller.update(input, timestep);
  
     //m_ortho_camera_controller.update(input, timestep);
     //glm::mat4 mvp = m_ortho_camera_controller.getCamera().getProjectionViewMatrix() * model * anim;
@@ -237,12 +247,14 @@ void Renderer::draw()
 
     m_shader.use();
 
-    glm::mat4 vp = m_cameraController.GetCamera().getViewProjection();
+    glm::mat4 vp = m_perspectiveCameraController.GetCamera().getViewProjection();
+    //glm::mat4 vp = m_ortho_camera_controller.getCamera().getProjectionViewMatrix();
     
 
     //glm::mat4 mvp = vp * model;
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     glm::mat4 model(0.0f);
+    glm::mat4 normal(0.0f);
     /*
     model = glm::translate(glm::mat4(1.0f), c1.position * 32.0f);
     glUniformMatrix4fv(uniform_mvp, 1, GL_FALSE, glm::value_ptr(vp * model));
@@ -262,7 +274,11 @@ void Renderer::draw()
 
         //model = glm::translate(glm::mat4(1.0f), it->getPosition());
         model = glm::translate(glm::mat4(1), it->position * 32.0f);
-        glUniformMatrix4fv(uniform_mvp, 1, GL_FALSE, glm::value_ptr(vp * model));
+        normal = glm::transpose(glm::inverse(model));
+        glUniformMatrix4fv(uniform_normalMat, 1, GL_FALSE, glm::value_ptr(normal));
+        glUniformMatrix4fv(uniform_vp, 1, GL_FALSE, glm::value_ptr(vp));
+        glUniformMatrix4fv(uniform_model, 1, GL_FALSE, glm::value_ptr(model));
+
         it->vao.getDrawable().bindAndDraw();
     }
     

@@ -34,14 +34,16 @@ private:
     std::shared_ptr<SDL_Window> m_window;
     SDL_GLContext m_context;
 
-    PerspectiveCameraController m_cameraController = {45, (640.0f/480.0f), 0.1f, 500.0f};
-    OrthographicCameraController m_ortho_camera_controller = {(640.0f/480.0f)};
+    PerspectiveCameraController m_perspectiveCameraController = {45, (1280.0f/960.0f), 0.1f, 500.0f};
+    OrthographicCameraController m_ortho_camera_controller = {(1280.0f/960.0f)};
 
     float last_ticks = 0; //temp
 
     //temp variables for first shader draw
-    GLint uniform_mvp;
-
+    GLint uniform_model;
+    GLint uniform_vp;
+    GLint uniform_lightpos;
+    GLint uniform_normalMat;
     //VertexArrayObject my_cube;
     //std::vector<VertexArrayObject> m_chunkVAOs;
     //std::vector<Chunk> m_chunks;

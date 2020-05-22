@@ -26,7 +26,7 @@ bool Game::update(Input& input)
     {
         glm::ivec2 mouse_pos = input.getMousePos();
         std::cout << "Left mouse button pressed at position: " << mouse_pos.x << "," << mouse_pos.y << std::endl;
-    }
+    } 
     
 
     return m_is_running;

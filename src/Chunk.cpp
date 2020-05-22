@@ -255,6 +255,37 @@ void Chunk::addFace(const std::vector<GLuint>& faceVerts, const glm::ivec3& voxe
     element_count += 4;
 }
 
+void Chunk::addFace(const std::vector<GLuint>& faceVerts, const glm::ivec3& voxelPos, int& element_count, const glm::vec3& col, const glm::vec3& normal)
+{
+    int index = 0;
+    for (int i = 0; i < 4; i++)
+    {
+        m_mesh.vertices.push_back(faceVerts[index++] + voxelPos.x);
+        m_mesh.vertices.push_back(faceVerts[index++] + voxelPos.y);
+        m_mesh.vertices.push_back(faceVerts[index++] + voxelPos.z);
+
+        m_mesh.colours.push_back(col.r);
+        m_mesh.colours.push_back(col.g);
+        m_mesh.colours.push_back(col.b);
+
+        m_mesh.normals.push_back(normal.x);
+        m_mesh.normals.push_back(normal.y);
+        m_mesh.normals.push_back(normal.z);
+    }
+
+
+    
+    // add elements for two polygons representing the voxel face
+    m_mesh.elements.push_back(element_count);
+    m_mesh.elements.push_back(element_count + 1);
+    m_mesh.elements.push_back(element_count + 2);
+
+    m_mesh.elements.push_back(element_count + 2);
+    m_mesh.elements.push_back(element_count + 3);
+    m_mesh.elements.push_back(element_count);
+    element_count += 4;
+}
+
 void Chunk::makeEfficientChunkMesh()
 {
     std::vector<GLuint> xMinusFace = {0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 0};
@@ -263,6 +294,7 @@ void Chunk::makeEfficientChunkMesh()
     std::vector<GLuint> xPlusFace =  {1, 0, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1};
     std::vector<GLuint> yPlusFace =  {1, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1};
     std::vector<GLuint> zPlusFace =  {1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1};
+
 
     int element_count = 0;
 
@@ -351,6 +383,13 @@ void Chunk::makeEfficientChunkMesh()
     std::vector<GLuint> yPlusFace =  {1, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1};
     std::vector<GLuint> zPlusFace =  {1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1};
 
+    glm::vec3 xMinusNormal = {-1.0f, 0.0f, 0.0f};
+    glm::vec3 yMinusNormal = {0.0f, -1.0f, 0.0f};
+    glm::vec3 zMinusNormal = {0.0f, 0.0f, -1.0f};
+    glm::vec3 xPlusNormal =  {1.0f, 0.0f, 0.0f};
+    glm::vec3 yPlusNormal =  {0.0f, 1.0f, 0.0f};
+    glm::vec3 zPlusNormal =  {0.0f, 0.0f, 1.0f};
+
     int element_count = 0;
 
     for (int y = 0; y < m_side; y++)
@@ -371,54 +410,54 @@ void Chunk::makeEfficientChunkMesh()
                     {
                         if (!isVoxelThere_Safe({x-1, y, z}))
                         {
-                            addFace(xMinusFace, voxelPos, element_count, m_colours[colour_ind]);
+                            addFace(xMinusFace, voxelPos, element_count, m_colours[colour_ind], xMinusNormal);
                         }
                         if (!isVoxelThere_Safe({x+1, y, z}))
                         {
-                            addFace(xPlusFace, voxelPos, element_count, m_colours[colour_ind]);
+                            addFace(xPlusFace, voxelPos, element_count, m_colours[colour_ind], xPlusNormal);
                         }
                         if (!isVoxelThere_Safe({x, y-1, z}))
                         {
-                            addFace(yMinusFace, voxelPos, element_count, m_colours[colour_ind]);
+                            addFace(yMinusFace, voxelPos, element_count, m_colours[colour_ind], yMinusNormal);
                         }
                         if (!isVoxelThere_Safe({x, y+1, z}))
                         {
-                            addFace(yPlusFace, voxelPos, element_count, m_colours[colour_ind]);
+                            addFace(yPlusFace, voxelPos, element_count, m_colours[colour_ind], yPlusNormal);
                         }
                         if (!isVoxelThere_Safe({x, y, z-1}))
                         {
-                            addFace(zMinusFace, voxelPos, element_count, m_colours[colour_ind]);
+                            addFace(zMinusFace, voxelPos, element_count, m_colours[colour_ind], zMinusNormal);
                         }
                         if (!isVoxelThere_Safe({x, y, z+1}))
                         {
-                            addFace(zPlusFace, voxelPos, element_count, m_colours[colour_ind]);
+                            addFace(zPlusFace, voxelPos, element_count, m_colours[colour_ind], zPlusNormal);
                         }
                     }
                     else
                     {
                         if (!isVoxelThere({x-1, y, z}))
                         {
-                            addFace(xMinusFace, voxelPos, element_count, m_colours[colour_ind]);
+                            addFace(xMinusFace, voxelPos, element_count, m_colours[colour_ind], xMinusNormal);
                         }
                         if (!isVoxelThere({x+1, y, z}))
                         {
-                            addFace(xPlusFace, voxelPos, element_count, m_colours[colour_ind]);
+                            addFace(xPlusFace, voxelPos, element_count, m_colours[colour_ind], xPlusNormal);
                         }
                         if (!isVoxelThere({x, y-1, z}))
                         {
-                            addFace(yMinusFace, voxelPos, element_count, m_colours[colour_ind]);
+                            addFace(yMinusFace, voxelPos, element_count, m_colours[colour_ind], yMinusNormal);
                         }
                         if (!isVoxelThere({x, y+1, z}))
                         {
-                            addFace(yPlusFace, voxelPos, element_count, m_colours[colour_ind]);
+                            addFace(yPlusFace, voxelPos, element_count, m_colours[colour_ind], yPlusNormal);
                         }
                         if (!isVoxelThere({x, y, z-1}))
                         {
-                            addFace(zMinusFace, voxelPos, element_count, m_colours[colour_ind]);
+                            addFace(zMinusFace, voxelPos, element_count, m_colours[colour_ind], zMinusNormal);
                         }
                         if (!isVoxelThere({x, y, z+1}))
                         {
-                            addFace(zPlusFace, voxelPos, element_count, m_colours[colour_ind]);
+                            addFace(zPlusFace, voxelPos, element_count, m_colours[colour_ind], zPlusNormal);
                         }
                     }
 
@@ -459,6 +498,7 @@ VertexArrayObject Chunk::createAndGetVao()
     vao.bind();
     vao.addVertexBuffer(3, m_mesh.vertices);
     vao.addVertexBuffer(3, m_mesh.colours);
+    vao.addVertexBuffer(3, m_mesh.normals);
     vao.addElementBuffer(m_mesh.elements);
     return vao;
 }

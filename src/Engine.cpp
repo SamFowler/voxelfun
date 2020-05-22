@@ -9,7 +9,7 @@ bool Engine::init()
         return false;
     }
 
-    if( !m_renderer.init(680, 480) )
+    if( !m_renderer.init(1280, 960) )
     {
         return false;
     }

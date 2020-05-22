@@ -32,6 +32,7 @@ public:
     std::vector<GLuint> vertices;
     std::vector<GLfloat> colours;
     std::vector<GLuint> elements;
+    std::vector<GLfloat> normals;
 private:
     
      
@@ -69,6 +70,8 @@ public:
 
     int getVoxelIndex(const glm::ivec3& voxel_position);
     void addFace(const std::vector<GLuint>& faceVerts, const glm::ivec3& voxelPos, int& element_count, const glm::vec3& col);
+    void addFace(const std::vector<GLuint>& faceVerts, const glm::ivec3& voxelPos, int& element_count, const glm::vec3& col, const glm::vec3& normal);
+
     void makeChunkMesh();
     void makeEfficientChunkMesh();
     void makeColouredEfficientChunkMesh();
