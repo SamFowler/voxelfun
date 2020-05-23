@@ -44,7 +44,7 @@ private:
 
     std::vector<Chunk> m_chunks;
     std::vector<Renderable> m_chunk_renderables;
-
+    //std::vector<std::shared_ptr<VertexArrayObject>> m_vaos;
     Shader m_shader; //TODO: will probably be a map of shaders eventually
     
 };

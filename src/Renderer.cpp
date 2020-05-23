@@ -96,13 +96,13 @@ bool Renderer::init(int win_width = 640, int win_height = 480)
     //glUniformMatrixfv(uniform_mvp, 1, GL_FALSE, glm::value_ptr(vp * model));
 
 
-
+/*
     Chunk chunk({2.0f,0.0f,0.0f}, 16);
     chunk.removeVoxel({1,1,1});
     chunk.removeVoxel({2,2,2});
     chunk.removeVoxel({0, 1, 1});
     chunk.makeEfficientChunkMesh();
-    m_chunk_renderables.push_back({chunk.getPosition(), chunk.createAndGetVao()});
+    m_chunk_renderables.push_back({chunk.getPosition(), &chunk.createAndGetVao()});
     
     Chunk chunk2({0.0f,0.0f,0.0f}, {{1.0f, 0.86f, 0.50f}, {0.9f, 0.61f, 0.33f}, {0.39f, 0.83f, 0.74f}}, 8);
     chunk2.removeVoxel({3,3,3});
@@ -112,7 +112,7 @@ bool Renderer::init(int win_width = 640, int win_height = 480)
     chunk2.removeVoxel({0, 1, 3});
     chunk2.removeVoxel({0, 2, 2});
     chunk2.makeColouredEfficientChunkMesh();
-    m_chunk_renderables.push_back({chunk2.getPosition(), chunk2.createAndGetVao()});
+    m_chunk_renderables.push_back({chunk2.getPosition(), &chunk2.createAndGetVao()});
 
     
 
@@ -124,7 +124,7 @@ bool Renderer::init(int win_width = 640, int win_height = 480)
     chunk3.removeVoxel({10,10,15});
     chunk3.removeVoxel({10,10,16});
     chunk3.makeColouredEfficientChunkMesh();
-    m_chunk_renderables.push_back({chunk3.getPosition(), chunk3.createAndGetVao()});
+    m_chunk_renderables.push_back({chunk3.getPosition(), &chunk3.createAndGetVao()});
 
 
     Chunk chunk4({0.0f,0.0f,-2.0f}, {{1.0f, 0.86f, 0.50f}, {0.9f, 0.61f, 0.33f}, {0.39f, 0.83f, 0.74f}}, 32);
@@ -135,8 +135,8 @@ bool Renderer::init(int win_width = 640, int win_height = 480)
     chunk4.removeVoxel({10,5,25});
     chunk4.removeVoxel({10,6,25});
     chunk4.makeColouredEfficientChunkMesh();
-    m_chunk_renderables.push_back({chunk4.getPosition(), chunk4.createAndGetVao()});
-
+    m_chunk_renderables.push_back({chunk4.getPosition(), &chunk4.createAndGetVao()});
+*/
 
     int block_size = 16;
     BlockManager block_manager(block_size);
@@ -151,19 +151,34 @@ bool Renderer::init(int win_width = 640, int win_height = 480)
     //Block block(16, )
 
     {
-    std::vector<Colour> colours = {{1.0f, 0.0f, 0.0f, 1.0f}, {0.0f, 1.0f, 0.0f, 1.0f}, {0.0f, 0.0f, 1.0f, 1.0f}};
-    BlockID block_id = block_manager.addBlock(block_size, voxels, colours);
-    const Block* block_ptr = block_manager.getBlock(block_id);
-    BlockMesh mesh = BlockMeshGenerator::makeBlockMesh(*block_ptr, CULL_MESH_FAST);
-    m_chunk_renderables.push_back({glm::vec3(1.0f, 1.0f, 0.0f), mesh.createBuffer()});
+        /*
+        std::vector<Colour> colours = {{1.0f, 0.0f, 0.0f, 1.0f}, {0.0f, 1.0f, 0.0f, 1.0f}, {0.0f, 0.0f, 1.0f, 1.0f}};
+        BlockID block_id = block_manager.addBlock(block_size, voxels, colours);
+        const Block* block_ptr = block_manager.getBlock(block_id);
+        BlockMesh mesh = BlockMeshGenerator::makeBlockMesh(*block_ptr, CULL_MESH_FAST);
+        VertexArrayObject vao = mesh.createBuffer();
+        VertexArrayObject* ptr2 = &vao;
+        m_chunk_renderables.push_back({glm::vec3(1.0f, 1.0f, 0.0f), ptr2});
+    */
     }
+
     {
     std::vector<Colour> colours = {{1.0f, 0.86f, 0.50f, 1.0f}, {0.9f, 0.61f, 0.33f, 1.0f}, {0.39f, 0.83f, 0.74f, 0.5f}};
     Block block(block_size, voxels, colours);
     BlockID block_id = block_manager.addBlock(block_size, voxels, colours);
     const Block* block_ptr = block_manager.getBlock(block_id);
     BlockMesh mesh = BlockMeshGenerator::makeBlockMesh(*block_ptr, CULL_MESH_FAST);
-    m_chunk_renderables.push_back({glm::vec3(1.0f, 0.0f, 0.0f), mesh.createBuffer()});
+    //VertexArrayObject vao = mesh.createBuffer();
+    std::shared_ptr<VertexArrayObject> ptr = std::make_shared<VertexArrayObject>(mesh.createBuffer());
+    //m_vaos.push_back(mesh.createBuffer());
+    //std::shared_ptr<VertexArrayObject> ptr = std::make_shared<VertexArrayObject>(m_vaos[0]);
+    //VertexArrayObject* ptr2 = &vao;
+    m_chunk_renderables.push_back({glm::vec3(1.0f, 0.0f, 0.0f), ptr});
+    m_chunk_renderables.push_back({glm::vec3(2.0, 0.0f, 0.0f), ptr});
+    m_chunk_renderables.push_back({glm::vec3(1.0f, 1.0f, 0.0f), ptr});
+    m_chunk_renderables.push_back({glm::vec3(2.0f, 1.0f, 0.0f), ptr});
+
+
     }
 
     return true;
@@ -204,13 +219,13 @@ void Renderer::draw()
     
     for (auto it = m_chunk_renderables.begin(); it != m_chunk_renderables.end(); ++it)
     {
-        model = glm::translate(glm::mat4(1), it->position * 32.0f);
+        model = glm::translate(glm::mat4(1), it->position * 16.0f);
         normal = glm::transpose(glm::inverse(model));
         glUniformMatrix4fv(uniform_normalMat, 1, GL_FALSE, glm::value_ptr(normal));
         glUniformMatrix4fv(uniform_vp, 1, GL_FALSE, glm::value_ptr(vp));
         glUniformMatrix4fv(uniform_model, 1, GL_FALSE, glm::value_ptr(model));
 
-        it->vao.getDrawable().bindAndDraw();
+        it->vao->getDrawable().bindAndDraw();
     }
     
     SDL_GL_SwapWindow(m_window.get());

@@ -2,6 +2,7 @@
 
 #include <vector>
 #include "VertexArrayObject.hpp"
+#include <memory>
 
 #include <glm/vec3.hpp>
 
@@ -17,7 +18,7 @@ private:
 
 struct Renderable final {
     glm::vec3 position;
-    VertexArrayObject vao;
+    std::shared_ptr<VertexArrayObject> vao;
 };
 
 class Chunk
