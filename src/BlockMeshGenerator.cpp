@@ -5,7 +5,7 @@
 #include <GL/glew.h>
 
 
-
+#include <iostream> //temp
 
 namespace BlockMeshGenerator 
 {
@@ -70,14 +70,15 @@ namespace BlockMeshGenerator
 
     std::array<bool, 6> getNeighbours_safe(const glm::ivec3& vox_pos, const Block& block) //, const Blocks& blocks)
     {
+        int size = block.getSize();
         return {
-            doesNeighbourExist_safe({vox_pos.x - 1, vox_pos.y, vox_pos.z}, block),
-            doesNeighbourExist_safe({vox_pos.x + 1, vox_pos.y, vox_pos.z}, block),
-            doesNeighbourExist_safe({vox_pos.x, vox_pos.y - 1, vox_pos.z}, block),
-            doesNeighbourExist_safe({vox_pos.x, vox_pos.y + 1, vox_pos.z}, block),
-            doesNeighbourExist_safe({vox_pos.x, vox_pos.y, vox_pos.z - 1}, block),
-            doesNeighbourExist_safe({vox_pos.x, vox_pos.y, vox_pos.z + 1}, block)
-        };        
+            ( (vox_pos.x == 0)    ?     false : (doesNeighbourExist_safe({vox_pos.x - 1, vox_pos.y, vox_pos.z}, block)) ),
+            ( (vox_pos.x + 1 == size) ? false : (doesNeighbourExist_safe({vox_pos.x + 1, vox_pos.y, vox_pos.z}, block)) ),
+            ( (vox_pos.y == 0)    ?     false : (doesNeighbourExist_safe({vox_pos.x, vox_pos.y - 1, vox_pos.z}, block)) ),
+            ( (vox_pos.y + 1 == size) ? false : (doesNeighbourExist_safe({vox_pos.x, vox_pos.y + 1, vox_pos.z}, block)) ),
+            ( (vox_pos.z == 0)    ?     false : (doesNeighbourExist_safe({vox_pos.x, vox_pos.y, vox_pos.z - 1}, block)) ),
+            ( (vox_pos.z + 1 == size) ? false : (doesNeighbourExist_safe({vox_pos.x, vox_pos.y, vox_pos.z + 1}, block)) )
+        };
     }
 
     bool doesNeighbourExist(const glm::ivec3& neighbour_position, const Block& block)
@@ -139,6 +140,8 @@ namespace BlockMeshGenerator
         int element_count = 0;
         int block_size = block.getSize();
 
+        std::cout << block.getVoxel(0) << "," << block.getVoxel(1) << "," << block.getVoxel(2) << "," << block.getVoxel(3) << "," << std::endl;
+
         //TODO: change neigbours to a packed bit with bit mask flags rather than array of bools
         std::array<bool, 6> neighbours;
 
@@ -148,19 +151,21 @@ namespace BlockMeshGenerator
             {
                 for (int x = 0; x < block_size; x++)
                 {
+                    
                     glm::ivec3 voxel_pos = {x,y,z};
                     int voxel_index = getVoxelIndex(voxel_pos, block_size);
-                    VoxelID voxel_id = block.getVoxel(voxel_index);
-                    Colour voxel_colour = block.getColour(voxel_index);
 
+                    VoxelID voxel_id = block.getVoxel(voxel_index);
+                    
                     if (voxel_id <= 0)
                         continue;
                     
+                    Colour voxel_colour = block.getColour(voxel_id - 1); // (voxel_id - 1) as there is no colour for empty block
+                    
                     if (isBlockEdge(voxel_pos, block_size))
-                        neighbours = getNeighbours(voxel_pos, block);
-                    else 
                         neighbours = getNeighbours_safe(voxel_pos, block); //TODO: _safe function is not properly implemented yet
-
+                    else 
+                        neighbours = getNeighbours(voxel_pos, block); 
 
                     if (neighbours[0] == false) // if x-1 neighbour doesn't exists, draw face
                         addFace(block_mesh, X_MINUS_FACE, voxel_pos, element_count, voxel_colour, X_MINUS_NORMAL);

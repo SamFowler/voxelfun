@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <vector>
 #include <queue>
 #include <map>
@@ -11,7 +12,7 @@ class BlockManager
 {
 public:
     //BlockManager(int& empty_block_size);
-    BlockManager(const unsigned int& empty_block_size, const int& numBlocks = 15);
+    BlockManager(const unsigned int& default_block_size, const int& numBlocks = 15);
 
     // gets the number of blocks currently stored within this manager
     int getNumBlocks() const { return m_blocks.size(); }
@@ -24,7 +25,7 @@ public:
     bool removeBlock(const BlockID& block_id);
 
     // get reference to block which is within the manager
-    Block getBlock(const BlockID& block_id);
+    const Block* getBlock(const BlockID& block_id) const;
 
     //within the Block at block_id: change Voxels at voxel_indexes to voxel_id
     void changeVoxelsInBlock(const BlockID& block_id, const unsigned int& voxel_index, const VoxelID& voxel_id);
@@ -45,6 +46,7 @@ public:
 private:
     //std::vector<int> m_block_ids;
     std::queue<BlockID> m_free_block_ids = {};
-    std::map<BlockID, Block> m_blocks;
+    //std::map<BlockID, Block> m_blocks;
+    std::vector<std::unique_ptr<Block>> m_blocks;
     //std::vector<Block> m_blocks;
 };

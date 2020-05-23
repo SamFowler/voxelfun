@@ -8,76 +8,8 @@
 
 #include <math.h>
 
-//#include "BlockManager.hpp"
+#include "BlockManager.hpp"
 #include "BlockMeshGenerator.hpp"
-
-VertexArrayObject makeIt()
-{
-
-    std::vector<GLfloat> verts = {
-        //front
-        -0.5f, -0.5f, 0.5f,
-         0.5f, -0.5f, 0.5f,
-         0.5f,  0.5f, 0.5f,
-        -0.5f,  0.5f, 0.5f,
-
-        //back
-        -0.5f, -0.5f, -0.5f,
-         0.5f, -0.5f, -0.5f,
-         0.5f,  0.5f, -0.5f,
-        -0.5f,  0.5f, -0.5f,
-    };
-
-     std::vector<GLfloat> colours = {
-        //front colours
-        1.0f, 0.0f, 0.0f,
-        0.0f, 1.0f, 0.0f,
-        0.0f, 0.0f, 1.0f,
-        1.0f, 1.0f, 1.0f,
-        //back colours
-        1.0f, 0.0f, 0.0f,
-        0.0f, 1.0f, 0.0f,
-        0.0f, 0.0f, 1.0f,
-        1.0f, 1.0f, 1.0f,
-    };
-
-    std::vector<GLuint> elements = {
-        //front
-        0, 1, 2,
-        2, 3, 0,
-        //right
-        1, 5, 6,
-        6, 2, 1,
-        //back 
-        7, 6, 5,
-        5, 4, 7,
-        // left
-        4, 0, 3,
-        3, 7, 4,
-        //bottom
-        4, 5, 1,
-        1, 0, 4,
-        //top
-        3, 2, 6,
-        6, 7, 3,
-    };
-
-    VertexArrayObject vao;
-    vao.create();
-    vao.bind();
-    vao.addVertexBuffer(3, verts);
-    vao.addVertexBuffer(3, colours);
-    vao.addElementBuffer(elements);
-    return vao;
-}
-
-/*
-Renderer::Renderer(int win_width, int win_height, int fov)
-: m_cameraController(fov, 1.0f*(win_width/win_height))
-{
-    
-}
-*/
 
 bool Renderer::init(int win_width = 640, int win_height = 480)
 {
@@ -171,7 +103,6 @@ bool Renderer::init(int win_width = 640, int win_height = 480)
     chunk.removeVoxel({0, 1, 1});
     chunk.makeEfficientChunkMesh();
     m_chunk_renderables.push_back({chunk.getPosition(), chunk.createAndGetVao()});
-
     
     Chunk chunk2({0.0f,0.0f,0.0f}, {{1.0f, 0.86f, 0.50f}, {0.9f, 0.61f, 0.33f}, {0.39f, 0.83f, 0.74f}}, 8);
     chunk2.removeVoxel({3,3,3});
@@ -184,6 +115,7 @@ bool Renderer::init(int win_width = 640, int win_height = 480)
     m_chunk_renderables.push_back({chunk2.getPosition(), chunk2.createAndGetVao()});
 
     
+
     Chunk chunk3({0.0f,0.0f,-3.0f}, {{1.0f, 0.86f, 0.50f}, {0.9f, 0.61f, 0.33f}, {0.39f, 0.83f, 0.74f}}, 32);
     chunk3.removeVoxel({10,10,11});
     chunk3.removeVoxel({10,10,12});
@@ -205,6 +137,34 @@ bool Renderer::init(int win_width = 640, int win_height = 480)
     chunk4.makeColouredEfficientChunkMesh();
     m_chunk_renderables.push_back({chunk4.getPosition(), chunk4.createAndGetVao()});
 
+
+    int block_size = 16;
+    BlockManager block_manager(block_size);
+    std::vector<VoxelID> voxels;
+
+    for (int i = 0; i < block_size*block_size*block_size; i ++)
+    {
+        int vox = (rand() % 4);
+        voxels.push_back(vox);
+    }
+    
+    //Block block(16, )
+
+    {
+    std::vector<Colour> colours = {{1.0f, 0.0f, 0.0f, 1.0f}, {0.0f, 1.0f, 0.0f, 1.0f}, {0.0f, 0.0f, 1.0f, 1.0f}};
+    BlockID block_id = block_manager.addBlock(block_size, voxels, colours);
+    const Block* block_ptr = block_manager.getBlock(block_id);
+    BlockMesh mesh = BlockMeshGenerator::makeBlockMesh(*block_ptr, CULL_MESH_FAST);
+    m_chunk_renderables.push_back({glm::vec3(1.0f, 1.0f, 0.0f), mesh.createBuffer()});
+    }
+    {
+    std::vector<Colour> colours = {{1.0f, 0.86f, 0.50f, 1.0f}, {0.9f, 0.61f, 0.33f, 1.0f}, {0.39f, 0.83f, 0.74f, 0.5f}};
+    Block block(block_size, voxels, colours);
+    BlockID block_id = block_manager.addBlock(block_size, voxels, colours);
+    const Block* block_ptr = block_manager.getBlock(block_id);
+    BlockMesh mesh = BlockMeshGenerator::makeBlockMesh(*block_ptr, CULL_MESH_FAST);
+    m_chunk_renderables.push_back({glm::vec3(1.0f, 0.0f, 0.0f), mesh.createBuffer()});
+    }
 
     return true;
 

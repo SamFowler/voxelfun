@@ -35,7 +35,7 @@ namespace BlockMeshGenerator
     bool doesNeighbourExist_safe(const glm::ivec3& neighbour_position, const Block& block);
     void addFace(BlockMesh& mesh, const std::vector<GLuint>& face_verts, const glm::ivec3& voxel_pos, int& element_count, const Colour& colour, const glm::vec3& normal);
 
-    BlockMesh makeBlockMesh(const Block& block, const MeshMethod& mesh_method);
+    BlockMesh makeBlockMesh(const Block& block, const MeshMethod& mesh_method = CULL_MESH_FAST);
     BlockMesh makeBlockMesh_Naive(const Block& block);
     BlockMesh makeBlockMesh_Culling(const Block& block);
     BlockMesh makeBlockMesh_Greedy(const Block& block);

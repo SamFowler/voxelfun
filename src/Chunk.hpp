@@ -15,7 +15,7 @@ public:
 private:
 };
 
-struct ChunkRenderable final {
+struct Renderable final {
     glm::vec3 position;
     VertexArrayObject vao;
 };

@@ -43,7 +43,7 @@ private:
     GLint uniform_normalMat;
 
     std::vector<Chunk> m_chunks;
-    std::vector<ChunkRenderable> m_chunk_renderables;
+    std::vector<Renderable> m_chunk_renderables;
 
     Shader m_shader; //TODO: will probably be a map of shaders eventually
     
