@@ -126,6 +126,98 @@ namespace BlockMeshGenerator
         mesh.elements.push_back(element_count);
         element_count += 4;
     }
+ 
+    char getNeighboursByte(const glm::ivec3& vox_pos, const Block& block) 
+    {
+        char byte = 0x00;
+        
+        if (doesNeighbourExist({vox_pos.x - 1, vox_pos.y, vox_pos.z}, block) )
+            byte |= 1UL << 0;
+        if (doesNeighbourExist({vox_pos.x + 1, vox_pos.y, vox_pos.z}, block) )
+            byte |= 1UL << 1;
+        if (doesNeighbourExist({vox_pos.x, vox_pos.y - 1, vox_pos.z}, block) )
+            byte |= 1UL << 2;
+        if (doesNeighbourExist({vox_pos.x, vox_pos.y + 1, vox_pos.z}, block) )
+            byte |= 1UL << 3;
+        if (doesNeighbourExist({vox_pos.x, vox_pos.y, vox_pos.z - 1}, block) )
+            byte |= 1UL << 4;
+        if (doesNeighbourExist({vox_pos.x, vox_pos.y, vox_pos.z + 1}, block) )
+            byte |= 1UL << 5;
+
+        return byte;
+    }
+
+    char getNeighboursByte_safe(const glm::ivec3& vox_pos, const Block& block) 
+    {
+        char byte = 0x00;
+        int size = block.getSize();
+
+        if (vox_pos.x != 0) {
+            if (doesNeighbourExist({vox_pos.x - 1, vox_pos.y, vox_pos.z}, block) )
+                byte |= 1UL << 0;
+        }
+        if (vox_pos.x != size) {
+            if (doesNeighbourExist({vox_pos.x + 1, vox_pos.y, vox_pos.z}, block) )
+                byte |= 1UL << 1;
+        }
+        if (vox_pos.y != 0) {            
+            if (doesNeighbourExist({vox_pos.x, vox_pos.y - 1, vox_pos.z}, block) )
+                byte |= 1UL << 2;
+        }
+        if (vox_pos.y != size) {
+            if (doesNeighbourExist({vox_pos.x, vox_pos.y + 1, vox_pos.z}, block) )
+                byte |= 1UL << 3;
+        }
+        if (vox_pos.z != 0) {
+            if (doesNeighbourExist({vox_pos.x, vox_pos.y, vox_pos.z - 1}, block) )
+                byte |= 1UL << 4;
+        }
+        if (vox_pos.z != size) {
+            if (doesNeighbourExist({vox_pos.x, vox_pos.y, vox_pos.z + 1}, block) )
+                byte |= 1UL << 5;
+        }
+
+
+        return byte;
+
+    } 
+
+    std::vector<char> getAllNeighbours(const Block& block)
+    {
+        
+        int block_size = block.getSize();
+        std::vector<char> all_neighbours(block_size*block_size*block_size, 0);
+        
+
+        for (int y = 0; y < block_size; y++)
+        {
+            for (int z = 0; z < block_size; z++)
+            {
+                for (int x = 0; x < block_size; x++)
+                {
+
+                    
+                    glm::ivec3 voxel_pos = {x,y,z};
+                    int voxel_index = getVoxelIndex(voxel_pos, block_size);
+
+                    VoxelID voxel_id = block.getVoxel(voxel_index);
+                    
+                    if (voxel_id <= 0)
+                        continue;
+
+                    
+
+                    if (isBlockEdge(voxel_pos, block_size))
+                        all_neighbours.push_back(getNeighboursByte_safe(voxel_pos, block)); //TODO: _safe function is not properly implemented yet
+                    else 
+                        all_neighbours.push_back(getNeighboursByte(voxel_pos, block)); 
+
+                }
+            }
+        }
+
+        return all_neighbours;
+    }
 
     Mesh makeBlockMesh_Naive(const Block& block)
     {

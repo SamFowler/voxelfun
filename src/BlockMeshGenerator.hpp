@@ -21,7 +21,6 @@ enum MeshMethod {
 //TODO: can i do:
 //using Colour; // or class Colour?
 //using VoxelID;?
-//class Block;
 
 namespace BlockMeshGenerator
 {
@@ -33,6 +32,12 @@ namespace BlockMeshGenerator
     bool doesNeighbourExist(const glm::ivec3& neighbour_position, const Block& block);
     bool doesNeighbourExist_safe(const glm::ivec3& neighbour_position, const Block& block);
     void addFace(Mesh& mesh, const std::vector<GLuint>& face_verts, const glm::ivec3& voxel_pos, int& element_count, const Colour& colour, const glm::vec3& normal);
+
+
+    char getNeighboursByte_safe(const glm::ivec3& vox_pos, const Block& block);
+    char getNeighboursByte(const glm::ivec3& vox_pos, const Block& block);
+    std::vector<char> getAllNeighbours(const Block& block);
+
 
     Mesh makeBlockMesh(const Block& block, const MeshMethod& mesh_method = CULL_MESH_FAST);
     Mesh makeBlockMesh_Naive(const Block& block);
