@@ -19,7 +19,7 @@ public:
     unsigned int getVolume() const { return m_volume; }
     glm::ivec3 getChunkPosition() const { return m_position; }
 
-    //BlockMesh makeBlockMesh(const int& block_index, const MeshMethod& mesh_method = CULL_MESH_FAST) const;
+    //ChunkMesh makeChunkMesh(const int& block_index, const MeshMethod& mesh_method = CULL_MESH_FAST) const;
 
 private:
     unsigned int m_size;
@@ -29,5 +29,6 @@ private:
     glm::ivec3 m_position;
     std::vector<BlockID> m_blocks;
 
+    
 
 };

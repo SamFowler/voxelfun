@@ -5,7 +5,7 @@
 #include <vector>
 
 #include "Block.hpp" 
-#include "BlockMesh.hpp"
+#include "Mesh.hpp"
 
 enum MeshMethod {
     NAIVE_MESH = 0,
@@ -21,7 +21,6 @@ enum MeshMethod {
 //TODO: can i do:
 //using Colour; // or class Colour?
 //using VoxelID;?
-//class BlockMesh;
 //class Block;
 
 namespace BlockMeshGenerator
@@ -33,11 +32,11 @@ namespace BlockMeshGenerator
 
     bool doesNeighbourExist(const glm::ivec3& neighbour_position, const Block& block);
     bool doesNeighbourExist_safe(const glm::ivec3& neighbour_position, const Block& block);
-    void addFace(BlockMesh& mesh, const std::vector<GLuint>& face_verts, const glm::ivec3& voxel_pos, int& element_count, const Colour& colour, const glm::vec3& normal);
+    void addFace(Mesh& mesh, const std::vector<GLuint>& face_verts, const glm::ivec3& voxel_pos, int& element_count, const Colour& colour, const glm::vec3& normal);
 
-    BlockMesh makeBlockMesh(const Block& block, const MeshMethod& mesh_method = CULL_MESH_FAST);
-    BlockMesh makeBlockMesh_Naive(const Block& block);
-    BlockMesh makeBlockMesh_Culling(const Block& block);
-    BlockMesh makeBlockMesh_Greedy(const Block& block);
-    BlockMesh makeBlockMesh_Optimal(const Block& block);
+    Mesh makeBlockMesh(const Block& block, const MeshMethod& mesh_method = CULL_MESH_FAST);
+    Mesh makeBlockMesh_Naive(const Block& block);
+    Mesh makeBlockMesh_Culling(const Block& block);
+    Mesh makeBlockMesh_Greedy(const Block& block);
+    Mesh makeBlockMesh_Optimal(const Block& block);
 }

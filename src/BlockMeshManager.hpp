@@ -16,5 +16,5 @@ public:
 
 private:
     std::vector<unsigned int> m_meshes_to_be_updated;
-    std::vector<BlockMesh> m_block_meshes;
+    std::vector<Mesh> m_block_meshes;
 };

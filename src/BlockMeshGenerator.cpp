@@ -27,7 +27,7 @@ namespace BlockMeshGenerator
     const glm::vec3 Y_PLUS_NORMAL =  {0.0f, 1.0f, 0.0f};
     const glm::vec3 Z_PLUS_NORMAL =  {0.0f, 0.0f, 1.0f};
 
-    BlockMesh makeBlockMesh(const Block& block, const MeshMethod& mesh_method)
+    Mesh makeBlockMesh(const Block& block, const MeshMethod& mesh_method)
     {
         if (mesh_method == CULL_MESH_FAST) // doesn't check neighbouring chunks
             return makeBlockMesh_Culling(block);
@@ -96,7 +96,7 @@ namespace BlockMeshGenerator
         return doesNeighbourExist(neighbour_position, block); // TODO: this is temp
     }
 
-    void addFace(BlockMesh& mesh, const VertexData_i& face_verts, const glm::ivec3& voxel_pos, 
+    void addFace(Mesh& mesh, const VertexData_i& face_verts, const glm::ivec3& voxel_pos, 
                                         int& element_count, const Colour& colour, const glm::vec3& normal)
     {
         //TODO: make this pack bits into a few bytes rather than large number of bytes for each vertex attribute
@@ -127,15 +127,15 @@ namespace BlockMeshGenerator
         element_count += 4;
     }
 
-    BlockMesh makeBlockMesh_Naive(const Block& block)
+    Mesh makeBlockMesh_Naive(const Block& block)
     {
-        return BlockMesh(); // TODO: complete
+        return Mesh(); // TODO: complete
     }
 
-    BlockMesh makeBlockMesh_Culling(const Block& block)
+    Mesh makeBlockMesh_Culling(const Block& block)
     {
 
-        BlockMesh block_mesh;
+        Mesh block_mesh;
 
         int element_count = 0;
         int block_size = block.getSize();
@@ -187,14 +187,14 @@ namespace BlockMeshGenerator
         return block_mesh;
     }
     
-    BlockMesh makeBlockMesh_Greedy(const Block& block)
+    Mesh makeBlockMesh_Greedy(const Block& block)
     {
-        return BlockMesh(); // TODO: complete
+        return Mesh(); // TODO: complete
     }
 
-    BlockMesh makeBlockMesh_Optimal(const Block& block)
+    Mesh makeBlockMesh_Optimal(const Block& block)
     {
-        return BlockMesh(); // TODO: complete
+        return Mesh(); // TODO: complete
     }
 
 

@@ -169,7 +169,7 @@ bool Renderer::init(int win_width = 640, int win_height = 480)
     Block block(block_size, voxels, colours);
     BlockID block_id = block_manager.addBlock(block_size, voxels, colours);
     const Block* block_ptr = block_manager.getBlock(block_id);
-    BlockMesh mesh = BlockMeshGenerator::makeBlockMesh(*block_ptr, CULL_MESH_FAST);
+    Mesh mesh = BlockMeshGenerator::makeBlockMesh(*block_ptr, CULL_MESH_FAST);
     //VertexArrayObject vao = mesh.createBuffer();
     std::shared_ptr<VertexArrayObject> ptr = std::make_shared<VertexArrayObject>(mesh.createBuffer());
     //m_vaos.push_back(mesh.createBuffer());

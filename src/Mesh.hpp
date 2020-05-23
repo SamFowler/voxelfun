@@ -5,7 +5,7 @@
 
 #include "VertexArrayObject.hpp"
 
-class BlockMesh
+class Mesh
 {
 
 public:

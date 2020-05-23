@@ -1,6 +1,6 @@
-#include "BlockMesh.hpp"
+#include "Mesh.hpp"
 
-VertexArrayObject BlockMesh::createBuffer()
+VertexArrayObject Mesh::createBuffer()
 {
     VertexArrayObject vao;
     vao.create();
