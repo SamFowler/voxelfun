@@ -17,9 +17,6 @@
 #include "Input.hpp" // temp
 #include "Chunk.hpp"
 
-
-
-
 class Renderer 
 {
 
@@ -44,16 +41,10 @@ private:
     GLint uniform_vp;
     GLint uniform_lightpos;
     GLint uniform_normalMat;
-    //VertexArrayObject my_cube;
-    //std::vector<VertexArrayObject> m_chunkVAOs;
-    //std::vector<Chunk> m_chunks;
-    //Renderable c1;
-    //Renderable c2;
+
     std::vector<Chunk> m_chunks;
     std::vector<ChunkRenderable> m_chunk_renderables;
-    //VertexArrayObject my_chunk;
+
     Shader m_shader; //TODO: will probably be a map of shaders eventually
-
-
-
+    
 };

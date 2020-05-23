@@ -8,6 +8,8 @@
 
 #include <math.h>
 
+//#include "BlockManager.hpp"
+#include "BlockMeshGenerator.hpp"
 
 VertexArrayObject makeIt()
 {
@@ -162,18 +164,12 @@ bool Renderer::init(int win_width = 640, int win_height = 480)
     //glUniformMatrixfv(uniform_mvp, 1, GL_FALSE, glm::value_ptr(vp * model));
 
 
-    //chunk.makeChunkMesh();
-    int i = rand() % 4;
 
     Chunk chunk({2.0f,0.0f,0.0f}, 16);
     chunk.removeVoxel({1,1,1});
     chunk.removeVoxel({2,2,2});
     chunk.removeVoxel({0, 1, 1});
     chunk.makeEfficientChunkMesh();
-    //chunk.createVao();
-    //m_chunks.push_back(chunk);
-    //c1.vao = chunk.createAndGetVao();
-    //c1.position = chunk.getPosition();
     m_chunk_renderables.push_back({chunk.getPosition(), chunk.createAndGetVao()});
 
     
@@ -185,11 +181,8 @@ bool Renderer::init(int win_width = 640, int win_height = 480)
     chunk2.removeVoxel({0, 1, 3});
     chunk2.removeVoxel({0, 2, 2});
     chunk2.makeColouredEfficientChunkMesh();
-    //chunk2.createVao();
     m_chunk_renderables.push_back({chunk2.getPosition(), chunk2.createAndGetVao()});
-    //c2.vao = chunk2.createAndGetVao();
-    //c2.position = chunk2.getPosition();
-    //m_chunks.push_back(chunk2);
+
     
     Chunk chunk3({0.0f,0.0f,-3.0f}, {{1.0f, 0.86f, 0.50f}, {0.9f, 0.61f, 0.33f}, {0.39f, 0.83f, 0.74f}}, 32);
     chunk3.removeVoxel({10,10,11});
@@ -222,17 +215,12 @@ void Renderer::tempUpdate(Input& input)
     float angle = SDL_GetTicks() / 1000.0 * 30; //30deg per second
     glm::vec3 axis_y(0,1,0);
     //glm::mat4 anim = glm::rotate(glm::mat4(1.0f), glm::radians(angle), axis_y);
-    
-
 
     float ticks = (SDL_GetTicks() / 1000.0);
     float timestep = (last_ticks - ticks);
 
     m_perspectiveCameraController.update(input, timestep);
     //m_ortho_camera_controller.update(input, timestep);
- 
-    //m_ortho_camera_controller.update(input, timestep);
-    //glm::mat4 mvp = m_ortho_camera_controller.getCamera().getProjectionViewMatrix() * model * anim;
 
     m_shader.use();
 
@@ -250,29 +238,12 @@ void Renderer::draw()
     glm::mat4 vp = m_perspectiveCameraController.GetCamera().getViewProjection();
     //glm::mat4 vp = m_ortho_camera_controller.getCamera().getProjectionViewMatrix();
     
-
-    //glm::mat4 mvp = vp * model;
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     glm::mat4 model(0.0f);
     glm::mat4 normal(0.0f);
-    /*
-    model = glm::translate(glm::mat4(1.0f), c1.position * 32.0f);
-    glUniformMatrix4fv(uniform_mvp, 1, GL_FALSE, glm::value_ptr(vp * model));
-    c1.vao.getDrawable().bindAndDraw();
-
-    model = glm::translate(glm::mat4(1.0f), c2.position * 32.0f);
-    glUniformMatrix4fv(uniform_mvp, 1, GL_FALSE, glm::value_ptr(vp * model));
-    c2.vao.getDrawable().bindAndDraw();
-    */
-    //my_chunk.getDrawable().bindAndDraw();
-    
     
     for (auto it = m_chunk_renderables.begin(); it != m_chunk_renderables.end(); ++it)
     {
-        
-        //model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, 0.0, -4.0));
-
-        //model = glm::translate(glm::mat4(1.0f), it->getPosition());
         model = glm::translate(glm::mat4(1), it->position * 32.0f);
         normal = glm::transpose(glm::inverse(model));
         glUniformMatrix4fv(uniform_normalMat, 1, GL_FALSE, glm::value_ptr(normal));
@@ -282,25 +253,6 @@ void Renderer::draw()
         it->vao.getDrawable().bindAndDraw();
     }
     
-    
-
-    //model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, 0.0, -4.0));
-    //glUniformMatrix4fv(uniform_mvp, 1, GL_FALSE, glm::value_ptr(vp * model));
-    //my_cube.getDrawable().bindAndDraw();
-/*
-    model = glm::translate(glm::mat4(1.0f), glm::vec3(1.0, 0.0, -4.0));
-    glUniformMatrix4fv(uniform_mvp, 1, GL_FALSE, glm::value_ptr(vp * model));
-    my_cube.getDrawable().bindAndDraw(GL_LINES);
-
-    model = glm::translate(glm::mat4(1.0f), glm::vec3(1.0, 0.0, -3.0));
-    glUniformMatrix4fv(uniform_mvp, 1, GL_FALSE, glm::value_ptr(vp * model));
-    my_cube.getDrawable().bindAndDraw();
-
-    model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, 0.0, -3.0));
-    glUniformMatrix4fv(uniform_mvp, 1, GL_FALSE, glm::value_ptr(vp * model));
-    my_cube.getDrawable().bindAndDraw(GL_LINES);
-*/
-
     SDL_GL_SwapWindow(m_window.get());
 }
 

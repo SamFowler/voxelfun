@@ -2,18 +2,13 @@
 
 #include <iostream>
 
-
-
 Chunk::Chunk(const glm::vec3 position, const int side_size)
  : m_position(position), m_side(side_size), m_side_sq(side_size * side_size), m_volume(side_size * side_size * side_size), 
     m_voxels(m_volume, 1)
 {
     std::cout << "chunk created" << std::endl;
     m_colours.push_back({1.0f, 0.0f, 1.0f});
-    
-    
 }
-
 
 Chunk::Chunk(const glm::vec3 position, const std::vector<glm::vec3> colours, const int side_size)
  : m_position(position), m_side(side_size), m_side_sq(side_size * side_size), 
@@ -24,18 +19,7 @@ Chunk::Chunk(const glm::vec3 position, const std::vector<glm::vec3> colours, con
         int vox = (rand() % 4);
         m_voxels.push_back(vox);
     }
-    /*
-    for (auto i : m_voxels)
-    {
-        *i = rand() % 4;
-        std::cout << i << "|" ;
-    }*/
-    std::cout << std::endl;
 }
-
-
-
-
 
  VertexArrayObject Chunk::getInitialVao()
  {
@@ -59,7 +43,6 @@ void Chunk::removeVoxel(const glm::ivec3& position)
     changeVoxel(position, 0);
 }
 
-
 unsigned int Chunk::getVoxelType(const glm::ivec3& position)
 {
     return m_voxels[getVoxelIndex(position)];
@@ -72,6 +55,7 @@ bool Chunk::isVoxelThere(const glm::ivec3& position)
 
     return true;
 }
+
 bool Chunk::isVoxelThere_Safe(const glm::ivec3& position)
 {
     if (isOutsideChunk(position))
@@ -85,7 +69,6 @@ bool Chunk::isVoxelThere_Safe(const glm::ivec3& position)
     return true;
 }
 
-
 bool Chunk::isOutsideChunk(const glm::ivec3& position)
 {
     if (position.x < 0 || position.y < 0 || position.z < 0 || position.x == m_side || position.y == m_side || position.z == m_side)
@@ -94,15 +77,12 @@ bool Chunk::isOutsideChunk(const glm::ivec3& position)
 
 }
 
-
 bool Chunk::isChunkEdge(const glm::ivec3& position)
 {
     if (position.x == 0 || position.y == 0 || position.z == 0 || (position.x + 1) == m_side || (position.y + 1) == m_side || (position.z + 1) == m_side)
         return true;
     return false;
 }
-
-
 
 int Chunk::getVoxelIndex(const glm::ivec3& voxel_position)
 {
@@ -187,7 +167,7 @@ int Chunk::getVoxelIndex(const glm::ivec3& voxel_position)
                 int voxel_index = getVoxelIndex({x,y,z});
                 unsigned int type = m_voxels[voxel_index];
 
-                if (type == BLOCK)
+                if (type != 0)
                 {
                     
                     //add vertex position data of each cube vertices to mesh vertex vector
@@ -242,8 +222,6 @@ void Chunk::addFace(const std::vector<GLuint>& faceVerts, const glm::ivec3& voxe
         m_mesh.colours.push_back(col.b);
     }
 
-
-    
     // add elements for two polygons representing the voxel face
     m_mesh.elements.push_back(element_count);
     m_mesh.elements.push_back(element_count + 1);
@@ -273,8 +251,6 @@ void Chunk::addFace(const std::vector<GLuint>& faceVerts, const glm::ivec3& voxe
         m_mesh.normals.push_back(normal.z);
     }
 
-
-    
     // add elements for two polygons representing the voxel face
     m_mesh.elements.push_back(element_count);
     m_mesh.elements.push_back(element_count + 1);
@@ -309,7 +285,7 @@ void Chunk::makeEfficientChunkMesh()
                 unsigned int type = m_voxels[voxel_index];
 
                 
-                if (getVoxelType(voxelPos) == BLOCK)
+                if (getVoxelType(voxelPos) != 0)
                 {
                     if (isChunkEdge({x, y, z}))
                     {
@@ -400,7 +376,6 @@ void Chunk::makeEfficientChunkMesh()
             {
                 glm::ivec3 voxelPos = {x, y, z};
                 int voxel_index = getVoxelIndex(voxelPos);
-                //unsigned int type = m_voxels[voxel_index];
 
                 unsigned int type = getVoxelType(voxelPos);
                 unsigned int colour_ind = type - 1;

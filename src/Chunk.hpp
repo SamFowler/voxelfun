@@ -5,27 +5,6 @@
 
 #include <glm/vec3.hpp>
 
-struct pos3d
-{
-    int x = 0;
-    int y = 0;
-    int z = 0;
-};
-
-struct colour
-{
-    float r = 1.0f, g = 0.0f, b = 1.0f;
-};
-
-
-
-enum voxel_type 
-{
-    AIR = 0,
-    BLOCK,
-    COUNT
-};
-
 class ChunkMesh
 {
 public:
@@ -34,8 +13,6 @@ public:
     std::vector<GLuint> elements;
     std::vector<GLfloat> normals;
 private:
-    
-     
 };
 
 struct ChunkRenderable final {
