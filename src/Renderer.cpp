@@ -138,32 +138,34 @@ bool Renderer::init(int win_width = 640, int win_height = 480)
     m_chunk_renderables.push_back({chunk4.getPosition(), &chunk4.createAndGetVao()});
 */
 
-    int block_size = 16;
+    int block_size = 32;
     BlockManager block_manager(block_size);
-    std::vector<VoxelID> voxels;
+    std::vector<VoxelID> voxels(block_size*block_size*block_size, 1);
+    std::vector<VoxelID> v(block_size*block_size*block_size);
+    std::cout << "sdsd: " << v.size() << std::endl;
+  
+        //(voxel_position.x) + (voxel_position.z * size) + (voxel_position.y * size * size);
+    //for (int y = 0; y < block_size; y++) {
+    int y = block_size - 1;
+    for (int z = 0; z < block_size; z++) {
+        for (int x = 0; x < block_size; x++) {
+            int voxel_index = x + z*block_size + y*block_size*block_size;
+            //std::cout << voxel_index << std::endl;
+            if (rand() % 10 == 0)
+                voxels[voxel_index] = 2;
+        }
+    }
+    //}
 
     for (int i = 0; i < block_size*block_size*block_size; i ++)
     {
-        int vox = (rand() % 4);
-        voxels.push_back(vox);
-    }
+        //int vox = (rand() % 4);
+        voxels.push_back(1);
+   }
     
-    //Block block(16, )
 
     {
-        /*
-        std::vector<Colour> colours = {{1.0f, 0.0f, 0.0f, 1.0f}, {0.0f, 1.0f, 0.0f, 1.0f}, {0.0f, 0.0f, 1.0f, 1.0f}};
-        BlockID block_id = block_manager.addBlock(block_size, voxels, colours);
-        const Block* block_ptr = block_manager.getBlock(block_id);
-        BlockMesh mesh = BlockMeshGenerator::makeBlockMesh(*block_ptr, CULL_MESH_FAST);
-        VertexArrayObject vao = mesh.createBuffer();
-        VertexArrayObject* ptr2 = &vao;
-        m_chunk_renderables.push_back({glm::vec3(1.0f, 1.0f, 0.0f), ptr2});
-    */
-    }
-
-    {
-    std::vector<Colour> colours = {{1.0f, 0.86f, 0.50f, 1.0f}, {0.9f, 0.61f, 0.33f, 1.0f}, {0.39f, 0.83f, 0.74f, 0.5f}};
+    std::vector<Colour> colours = {{0.44f, 0.41f, 0.22f, 1.0f}, {0.87f, 0.86f, 0.66, 1.0f}, {0.39f, 0.83f, 0.74f, 0.5f}};
     Block block(block_size, voxels, colours);
     BlockID block_id = block_manager.addBlock(block_size, voxels, colours);
     const Block* block_ptr = block_manager.getBlock(block_id);
@@ -173,10 +175,18 @@ bool Renderer::init(int win_width = 640, int win_height = 480)
     //m_vaos.push_back(mesh.createBuffer());
     //std::shared_ptr<VertexArrayObject> ptr = std::make_shared<VertexArrayObject>(m_vaos[0]);
     //VertexArrayObject* ptr2 = &vao;
-    m_chunk_renderables.push_back({glm::vec3(1.0f, 0.0f, 0.0f), ptr});
-    m_chunk_renderables.push_back({glm::vec3(2.0, 0.0f, 0.0f), ptr});
-    m_chunk_renderables.push_back({glm::vec3(1.0f, 1.0f, 0.0f), ptr});
-    m_chunk_renderables.push_back({glm::vec3(2.0f, 1.0f, 0.0f), ptr});
+
+    for (int i = 0; i < 5; i++)
+    {
+        for (int j = 0; j < 5; j++)
+        {
+            m_chunk_renderables.push_back({glm::vec3(i, -1.0f, j), ptr});
+        }
+    }
+    //m_chunk_renderables.push_back({glm::vec3(1.0f, 0.0f, 0.0f), ptr});
+    //m_chunk_renderables.push_back({glm::vec3(2.0, 0.0f, 0.0f), ptr});
+    //m_chunk_renderables.push_back({glm::vec3(1.0f, 1.0f, 0.0f), ptr});
+    //m_chunk_renderables.push_back({glm::vec3(2.0f, 1.0f, 0.0f), ptr});
 
 
     }
@@ -219,9 +229,9 @@ void Renderer::draw()
     
     for (auto it = m_chunk_renderables.begin(); it != m_chunk_renderables.end(); ++it)
     {
-        model = glm::translate(glm::mat4(1), it->position * 16.0f);
-        normal = glm::transpose(glm::inverse(model));
-        glUniformMatrix4fv(uniform_normalMat, 1, GL_FALSE, glm::value_ptr(normal));
+        model = glm::translate(glm::mat4(1), it->position * 32.0f);
+        //normal = glm::transpose(glm::inverse(model));
+        //glUniformMatrix4fv(uniform_normalMat, 1, GL_FALSE, glm::value_ptr(normal));
         glUniformMatrix4fv(uniform_vp, 1, GL_FALSE, glm::value_ptr(vp));
         glUniformMatrix4fv(uniform_model, 1, GL_FALSE, glm::value_ptr(model));
 
