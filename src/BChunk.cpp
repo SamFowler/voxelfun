@@ -6,39 +6,43 @@
 
 #include "ChunkMeshGenerator.hpp"
 
-Mesh BChunk::makeMesh(const BlockManager& block_manager) const
+BlockRenderList BChunk::getBlockRenderList() 
 {
+    if (m_render_list_needs_updating)
+        updateBlockRenderList();
 
-    //return ChunkMeshGenerator::makeChunkMesh_Culling(m_blocks, m_unique_blocks, m_size, block_manager);
-    /*
-    Mesh chunk_mesh; 
-    //TODO get list of block ids within the chunk
-    std::map<BlockID, Mesh> block_meshes;
-    std::cout << "chunk making mesh" << std::endl;
-    
+    return m_block_render_list;
+}
+
+BlockRenderList* BChunk::getBlockRenderListPtr() 
+{
+    if (m_render_list_needs_updating)
+        updateBlockRenderList();
+
+    return &m_block_render_list;
+}
 
 
-    for (const BlockID& id : m_unique_blocks)
-    {
-        block_meshes.emplace(id, mesh_manager.getMesh(id));
-    }
-    std::valarray<unsigned int> vert_valarr(block_meshes[1].vertices.data(), block_meshes[1].vertices.size());
+void BChunk::updateBlockRenderList()
+{
+    BlockRenderList render_list;
 
-    
-    
-    for (auto block_id : m_blocks)
-    {
-        //Mesh block_mesh = mesh_manager.getMeshRef(block_id);
-        Mesh this_block_mesh = block_meshes[block_id];
-        for (auto it : this_block_mesh.vertices)
-        {
-            std::cout << it << std::endl;
+    glm::ivec3 chunk_world_pos = m_position * m_size;
+
+    for (int y = 0; y < m_size; y++) {
+        for (int z = 0; z < m_size; z++) {
+            for (int x = 0; x < m_size; x++) {
+                int index = x + z*m_size + y*m_size*m_size;
+
+                glm::ivec3 block_world_pos = chunk_world_pos + glm::ivec3(x,y,z);
+                if (m_blocks[index] != 0)
+                {
+                    render_list[m_blocks[index]].push_back(block_world_pos);
+                }
+            }   
         }
-        std::cout << "block mesh end" << std::endl << std::endl;
     }
-    
-    return chunk_mesh;
 
-    */
-    
+    m_block_render_list = render_list;
+
 }

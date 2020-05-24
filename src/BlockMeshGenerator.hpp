@@ -39,7 +39,7 @@ namespace BlockMeshGenerator
     std::vector<char> getAllNeighbours(const Block& block);
 
 
-    Mesh makeBlockMesh(const Block& block, const MeshMethod& mesh_method = CULL_MESH_FAST);
+    VertexArrayObject makeBlockVAO(const Block& block, const MeshMethod& mesh_method = CULL_MESH_FAST);
     Mesh makeBlockMesh_Naive(const Block& block);
     Mesh makeBlockMesh_Culling(const Block& block);
     Mesh makeBlockMesh_Greedy(const Block& block);

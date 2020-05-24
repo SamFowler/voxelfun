@@ -4,7 +4,11 @@
 #include <vector>
 #include <queue>
 #include <map>
+#include <unordered_map>
 #include "Block.hpp"
+
+#include "BlockMeshGenerator.hpp"
+//#include "VertexArrayObject.hpp"
 
 using BlockID = unsigned int;
 
@@ -12,6 +16,7 @@ class BlockManager
 {
 public:
     //BlockManager(int& empty_block_size);
+    BlockManager();
     BlockManager(const unsigned int& default_block_size, const int& numBlocks = 15);
 
     // gets the number of blocks currently stored within this manager
@@ -43,10 +48,21 @@ public:
     // remove colour from block, sets voxels of that colour to empty
     void removeColourFromBlock(const BlockID& block_id, const VoxelID& voxel_id);
 
+
+    //void update(const MeshMethod& method = CULL_MESH_FAST);
+
+    DrawableVAO getDrawableVAO(const BlockID& block_id) { return m_block_vaos[block_id].getDrawable(); }
+
+    void updateDrawables(std::unordered_map<BlockID, VertexArrayObject>& block_drawables, const MeshMethod& method = CULL_MESH_FAST);
+
 private:
     //std::vector<int> m_block_ids;
     std::queue<BlockID> m_free_block_ids = {};
     //std::map<BlockID, Block> m_blocks;
     std::vector<std::unique_ptr<Block>> m_blocks;
     //std::vector<Block> m_blocks;
+
+    std::unordered_map<BlockID, VertexArrayObject> m_block_vaos;
+    std::vector<BlockID> m_updated_blocks = {};
+
 };

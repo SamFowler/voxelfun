@@ -4,7 +4,6 @@
 #include <glm/vec4.hpp>
 #include <glm/vec3.hpp>
 
-
 using Colour = glm::vec4;
 using VoxelID = unsigned int;
 /*struct Voxel
@@ -55,6 +54,7 @@ public:
 
     //unsigned int getBlockId() const { return m_block_id; }
     //void setBlockId(const unsigned int& block_id) { m_block_id = block_id; }
+
 
 private:
     unsigned int m_size;

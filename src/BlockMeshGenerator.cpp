@@ -27,20 +27,23 @@ namespace BlockMeshGenerator
     const glm::vec3 Y_PLUS_NORMAL =  {0.0f, 1.0f, 0.0f};
     const glm::vec3 Z_PLUS_NORMAL =  {0.0f, 0.0f, 1.0f};
 
-    Mesh makeBlockMesh(const Block& block, const MeshMethod& mesh_method)
+    VertexArrayObject makeBlockVAO(const Block& block, const MeshMethod& mesh_method)
     {
+        Mesh blockMesh;
         if (mesh_method == CULL_MESH_FAST) // doesn't check neighbouring chunks
-            return makeBlockMesh_Culling(block);
+            blockMesh = makeBlockMesh_Culling(block);
         else if (mesh_method == CULL_MESH_OPTIMAL) // checks neighbouring chunks for voxel visibility
-            return makeBlockMesh_Culling(block);
+            blockMesh = makeBlockMesh_Culling(block);
         else if (mesh_method == GREEDY_MESH)
-            return makeBlockMesh_Greedy(block);
+            blockMesh = makeBlockMesh_Greedy(block);
         else if (mesh_method == NAIVE_MESH)
-            return makeBlockMesh_Naive(block);
+            blockMesh = makeBlockMesh_Naive(block);
         else if (mesh_method == OPTIMAL_MESH)
-            return makeBlockMesh_Optimal(block);
+            blockMesh = makeBlockMesh_Optimal(block);
+        else 
+            blockMesh = makeBlockMesh_Culling(block);
 
-        return makeBlockMesh_Culling(block);
+        return blockMesh.createBuffer();
     }
 
     bool isBlockEdge(const glm::ivec3& position, const int& size)

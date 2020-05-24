@@ -12,5 +12,5 @@ class BChunkMeshes
 public:
 
 private:
-    std::vector<BChunkMesh> m_chunk_meshes;
+    //std::vector<BChunkMesh> m_chunk_meshes;
 };

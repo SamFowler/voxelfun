@@ -7,6 +7,7 @@
 #include <GL/glu.h>
 
 #include <memory>
+#include <unordered_map>
 #include <vector>
 
 #include "sdl2_shared.cpp"
@@ -16,6 +17,10 @@
 #include "OrthographicCameraController.hpp"
 #include "Input.hpp" // temp
 #include "Chunk.hpp"
+#include "Block.hpp"
+#include "BlockManager.hpp"
+#include "BChunk.hpp"
+#include "World.hpp"
 
 class Renderer 
 {
@@ -44,6 +49,14 @@ private:
 
     std::vector<Chunk> m_chunks;
     std::vector<Renderable> m_chunk_renderables;
+    std::unordered_map<BlockID, VertexArrayObject> m_block_drawables;
+
+    BlockRenderList m_block_render_list;
+    std::vector<BlockRenderList*> m_chunk_render_list;
+
+    BlockManager m_block_manager;
+
+    World m_world;
     //std::vector<std::shared_ptr<VertexArrayObject>> m_vaos;
     Shader m_shader; //TODO: will probably be a map of shaders eventually
     

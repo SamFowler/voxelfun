@@ -10,6 +10,7 @@ bool Game::init()
 bool Game::update(Input& input) 
 {
 
+
     if (input.wasKeyPressed(SDLK_ESCAPE) || input.isQuit())
     {
         m_is_running = false;
@@ -28,6 +29,9 @@ bool Game::update(Input& input)
         std::cout << "Left mouse button pressed at position: " << mouse_pos.x << "," << mouse_pos.y << std::endl;
     } 
     
+    m_world.update(input);
+
+
 
     return m_is_running;
 }

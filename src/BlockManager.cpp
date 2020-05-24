@@ -22,6 +22,14 @@ BlockManager::BlockManager(int& empty_block_size) :
     //m_blocks.push_back({16, {0}, {0.0f, 0.0f, 0.0f, 0.0f}});
 }
 */
+BlockManager::BlockManager()
+{
+    m_blocks.reserve(15 * sizeof(std::unique_ptr<Block>));
+    m_blocks.push_back( std::make_unique<Block>(
+        Block(8, {(8, 0)}, {{0.0f, 0.0f, 0.0f, 0.0f}} )
+        ));
+}
+
 BlockManager::BlockManager(const unsigned int& default_block_size, const int& numBlocks)
    // m_blocks(
    // { 
@@ -61,6 +69,8 @@ BlockID BlockManager::addBlock(const Block& block)
         m_free_block_ids.pop();
     }
 
+    m_updated_blocks.push_back(new_block_id);
+
     return new_block_id;
 }
 
@@ -94,6 +104,7 @@ const Block* BlockManager::getBlock(const BlockID& block_id) const
 void BlockManager::changeVoxelsInBlock(const BlockID& block_id, const unsigned int& voxel_index, const VoxelID& voxel_id)
 {
     m_blocks[block_id]->setVoxel(voxel_index, voxel_id);
+    m_updated_blocks.push_back(block_id);
 }
 
 void BlockManager::changeVoxelsInBlock(const BlockID& block_id, const std::vector<unsigned int>& voxel_indexes, const VoxelID& voxel_id)
@@ -106,6 +117,7 @@ void BlockManager::changeVoxelsInBlock(const BlockID& block_id, const std::vecto
         block->setVoxel(*it, voxel_id);
         //changeVoxelsInBlock(block_id, *it, voxel_id);
     }
+    m_updated_blocks.push_back(block_id);
 }
 
 void BlockManager::removeVoxelsFromBlock(const BlockID& block_id, const unsigned int& voxel_index)
@@ -121,6 +133,7 @@ void BlockManager::removeVoxelsFromBlock(const BlockID& block_id, const std::vec
 void BlockManager::changeColourInBlock(const BlockID& block_id, const VoxelID& voxel_id, const VoxelID& replacement_id)
 {
     m_blocks[block_id]->changeVoxelID(voxel_id, replacement_id);
+    m_updated_blocks.push_back(block_id);
 }
 
 
@@ -134,5 +147,25 @@ VoxelID BlockManager::addColourToBlock(const BlockID& block_id, const Colour& co
 void BlockManager::removeColourFromBlock(const BlockID& block_id, const VoxelID& voxel_id)
 {
     m_blocks[block_id]->removeColour(voxel_id);
+    m_updated_blocks.push_back(block_id);
+
 }
 
+
+/*
+void BlockManager::update(const MeshMethod& method)
+{
+    for (auto block_id : m_updated_blocks)
+    {
+        m_block_vaos[block_id] = BlockMeshGenerator::makeBlockVAO(*m_blocks[block_id], method);
+    }
+}
+*/
+
+void BlockManager::updateDrawables(std::unordered_map<BlockID, VertexArrayObject>& block_drawables, const MeshMethod& method)
+{
+    for (auto block_id : m_updated_blocks)
+    {
+        block_drawables[block_id] = BlockMeshGenerator::makeBlockVAO(*m_blocks[block_id], method);
+    }
+}

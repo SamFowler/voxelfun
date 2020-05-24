@@ -1,5 +1,7 @@
 #pragma once
 #include "Input.hpp"
+#include "World.hpp"
+
 
 class Game 
 {
@@ -11,8 +13,9 @@ public:
     void tick(float timestep);
 
     bool update(Input& input);
-    void render();
 
 private:
     bool m_is_running;
+
+    World m_world;
 };
