@@ -9,7 +9,7 @@
 Mesh BChunk::makeMesh(const BlockManager& block_manager) const
 {
 
-    return ChunkMeshGenerator::makeChunkMesh_Culling(m_blocks, m_unique_blocks, m_size, block_manager);
+    //return ChunkMeshGenerator::makeChunkMesh_Culling(m_blocks, m_unique_blocks, m_size, block_manager);
     /*
     Mesh chunk_mesh; 
     //TODO get list of block ids within the chunk

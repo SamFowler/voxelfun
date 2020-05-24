@@ -99,7 +99,7 @@ bool Renderer::init(int win_width = 640, int win_height = 480)
 
 
 
-    int block_size = 32;
+    int block_size = 8;
     BlockManager block_manager(block_size);
     BlockMeshManager mesh_manager;
     //MAKE BLOCK
@@ -114,15 +114,15 @@ bool Renderer::init(int win_width = 640, int win_height = 480)
                     voxels[voxel_index] = 2;
             }
         }
-
+/*
         for (int i = 0; i < block_size*block_size*block_size; i ++)
         {
             voxels.push_back(1);
-        }
-        
-        std::vector<Colour> colours = {{0.44f, 0.41f, 0.22f, 1.0f}, {0.87f, 0.86f, 0.66, 1.0f}, {0.39f, 0.83f, 0.74f, 0.5f}};
+        }*/
+        std::cout << "voxels size: " << voxels.size() << std::endl;
+        std::vector<Colour> colours = {{0.36f, 0.70f, 0.38f, 1.0f}, {0.63f, 0.90f, 0.35, 1.0f}, {0.39f, 0.83f, 0.74f, 0.5f}};
         Block block(block_size, voxels, colours);
-        block.makeNeighbours();
+        //block.makeNeighbours();
         
         BlockID block_id = block_manager.addBlock(block);
         //BlockID block_id = block_manager.addBlock(block_size, voxels, colours);
@@ -132,35 +132,80 @@ bool Renderer::init(int win_width = 640, int win_height = 480)
         //mesh_manager.addMesh(BlockMeshGenerator::makeBlockMesh(*block_manager.getBlock(block_id), CULL_MESH_FAST));
     }
 
+
+    //MAKE BLOCK
+    {
+        std::vector<VoxelID> voxels(block_size*block_size*block_size, 1);
+    
+        int y = block_size - 1;
+        for (int z = 0; z < block_size; z++) {
+            for (int x = 0; x < block_size; x++) {
+                int voxel_index = x + z*block_size + y*block_size*block_size;
+                if (rand() % 10 == 0)
+                    voxels[voxel_index] = 2;
+                else 
+                    voxels[voxel_index] = 3;
+            }
+        }
+        
+        std::vector<Colour> colours = {{0.36f, 0.70f, 0.38f, 1.0f}, {0.976f, 0.57f, 0.32, 1.0f}, {0.39f, 0.83f, 0.74f, 0.5f}};
+        Block block(block_size, voxels, colours);
+        //block.makeNeighbours();
+        
+        BlockID block_id = block_manager.addBlock(block);
+        //BlockID block_id = block_manager.addBlock(block_size, voxels, colours);
+        
+        
+        //Mesh mesh = BlockMeshGenerator::makeBlockMesh(*block_manager.getBlock(block_id), CULL_MESH_FAST);
+        //mesh_manager.addMesh(BlockMeshGenerator::makeBlockMesh(*block_manager.getBlock(block_id), CULL_MESH_FAST));
+    }
+    
+
+
     //BlockMeshGenerator::g
 
     // MAKE CHUNK FROM BLOCKS
     
-    std::vector<BlockID> blocks(16*16*16, 1);
-    for (int i = 0; i < 16*16*16; i++) {
+    std::vector<BlockID> blocks(block_size*block_size*block_size, 1);
+    for (int i = 0; i < block_size*block_size*block_size; i++) {
         if (rand()% 50 == 0) 
             blocks[i] = 0;
     }
-    BChunk bchunk(16, {0.0f, -1.0f, 1.0f}, blocks);
+    BChunk bchunk(block_size, {0.0f, -1.0f, 1.0f}, blocks);
         //Mesh chunk_mesh = bchunk.makeMesh(mesh_manager);
-    Mesh chunk_mesh = bchunk.makeMesh(block_manager);
-    std::cout << "mesh_sz " << chunk_mesh.vertices.size() << ", ele-sz: " << chunk_mesh.elements.size() << std::endl;
+    //Mesh chunk_mesh = bchunk.makeMesh(block_manager);
+
+
+     
     const Block* block_ptr = block_manager.getBlock(1);
+    Mesh mesh = BlockMeshGenerator::makeBlockMesh(*block_ptr, CULL_MESH_FAST);
+    std::shared_ptr<VertexArrayObject> ptr = std::make_shared<VertexArrayObject>(mesh.createBuffer());
 
-    std::shared_ptr<VertexArrayObject> ptr = std::make_shared<VertexArrayObject>(chunk_mesh.createBuffer());
+    block_ptr = block_manager.getBlock(2);
+    mesh = BlockMeshGenerator::makeBlockMesh(*block_ptr, CULL_MESH_FAST);
+    std::shared_ptr<VertexArrayObject> ptr2 = std::make_shared<VertexArrayObject>(mesh.createBuffer());
 
-    //Mesh mesh = BlockMeshGenerator::makeBlockMesh(*block_ptr, CULL_MESH_FAST);
+
     //std::shared_ptr<VertexArrayObject> ptr = std::make_shared<VertexArrayObject>(mesh.createBuffer());
 
-    m_chunk_renderables.push_back({glm::vec3(1.0f, -1.0f, 1.0f), ptr});
-    /*
-    for (int i = 0; i < 5; i++)
+    //m_chunk_renderables.push_back({glm::vec3(1.0f, -1.0f, 1.0f), ptr});
+    
+    for (int i = 0; i < 30; i++)
     {
-        for (int j = 0; j < 5; j++)
+        for (int j = 0; j < 20; j++)
         {
             m_chunk_renderables.push_back({glm::vec3(i, -1.0f, j), ptr});
         }
-    }*/
+    }
+
+    for (int i = 0; i < 30; i++)
+    {
+        for (int j = 0; j < 20; j++)
+        {
+            if ( (rand() % 5) == 0)
+                m_chunk_renderables.push_back({glm::vec3(i, 0.0f, j), ptr2});
+        }
+    }
  
 
     
@@ -178,8 +223,8 @@ void Renderer::tempUpdate(Input& input)
     float ticks = (SDL_GetTicks() / 1000.0);
     float timestep = (last_ticks - ticks);
 
-    m_perspectiveCameraController.update(input, timestep);
-    //m_ortho_camera_controller.update(input, timestep);
+    //m_perspectiveCameraController.update(input, timestep);
+    m_ortho_camera_controller.update(input, timestep);
 
     m_shader.use();
 
@@ -194,8 +239,8 @@ void Renderer::draw()
 
     m_shader.use();
 
-    glm::mat4 vp = m_perspectiveCameraController.GetCamera().getViewProjection();
-    //glm::mat4 vp = m_ortho_camera_controller.getCamera().getProjectionViewMatrix();
+    //glm::mat4 vp = m_perspectiveCameraController.GetCamera().getViewProjection();
+    glm::mat4 vp = m_ortho_camera_controller.getCamera().getProjectionViewMatrix();
     
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     glm::mat4 model(0.0f);
@@ -203,7 +248,7 @@ void Renderer::draw()
     
     for (auto it = m_chunk_renderables.begin(); it != m_chunk_renderables.end(); ++it)
     {
-        model = glm::translate(glm::mat4(1), it->position * 32.0f);
+        model = glm::scale(glm::mat4(1), {0.1f, 0.1f, 0.1f}) * glm::translate(glm::mat4(1), it->position * 8.0f);
         //normal = glm::transpose(glm::inverse(model));
         //glUniformMatrix4fv(uniform_normalMat, 1, GL_FALSE, glm::value_ptr(normal));
         glUniformMatrix4fv(uniform_vp, 1, GL_FALSE, glm::value_ptr(vp));
