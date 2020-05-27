@@ -153,6 +153,7 @@ bool Renderer::init(int win_width = 640, int win_height = 480)
     
 
 
+
     m_chunk_render_list = m_world.getWorldRenderList();
     //m_block_render_list = bchunk.getBlockRenderList();
      
@@ -167,6 +168,14 @@ bool Renderer::init(int win_width = 640, int win_height = 480)
 
     m_block_manager.updateDrawables(m_block_drawables);
     
+    
+
+    m_chunk_manager = ChunkManager(2);
+    m_chunk_manager.init();
+    
+    m_chunk_manager.updateVAOs(m_chunk_vaos);
+    std::cout << "updateVAOs size " << m_chunk_vaos.size() << std::endl;
+
 
     //m_block_drawables.push_back(block_manager.getDrawableVAO(1));
     //m_block_drawables.push_back(block_manager.getDrawableVAO(2));
@@ -230,6 +239,17 @@ void Renderer::draw()
     glm::mat4 model(0.0f);
     glm::mat4 normal(0.0f);
     
+
+    for (auto it = m_chunk_vaos.begin(); it != m_chunk_vaos.end(); ++it)
+    {
+        it->getDrawable().bind();
+        model = glm::translate(glm::mat4(1), glm::vec3(-2.0, -2.0, -2.0) * 8.0f);
+        glUniformMatrix4fv(uniform_vp, 1, GL_FALSE, glm::value_ptr(vp));
+        glUniformMatrix4fv(uniform_model, 1, GL_FALSE, glm::value_ptr(model));
+
+        it->getDrawable().draw();
+    }
+
     for (auto block_rl : m_chunk_render_list)
     {
         for (auto it : *block_rl)

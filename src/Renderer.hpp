@@ -22,6 +22,10 @@
 #include "BChunk.hpp"
 #include "World.hpp"
 
+
+
+#include "world/ChunkManager.h"
+
 class Renderer 
 {
 
@@ -50,6 +54,9 @@ private:
     std::vector<Chunk> m_chunks;
     std::vector<Renderable> m_chunk_renderables;
     std::unordered_map<BlockID, VertexArrayObject> m_block_drawables;
+
+    std::vector<VertexArrayObject> m_chunk_vaos;
+    ChunkManager m_chunk_manager;
 
     BlockRenderList m_block_render_list;
     std::vector<BlockRenderList*> m_chunk_render_list;
