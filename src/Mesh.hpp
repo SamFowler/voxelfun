@@ -11,6 +11,7 @@ class Mesh
 public:
 
     VertexArrayObject createBuffer();
+    VertexArrayObject createChunkBuffer();
 
 
     std::vector<GLuint> vertices;

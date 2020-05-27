@@ -51,7 +51,7 @@ VertexArrayObject makeChunkVAO(const NChunk& chunk, const int& chunk_size, const
     else 
         makeChunkMesh_Culling(chunk,chunk_size, chunk_mesh);
 
-    return chunk_mesh.createBuffer();
+    return chunk_mesh.createChunkBuffer();
 }
 
 void makeChunkMesh_Naive  (const NChunk& chunk, const int& chunk_size, Mesh& chunk_mesh)
