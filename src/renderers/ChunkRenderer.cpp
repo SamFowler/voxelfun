@@ -42,7 +42,10 @@ void ChunkRenderer::updateVAOs()
 {
     for (auto chunk_ptr : m_updated_chunk_list)
     {
-        m_chunk_vaos.push_back(ChunkMeshGenerator::makeChunkVAO(*chunk_ptr, 2) );
+        if (chunk_ptr != nullptr)
+        {
+            m_chunk_vaos.push_back(ChunkMeshGenerator::makeChunkVAO(*chunk_ptr, 2) );
+        }
     }
 
     //TODO not all meshes may get updated per frame if there are many and it takes time, so don't always clear this list
@@ -51,18 +54,14 @@ void ChunkRenderer::updateVAOs()
 
 void ChunkRenderer::draw(const PerspectiveCamera& camera)
 {
-    std::cout << "drawing chunks" << std::endl;
-
     m_shader.use();
 
     glm::mat4 vp = camera.getViewProjection();
     //glm::mat4 vp = m_ortho_camera_controller.getCamera().getProjectionViewMatrix();
     
-    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     glm::mat4 model(0.0f);
     glm::mat4 normal(0.0f);
     
-
     for (auto it = m_chunk_vaos.begin(); it != m_chunk_vaos.end(); ++it)
     {
         it->getDrawable().bind();
@@ -76,6 +75,7 @@ void ChunkRenderer::draw(const PerspectiveCamera& camera)
 
 void ChunkRenderer::destroy()
 {
+    m_updated_chunk_list.clear();
     m_chunk_vaos.clear();
     m_shader.destroy();
 }

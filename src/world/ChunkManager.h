@@ -9,10 +9,6 @@
 
 #include "../Input.hpp" // TODO: unsure if this should go here or not
 
-
-#include "../renderers/ChunkMeshGenerator.h"
-#include "../opengl_api/VertexArrayObject.hpp"
-
 class ChunkManager
 {
 
@@ -31,7 +27,7 @@ public:
 
     // Processors
     bool init();
-    std::vector<ChunkPos> update(const Input& input); // returns list of chunk positions that have been updated
+    void update(const Input& input);
     void destroy();
 
     // Getters
@@ -44,13 +40,8 @@ public:
 
     void clearUpdatedChunkList();
     std::vector<const Chunk*> getUpdatedChunkList() const;
-    //void updateUpdatedChunkList(const std::vector<const Chunk*>& chunks_still_to_update);
     
-    //const Chunk&              getChunk  (const VoxelWorldPos&               voxel_world_pos      ) const;
-    //std::pair<bool, const Chunk&> getChunk(const ChunkPos& chunk_pos) const;
-    const Chunk* getChunkPtr(const ChunkPos& chunk_pos) const;
-    const std::vector<Chunk>& getChunks (const std::vector<VoxelWorldPos>&  voxel_world_position ) const;
-    
+    const Chunk* getChunkPtr(const ChunkPos& chunk_pos) const; 
 
     Voxel              getVoxel (const VoxelWorldPos&              voxel_world_pos       ) const;
     std::vector<Voxel> getVoxels(const std::vector<VoxelWorldPos>& voxel_world_positions ) const;
@@ -59,8 +50,6 @@ public:
     void setVoxels      (const std::vector<VoxelWorldPos>& voxel_world_positions, const Voxel& new_voxel);
     void setVoxelsColour(const std::vector<VoxelWorldPos>& voxel_world_positions, const Colour& new_colour);
     void setVoxelsType  (const std::vector<VoxelWorldPos>& voxel_world_positions, const VoxelType& new_type);
-
-    void updateVAOs(std::vector<VertexArrayObject>& chunk_vaos);
 
 private:
     // Helpers
@@ -79,15 +68,12 @@ private:
     Voxel              getVoxel  (const ChunkAndVoxelPos&     chunk_voxel_pos      ) const;
     std::vector<Voxel> getVoxels (const ChunkAndManyVoxelPos& chunk_voxel_positions) const;
 
+private:
+
     // Private setters
     void setVoxelsInChunk      (const ChunkPos& chunk_position, const std::vector<glm::ivec3>& chunk_voxel_positions, const Voxel& new_voxel);
     void setVoxelColoursInChunk(const ChunkPos& chunk_position, const std::vector<glm::ivec3>& chunk_voxel_positions, const Colour& new_colour);
     void setVoxelTypesInChunk  (const ChunkPos& chunk_position, const std::vector<glm::ivec3>& chunk_voxel_positions, const VoxelType& new_type);
-
-
-
-
-private:
 
     // Data
     std::unordered_map<ChunkPos, Chunk, ChunkPositionHash> m_chunks;
@@ -96,12 +82,8 @@ private:
     //std::queue<> m_updated_chunk_list;
     std::vector<const Chunk*> m_updated_chunk_list;
 
-    std::vector<ChunkPos> m_chunk_update_list;
-    std::vector<VertexArrayObject> m_chunk_vaos;
-
     unsigned int m_chunk_size;
     unsigned int m_chunk_size_sq;
     unsigned int m_chunk_volume;
-     
 
 };

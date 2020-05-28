@@ -69,7 +69,6 @@ bool Renderer::init(int win_width = 640, int win_height = 480)
     }
 
     std::cout << "Renderer successfully initialised with window width " << win_width << " and height " << win_height << std::endl;
-    
 
     return true;
 
@@ -79,6 +78,9 @@ void Renderer::clear()
 {
     glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
 }
 
 void Renderer::draw() 

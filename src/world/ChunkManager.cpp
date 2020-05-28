@@ -20,18 +20,9 @@ bool ChunkManager::init()
     return true;
 }
 
-std::vector<ChunkPos> ChunkManager::update(const Input& input) 
+void ChunkManager::update(const Input& input) 
 {
-    //std::cout << "manager update" << std::endl;
-    /*
-    std::pair<bool, const Chunk&> got_chunk = getChunk({0,0,0});
-    if (got_chunk.first)
-    {
-        got_chunk.second.printChunk(true);
-    }*/
-     //getChunkPtr({0,0,0})->printChunk(true);;
 
-    return std::vector<ChunkPos>(3);
 }
 
 void ChunkManager::destroy()
@@ -102,9 +93,6 @@ void ChunkManager::addChunkToUpdateList(const ChunkPos& chunk_pos)
     m_updated_chunk_list.push_back(getChunkPtr(chunk_pos));
     std::cout << "chunk added to update list" << std::endl;
 
-
-    m_chunk_update_list.push_back(chunk_pos);
-
 }
 
 void ChunkManager::clearUpdatedChunkList()
@@ -116,33 +104,6 @@ std::vector<const Chunk*> ChunkManager::getUpdatedChunkList() const
 {
     return m_updated_chunk_list;
 }
-
-//void ChunkManager::updateUpdatedChunkList(const std::vector<const Chunk*>& chunks_still_to_update)
-//{
-//    m_updated_chunk_list = chunks_still_to_update;
-//}
-
-
-//const Chunk& ChunkManager::getChunk(const VoxelWorldPos& voxel_world_pos) const
-//{
-    //return m_chunk[]
-//}
-
-//std::pair<bool, const Chunk&> ChunkManager::getChunk(const ChunkPos& chunk_pos) const;
-/*
-std::pair<bool, const Chunk&> ChunkManager::getChunk(const ChunkPos& chunk_pos) const
-{
-    auto it = m_chunks.find(chunk_pos);
-    if (it != m_chunks.end())
-    {
-        return std::make_pair(true, it->second);
-    }
-    return std::make_pair(false, it->second);
-    //return m_chunks[chunk_pos]
-}
-*/
-
-
 
 const Chunk* ChunkManager::getChunkPtr(const ChunkPos& chunk_pos) const
 {
@@ -157,12 +118,4 @@ const Chunk* ChunkManager::getChunkPtr(const ChunkPos& chunk_pos) const
     }
     
     return nullptr;
-}
-
-void ChunkManager::updateVAOs(std::vector<VertexArrayObject>& chunk_vaos)
-{
-    for (auto chunk_pos : m_chunk_update_list)
-    {
-        chunk_vaos.push_back(ChunkMeshGenerator::makeChunkVAO(m_chunks.find(chunk_pos)->second, m_chunk_size));
-    }
 }

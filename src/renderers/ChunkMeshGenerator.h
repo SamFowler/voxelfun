@@ -26,7 +26,6 @@ public:
           m_chunk_volume  (chunk_size*chunk_size*chunk_size)
         {};
 */
-   // std::vector<ChunkRenderable> bufferUpdatedMeshes(std::vector<const Chunk*> list_of_updated_chunks);
 
     enum MeshMethod {
         NAIVE_MESH = 0,

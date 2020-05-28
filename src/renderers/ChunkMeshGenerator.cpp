@@ -4,36 +4,6 @@
 
 namespace ChunkMeshGenerator
 {
-/*
-std::vector<ChunkRenderable> bufferUpdatedMeshes(std::vector<const Chunk*> list_of_updated_chunks)
-{
-    std::vector<ChunkRenderable> new_chunk_renderables;
-
-    if (list_of_updated_chunks.empty() == true)
-        return new_chunk_renderables;
-
-    for (auto it = list_of_updated_chunks.begin(); it != list_of_updated_chunks.end();)
-    {
-        const Chunk* p_chunk_to_mesh = *it;  //TODO probably update this to a queue as taking front of vector
-
-        if (p_chunk_to_mesh == nullptr)
-        {
-            continue;
-        }
-
-        new_chunk_renderables.push_back(
-            {   //create ChunkRenderable and add it to new renderables
-                p_chunk_to_mesh->getPosition(),
-                makeChunkVAO(p_chunk_to_mesh, CULL_MESH_FAST) //TODO: some function here to decide which mesh type?
-            }
-        );
-
-        it = list_of_updated_chunks.erase(it);  
-    }
-
-    return new_chunk_renderables;
-}
-*/
 
 VertexArrayObject makeChunkVAO(const Chunk& chunk, const int& chunk_size, const MeshMethod& mesh_method)
 {
