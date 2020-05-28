@@ -5,7 +5,7 @@
 
 #include "../world/Chunk.h"
 #include "Renderables.h"
-#include "../Mesh.hpp"
+#include "../opengl_api/Mesh.hpp"
 #include <GL/glew.h>
 
 

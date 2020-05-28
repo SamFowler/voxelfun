@@ -10,8 +10,8 @@
 #include "../Input.hpp" // TODO: unsure if this should go here or not
 
 
-#include "../rendering/ChunkMeshGenerator.h"
-#include "../VertexArrayObject.hpp"
+#include "../renderers/ChunkMeshGenerator.h"
+#include "../opengl_api/VertexArrayObject.hpp"
 
 class ChunkManager
 {

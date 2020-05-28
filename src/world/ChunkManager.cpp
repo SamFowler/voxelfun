@@ -2,7 +2,6 @@
 
 #include <iostream> //TODO: replace with log
 
-#include "../rendering/ChunkMeshGenerator.h"
 
 bool ChunkManager::init() 
 {
@@ -116,7 +115,6 @@ void ChunkManager::clearUpdatedChunkList()
 std::vector<const Chunk*> ChunkManager::getUpdatedChunkList() const
 {
     return m_updated_chunk_list;
-
 }
 
 //void ChunkManager::updateUpdatedChunkList(const std::vector<const Chunk*>& chunks_still_to_update)

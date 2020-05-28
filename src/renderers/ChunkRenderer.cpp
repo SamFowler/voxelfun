@@ -1,14 +1,16 @@
-#include "World.hpp"
+#include "ChunkRenderer.h"
 
-//to be moved to world renderer
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp> //temp, to be moved to world renderer
+#include <glm/gtc/type_ptr.hpp>
 
-void World::init()
+#include "ChunkMeshGenerator.h"
+
+#include <iostream>
+
+void ChunkRenderer::init()
 {
-/*
-    //all this init to be moved to a world renderer
+
     m_shader.create("cube", "cube");
     m_shader.use();
 
@@ -20,36 +22,37 @@ void World::init()
     glm::vec3 light_position = {10.0f, 5.0f, 10.0f};
     glUniform3fv(uniform_lightpos, 1, glm::value_ptr(light_position));
     //glUniformMatrixfv(uniform_mvp, 1, GL_FALSE, glm::value_ptr(vp * model));
-  */
-    
-    m_chunk_manager = ChunkManager(2);
-    m_chunk_manager.init();
-    
-    m_chunk_manager.updateVAOs(m_chunk_vaos);
-    std::cout << "updateVAOs size " << m_chunk_vaos.size() << std::endl;
-    
-    m_chunk_renderer.init();
-
 
 }
 
-void World::update(const float& timestep)
+void ChunkRenderer::getNewChunkUpdates(const std::vector<const Chunk*> updated_chunks)
 {
-    //m_chunk_manager.updateChunks();
-    //m_chunk_manager.updateVoxelNeighbours();
 
-    m_chunk_renderer.getNewChunkUpdates(
-        m_chunk_manager.getUpdatedChunkList()
-    );
-    m_chunk_manager.clearUpdatedChunkList();
-    m_chunk_renderer.updateVAOs();
+    //if (updated_chunks.size() != 0) 
+    //{
+        for (auto chunk_ptr : updated_chunks)
+        {
+            //TODO: check to see if chunk is already on remesh list? 
+            m_updated_chunk_list.push_back(chunk_ptr);
+        }
+    //}
 }
 
-
-void World::render(const PerspectiveCamera& camera)
+void ChunkRenderer::updateVAOs()
 {
-    m_chunk_renderer.draw(camera);
-    /*
+    for (auto chunk_ptr : m_updated_chunk_list)
+    {
+        m_chunk_vaos.push_back(ChunkMeshGenerator::makeChunkVAO(*chunk_ptr, 2) );
+    }
+
+    //TODO not all meshes may get updated per frame if there are many and it takes time, so don't always clear this list
+    m_updated_chunk_list.clear();
+}
+
+void ChunkRenderer::draw(const PerspectiveCamera& camera)
+{
+    std::cout << "drawing chunks" << std::endl;
+
     m_shader.use();
 
     glm::mat4 vp = camera.getViewProjection();
@@ -69,14 +72,10 @@ void World::render(const PerspectiveCamera& camera)
 
         it->getDrawable().draw();
     }
-
-*/
-
 }
 
-
-void World::destroy()
+void ChunkRenderer::destroy()
 {
-    m_chunk_renderer.destroy();    
-    m_chunk_manager.destroy();
+    m_chunk_vaos.clear();
+    m_shader.destroy();
 }

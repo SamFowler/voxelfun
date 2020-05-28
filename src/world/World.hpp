@@ -4,11 +4,12 @@
 
 #include "../camera/PerspectiveCamera.hpp"
 #include "ChunkManager.h"
+#include "../renderers/ChunkRenderer.h"
 
 #include <vector>
 #include <memory>
 
-#include "../Shader.hpp" // temp, to be moved to world renderer
+#include "../opengl_api/Shader.hpp" // temp, to be moved to world renderer
 
 class World
 {
@@ -22,7 +23,7 @@ public:
 private:
 
     ChunkManager m_chunk_manager;
-    
+    ChunkRenderer m_chunk_renderer;
  
     //temp, to be moved to a world renderer
 //    WorldRenderer m_world_renderer;
