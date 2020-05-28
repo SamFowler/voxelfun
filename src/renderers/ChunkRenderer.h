@@ -12,12 +12,15 @@
 class ChunkRenderer
 {
 public:
-    void init();
+    void init(const unsigned int& chunk_size);
     void getNewChunkUpdates(const std::vector<const Chunk*> updated_chunks);
-    void updateVAOs(const unsigned int& chunk_size);
+    void updateVAOs();
     void draw(const PerspectiveCamera& camera);
     void destroy();
 private:
+
+    float m_chunk_offset;
+    unsigned int m_chunk_size;
 
     std::vector<const Chunk*> m_updated_chunk_list;
     std::vector<VertexArrayObject> m_chunk_vaos;

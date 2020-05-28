@@ -9,8 +9,11 @@
 #include <iostream>
 #include "../helpers/Logging.h"
 
-void ChunkRenderer::init()
+void ChunkRenderer::init(const unsigned int& chunk_size)
 {
+    m_chunk_offset = (float)chunk_size;
+    m_chunk_size = chunk_size;
+
 
     m_shader.create("cube", "cube");
     m_shader.use();
@@ -39,14 +42,14 @@ void ChunkRenderer::getNewChunkUpdates(const std::vector<const Chunk*> updated_c
     //}
 }
 
-void ChunkRenderer::updateVAOs(const unsigned int& chunk_size)
+void ChunkRenderer::updateVAOs()
 {
     for (auto chunk_ptr : m_updated_chunk_list)
     {
         if (chunk_ptr != nullptr)
         {
             //m_chunk_vaos.push_back(ChunkMeshGenerator::makeChunkVAO(*chunk_ptr, chunk_size) );
-            m_chunk_renderables.push_back({chunk_ptr->getPosition(), ChunkMeshGenerator::makeChunkVAO(*chunk_ptr, chunk_size) });
+            m_chunk_renderables.push_back({chunk_ptr->getPosition(), ChunkMeshGenerator::makeChunkVAO(*chunk_ptr, m_chunk_size) });
         }
     }
 
@@ -66,7 +69,7 @@ void ChunkRenderer::draw(const PerspectiveCamera& camera)
     for (auto it = m_chunk_renderables.begin(); it != m_chunk_renderables.end(); ++it)
     {   
         it->vao.getDrawable().bind();
-        model = glm::translate(glm::mat4(1), glm::vec3(it->position.pos) * 32.0f);
+        model = glm::translate(glm::mat4(1), glm::vec3(it->position.pos) * m_chunk_offset);
         glUniformMatrix4fv(uniform_vp, 1, GL_FALSE, glm::value_ptr(vp));
         glUniformMatrix4fv(uniform_model, 1, GL_FALSE, glm::value_ptr(model));
 
