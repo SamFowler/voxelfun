@@ -65,22 +65,22 @@ void Input::pollEvents()
     }
 }
 
-bool Input::wasKeyPressed(SDL_Keycode key)
+bool Input::wasKeyPressed(const SDL_Keycode key)
 {
 	return m_pressed_keys[key];
 }
 
-bool Input::wasKeyReleased(SDL_Keycode key)
+bool Input::wasKeyReleased(const SDL_Keycode key)
 {
 	return m_released_keys[key];
 }
 
-bool Input::isKeyHeld(SDL_Keycode key)
+bool Input::isKeyHeld(const SDL_Keycode key)
 {
 	return m_held_keys[key];
 }
 
-bool Input::isQuit()
+bool Input::isQuit() const
 {
     return m_is_quit;
 }
@@ -90,30 +90,30 @@ void Input::quitEvent()
     m_is_quit = true;
 }
 
-bool Input::wasButtonPressed(mbutton buttonEnum)
+bool Input::wasButtonPressed(const mbutton buttonEnum)
 {
     return m_mouse.button_states[buttonEnum].pressed;
 }
-bool Input::wasButtonReleased(mbutton buttonEnum)
+bool Input::wasButtonReleased(const mbutton buttonEnum)
 {
     return m_mouse.button_states[buttonEnum].released;
 }
-bool Input::isButtonHeld(mbutton buttonEnum)
+bool Input::isButtonHeld(const mbutton buttonEnum)
 {
     return m_mouse.button_states[buttonEnum].held;
 }
 
-Uint8 Input::buttonClicks(mbutton buttonEnum)
+Uint8 Input::buttonClicks(const mbutton buttonEnum)
 {
     return m_mouse.button_states[buttonEnum].clicks;
 }
 
-glm::ivec2 Input::getMousePos()
+glm::ivec2 Input::getMousePos() const
 {
     return m_mouse.pos;
 }
 
-glm::ivec2 Input::getRelMousePos()
+glm::ivec2 Input::getRelMousePos() const
 {
     return m_mouse.rel_pos;
 }

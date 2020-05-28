@@ -10,8 +10,8 @@ class World
 {
 public:
     void init();
-    void update(const Input &input);
-
+    void update(const float& timestep);
+    void render(/*const Camera& camera*/);
    
 
 

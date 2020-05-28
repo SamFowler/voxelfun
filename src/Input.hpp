@@ -45,7 +45,7 @@ public:
         rel_pos.y = 0;
     }
 
-    inline void printButtonState(mbutton button) 
+    inline void printButtonState(mbutton button)
     {
         std::cout << "S:" << button_states[button].state << " C:" << unsigned(button_states[button].clicks) << " P:" << button_states[button].pressed
                 << " R:" << button_states[button].released << " H:" << button_states[button].held << " x:" << pos.x << " y:" << pos.y 
@@ -72,19 +72,19 @@ public:
     bool init();
     void collect();
 
-	bool wasKeyPressed(SDL_Keycode);
-	bool wasKeyReleased(SDL_Keycode);
-	bool isKeyHeld(SDL_Keycode);
+	bool wasKeyPressed(const SDL_Keycode);
+	bool wasKeyReleased(const SDL_Keycode);
+	bool isKeyHeld(const SDL_Keycode);
 
-    bool isQuit();
+    bool isQuit() const;
 
-    bool wasButtonPressed(mbutton);
-    bool wasButtonReleased(mbutton);
-    bool isButtonHeld(mbutton);
-    Uint8 buttonClicks(mbutton);
-    glm::ivec2 getMousePos();
-    glm::ivec2 getRelMousePos();
-    inline void printMouse(mbutton button) {m_mouse.printButtonState(button);}
+    bool wasButtonPressed(const mbutton); 
+    bool wasButtonReleased(const mbutton);
+    bool isButtonHeld(const mbutton);
+    Uint8 buttonClicks(const mbutton);
+    glm::ivec2 getMousePos() const;
+    glm::ivec2 getRelMousePos() const;
+    inline void printMouse(const mbutton button) {m_mouse.printButtonState(button);}
 
 
 private:

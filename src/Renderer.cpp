@@ -106,17 +106,18 @@ bool Renderer::init(int win_width = 640, int win_height = 480)
     m_chunk_manager.updateVAOs(m_chunk_vaos);
     std::cout << "updateVAOs size " << m_chunk_vaos.size() << std::endl;
 
-    
-
     return true;
 
 }
 
+void Renderer::clear()
+{
+    glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
 void Renderer::tempUpdate(Input& input)
 {
-    float angle = SDL_GetTicks() / 1000.0 * 30; //30deg per second
-    glm::vec3 axis_y(0,1,0);
-    //glm::mat4 anim = glm::rotate(glm::mat4(1.0f), glm::radians(angle), axis_y);
 
     float ticks = (SDL_GetTicks() / 1000.0);
     float timestep = (last_ticks - ticks);
@@ -124,7 +125,7 @@ void Renderer::tempUpdate(Input& input)
     m_perspectiveCameraController.update(input, timestep);
     //m_ortho_camera_controller.update(input, timestep);
 
-    m_shader.use();
+    //m_shader.use();
 
     last_ticks = ticks;
 
@@ -132,8 +133,7 @@ void Renderer::tempUpdate(Input& input)
 
 void Renderer::draw() 
 {
-    glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    
 
     m_shader.use();
 

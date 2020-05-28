@@ -29,15 +29,19 @@ public:
 
    // Renderer(int win_width, int win_height, int fov);
     bool init(int win_width, int win_height);
+
+    void clear();
     void draw();
-    void destroy();
     void tempUpdate(Input& input);
+
+    void destroy();
+
 private:
     std::shared_ptr<SDL_Window> m_window;
     SDL_GLContext m_context;
 
     PerspectiveCameraController m_perspectiveCameraController = {45, (1280.0f/960.0f), 0.1f, 500.0f};
-    OrthographicCameraController m_ortho_camera_controller = {(1280.0f/960.0f)};
+    //OrthographicCameraController m_ortho_camera_controller = {(1280.0f/960.0f)};
 
     float last_ticks = 0; //temp
 
