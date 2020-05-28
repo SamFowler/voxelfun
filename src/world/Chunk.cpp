@@ -12,9 +12,17 @@ Chunk::Chunk (Chunk chunk, ChunkManager& manager_ptr)
         std::cout << "chunk created" << std::endl;
     }
 
-Chunk::Chunk (ChunkPos position, std::vector<Voxel> voxels, std::vector<Colour> colours, ChunkManager& manager_ptr)
+Chunk::Chunk (const ChunkPos& position, ChunkManager& manager)
+    : mp_manager(manager), m_position(position),
+    m_remesh(true)
+{
+    
+}
+
+
+Chunk::Chunk (ChunkPos position, std::vector<Voxel> voxels, std::vector<Colour> colours, ChunkManager& manager)
     : m_voxel_data(std::move(voxels)),   m_chunk_colours(std::move(colours)),
-      mp_manager  (manager_ptr),         m_position     (std::move(position)),
+      mp_manager  (manager),         m_position     (std::move(position)),
       m_remesh    (true)
     {
         std::cout << "chunk created" << std::endl;
@@ -309,7 +317,7 @@ void Chunk::changeVoxelsFromTo(const Voxel& from_voxel, const Voxel& to_voxel)
 void Chunk::printChunk(const bool printVoxels) const
 {
     std::cout << "[Chunk] pos{" << m_position.pos.x << " " << m_position.pos.y << " " << m_position.pos.x << "}, num_voxels{" <<
-            m_voxel_data.size() << "}" << std::endl << "    colours{";
+            m_voxel_data.size() << "}, colours{";
     for (auto it : m_chunk_colours)
     {
         it.logColour(); std::cout << ", ";

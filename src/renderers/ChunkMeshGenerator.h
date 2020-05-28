@@ -36,11 +36,11 @@ public:
         COUNT
     };
 
-    VertexArrayObject makeChunkVAO(const Chunk& chunk, const int& chunk_size, const MeshMethod& mesh_method = CULL_MESH_FAST);
-    void makeChunkMesh_Naive  (const Chunk& chunk, const int& chunk_size, ChunkMesh& chunk_mesh);
-    void makeChunkMesh_Culling(const Chunk& chunk, const int& chunk_size, ChunkMesh& chunk_mesh);
-    void makeChunkMesh_Greedy (const Chunk& chunk, const int& chunk_size, ChunkMesh& chunk_mesh);
-    void makeChunkMesh_Optimal(const Chunk& chunk, const int& chunk_size, ChunkMesh& chunk_mesh);
+    VertexArrayObject makeChunkVAO(const Chunk& chunk, const unsigned int& chunk_size, const MeshMethod& mesh_method = CULL_MESH_FAST);
+    void makeChunkMesh_Naive  (const Chunk& chunk, const unsigned int& chunk_size, ChunkMesh& chunk_mesh);
+    void makeChunkMesh_Culling(const Chunk& chunk, const unsigned int& chunk_size, ChunkMesh& chunk_mesh);
+    void makeChunkMesh_Greedy (const Chunk& chunk, const unsigned int& chunk_size, ChunkMesh& chunk_mesh);
+    void makeChunkMesh_Optimal(const Chunk& chunk, const unsigned int& chunk_size, ChunkMesh& chunk_mesh);
 
     void addFace(ChunkMesh& mesh, const Voxel& voxel, const VoxelInChunkPos& voxel_pos, const Colour& voxel_colour,
                     int& element_count, const std::array<GLuint, 12>& face_verts, const GLuint& normal_index);

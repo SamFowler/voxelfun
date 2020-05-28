@@ -2,9 +2,9 @@
 
 #include <iostream> //TODO: replace with log
 
-
 bool ChunkManager::init() 
 {
+    /*
     //addChunk( {} )
     //Chunk (ChunkPos position, std::vector<Voxel> voxels, std::vector<Colour> colours, ChunkManager& manager_ptr);
     std::cout << "chunk manager init" << std::endl;
@@ -15,7 +15,7 @@ bool ChunkManager::init()
 
     addChunk(
         pos, voxels, colours
-    );
+    );*/
 
     return true;
 }
@@ -30,6 +30,16 @@ void ChunkManager::destroy()
 
 }
 
+void ChunkManager::addChunk(const ChunkPos& position, const ChunkMakeType& type)
+{
+    std::vector<Voxel> voxels;
+    voxels.reserve(sizeof(Voxel)*m_chunk_volume);
+    std::vector<Colour> colours;
+
+    DefaultChunkMaker::makeChunk(type, voxels, colours, m_chunk_size);
+
+    addChunk(position, voxels, colours);
+}
 void ChunkManager::addChunk(const ChunkPos& position, const std::vector<Voxel>& voxels, const std::vector<Colour>& colours)
 {
     

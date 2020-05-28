@@ -16,7 +16,8 @@ class Chunk
 public:
     //Constructors
     Chunk (Chunk chunk, ChunkManager& manager_ptr);
-    Chunk (ChunkPos position, std::vector<Voxel> voxels, std::vector<Colour> colours, ChunkManager& manager_ptr);
+    Chunk (const ChunkPos& position, ChunkManager& manager);
+    Chunk (ChunkPos position, std::vector<Voxel> voxels, std::vector<Colour> colours, ChunkManager& manager);
 
     // Helpers
     unsigned int    indexFromInChunkPos   (const VoxelInChunkPos& voxel_coord) const;

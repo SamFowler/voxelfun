@@ -9,10 +9,10 @@
 
 #include "../Input.hpp" // TODO: unsure if this should go here or not
 
+#include "DefaultChunkMaker.h"
+
 class ChunkManager
 {
-
-
 public:
     friend class Chunk;
     //friend class ChunkMeshGenerator;
@@ -32,6 +32,8 @@ public:
 
     // Getters
     int getNumChunks() const;
+    
+    void addChunk(const ChunkPos& position, const ChunkMakeType&);
     void addChunk(const ChunkPos& position, const std::vector<Voxel>& voxels, const std::vector<Colour>& colours);
     //void addChunk    (const Chunk&              chunk          );
     //void addChunks   (const std::vector<Chunk>& chunks         );

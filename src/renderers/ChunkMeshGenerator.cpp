@@ -5,7 +5,7 @@
 namespace ChunkMeshGenerator
 {
 
-VertexArrayObject makeChunkVAO(const Chunk& chunk, const int& chunk_size, const MeshMethod& mesh_method)
+VertexArrayObject makeChunkVAO(const Chunk& chunk, const unsigned int& chunk_size, const MeshMethod& mesh_method)
 {
     ChunkMesh chunk_mesh;
     if (mesh_method == CULL_MESH_FAST) // doesn't check neighbouring chunks
@@ -24,12 +24,12 @@ VertexArrayObject makeChunkVAO(const Chunk& chunk, const int& chunk_size, const 
     return chunk_mesh.createChunkBuffer();
 }
 
-void makeChunkMesh_Naive  (const Chunk& chunk, const int& chunk_size, ChunkMesh& chunk_mesh)
+void makeChunkMesh_Naive  (const Chunk& chunk, const unsigned int& chunk_size, ChunkMesh& chunk_mesh)
 {
 
 }
 
-void makeChunkMesh_Culling(const Chunk& chunk, const int& chunk_size, ChunkMesh& chunk_mesh)
+void makeChunkMesh_Culling(const Chunk& chunk, const unsigned int& chunk_size, ChunkMesh& chunk_mesh)
 {
     int element_count = 0;
     //int chunk_size = 8;
@@ -65,12 +65,12 @@ void makeChunkMesh_Culling(const Chunk& chunk, const int& chunk_size, ChunkMesh&
 
 }
 
-void makeChunkMesh_Greedy (const Chunk& chunk, const int& chunk_size, ChunkMesh& chunk_mesh)
+void makeChunkMesh_Greedy (const Chunk& chunk, const unsigned int& chunk_size, ChunkMesh& chunk_mesh)
 {
 
 }
 
-void makeChunkMesh_Optimal(const Chunk& chunk, const int& chunk_size, ChunkMesh& chunk_mesh)
+void makeChunkMesh_Optimal(const Chunk& chunk, const unsigned int& chunk_size, ChunkMesh& chunk_mesh)
 {
 
 }

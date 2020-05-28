@@ -7,6 +7,7 @@
 #include "ChunkMeshGenerator.h"
 
 #include <iostream>
+#include "../helpers/Logging.h"
 
 void ChunkRenderer::init()
 {
@@ -38,13 +39,14 @@ void ChunkRenderer::getNewChunkUpdates(const std::vector<const Chunk*> updated_c
     //}
 }
 
-void ChunkRenderer::updateVAOs()
+void ChunkRenderer::updateVAOs(const unsigned int& chunk_size)
 {
     for (auto chunk_ptr : m_updated_chunk_list)
     {
         if (chunk_ptr != nullptr)
         {
-            m_chunk_vaos.push_back(ChunkMeshGenerator::makeChunkVAO(*chunk_ptr, 2) );
+            //m_chunk_vaos.push_back(ChunkMeshGenerator::makeChunkVAO(*chunk_ptr, chunk_size) );
+            m_chunk_renderables.push_back({chunk_ptr->getPosition(), ChunkMeshGenerator::makeChunkVAO(*chunk_ptr, chunk_size) });
         }
     }
 
@@ -61,15 +63,14 @@ void ChunkRenderer::draw(const PerspectiveCamera& camera)
     
     glm::mat4 model(0.0f);
     glm::mat4 normal(0.0f);
-    
-    for (auto it = m_chunk_vaos.begin(); it != m_chunk_vaos.end(); ++it)
-    {
-        it->getDrawable().bind();
-        model = glm::translate(glm::mat4(1), glm::vec3(-2.0, -2.0, -2.0) * 8.0f);
+    for (auto it = m_chunk_renderables.begin(); it != m_chunk_renderables.end(); ++it)
+    {   
+        it->vao.getDrawable().bind();
+        model = glm::translate(glm::mat4(1), glm::vec3(it->position.pos) * 32.0f);
         glUniformMatrix4fv(uniform_vp, 1, GL_FALSE, glm::value_ptr(vp));
         glUniformMatrix4fv(uniform_model, 1, GL_FALSE, glm::value_ptr(model));
 
-        it->getDrawable().draw();
+        it->vao.getDrawable().draw();
     }
 }
 

@@ -14,7 +14,6 @@
 class World
 {
 public:
-
     void init();
     void update(const float& timestep);
     void render(const PerspectiveCamera& camera);
