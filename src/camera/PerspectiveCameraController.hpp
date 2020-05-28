@@ -2,7 +2,7 @@
 
 #include "PerspectiveCamera.hpp"
 
-#include "Input.hpp"
+#include "../Input.hpp"
 
 class PerspectiveCameraController 
 {

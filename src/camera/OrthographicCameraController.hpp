@@ -1,6 +1,6 @@
 #pragma once
 #include "OrthographicCamera.hpp"
-#include "Input.hpp"
+#include "../Input.hpp"
 
 class OrthographicCameraController 
 {

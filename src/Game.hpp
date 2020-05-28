@@ -1,6 +1,6 @@
 #pragma once
 #include "Input.hpp"
-#include "World.hpp"
+#include "world/World.hpp"
 
 
 class Game 

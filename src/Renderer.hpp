@@ -13,10 +13,10 @@
 #include "sdl2_shared.cpp"
 #include "Shader.hpp"
 #include "VertexArrayObject.hpp"
-#include "PerspectiveCameraController.hpp"
-#include "OrthographicCameraController.hpp"
+#include "camera/PerspectiveCameraController.hpp"
+#include "camera/OrthographicCameraController.hpp"
 #include "Input.hpp" // temp
-#include "World.hpp"
+#include "world/World.hpp"
 
 
 
