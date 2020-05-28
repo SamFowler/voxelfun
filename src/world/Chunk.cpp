@@ -220,15 +220,15 @@ void Chunk::updateNeighbours(const VoxelInChunkPos& voxel_coord)
     uint8_t neighbours = 0x00;
 
     //if (isChunkEdge(voxel_coord))
-    {   // set each of the 6 active bits of neighours to false if voxel is on that chunk edge or to the "isVisible" result of the neighbour in that direction
-        neighbours |= ( (voxel_coord.pos.x     == 0                      ) ? false : (getVoxel({voxel_coord.pos.x - 1, voxel_coord.pos.y    , voxel_coord.pos.z    }).isVisible()) ) << 0;
-        neighbours |= ( (voxel_coord.pos.x + 1 == mp_manager.m_chunk_size) ? false : (getVoxel({voxel_coord.pos.x + 1, voxel_coord.pos.y    , voxel_coord.pos.z    }).isVisible()) ) << 1;
-        neighbours |= ( (voxel_coord.pos.y     == 0                      ) ? false : (getVoxel({voxel_coord.pos.x    , voxel_coord.pos.y - 1, voxel_coord.pos.z    }).isVisible()) ) << 2;
-        neighbours |= ( (voxel_coord.pos.y + 1 == mp_manager.m_chunk_size) ? false : (getVoxel({voxel_coord.pos.x    , voxel_coord.pos.y + 1, voxel_coord.pos.z    }).isVisible()) ) << 3;
-        neighbours |= ( (voxel_coord.pos.z     == 0                      ) ? false : (getVoxel({voxel_coord.pos.x    , voxel_coord.pos.y    , voxel_coord.pos.z - 1}).isVisible()) ) << 4;
-        neighbours |= ( (voxel_coord.pos.z + 1 == mp_manager.m_chunk_size) ? false : (getVoxel({voxel_coord.pos.x    , voxel_coord.pos.y    , voxel_coord.pos.z + 1}).isVisible()) ) << 5;
+     // set each of the 6 active bits of neighours to false if voxel is on that chunk edge or to the "isVisible" result of the neighbour in that direction
+    neighbours |= ( (voxel_coord.pos.x     == 0                      ) ? false : (getVoxel({voxel_coord.pos.x - 1, voxel_coord.pos.y    , voxel_coord.pos.z    }).isVisible()) ) << 0;
+    neighbours |= ( (voxel_coord.pos.x + 1 == mp_manager.m_chunk_size) ? false : (getVoxel({voxel_coord.pos.x + 1, voxel_coord.pos.y    , voxel_coord.pos.z    }).isVisible()) ) << 1;
+    neighbours |= ( (voxel_coord.pos.y     == 0                      ) ? false : (getVoxel({voxel_coord.pos.x    , voxel_coord.pos.y - 1, voxel_coord.pos.z    }).isVisible()) ) << 2;
+    neighbours |= ( (voxel_coord.pos.y + 1 == mp_manager.m_chunk_size) ? false : (getVoxel({voxel_coord.pos.x    , voxel_coord.pos.y + 1, voxel_coord.pos.z    }).isVisible()) ) << 3;
+    neighbours |= ( (voxel_coord.pos.z     == 0                      ) ? false : (getVoxel({voxel_coord.pos.x    , voxel_coord.pos.y    , voxel_coord.pos.z - 1}).isVisible()) ) << 4;
+    neighbours |= ( (voxel_coord.pos.z + 1 == mp_manager.m_chunk_size) ? false : (getVoxel({voxel_coord.pos.x    , voxel_coord.pos.y    , voxel_coord.pos.z + 1}).isVisible()) ) << 5;
         //TODO replace the "false" with a check into neighbour chunks
-    }
+
   
     //std::cout << std::hex << (int)neighbours << std::endl;
     m_voxel_data[ indexFromInChunkPos(voxel_coord) ].setNeighbours(neighbours);

@@ -48,7 +48,7 @@ void ChunkManager::addChunk(const ChunkPos& position, const std::vector<Voxel>& 
     {
         
         std::cout << "Adding: " << std::endl;
-        auto chunk = m_chunks.emplace(
+        auto& chunk = m_chunks.emplace(
             std::piecewise_construct,
             std::forward_as_tuple(position),
             std::forward_as_tuple(position, voxels, colours, *this)
@@ -59,27 +59,7 @@ void ChunkManager::addChunk(const ChunkPos& position, const std::vector<Voxel>& 
         addChunkToUpdateList(position);
     }
 }
-/*
-void ChunkManager::addChunk(const Chunk& chunk)
-{
-    auto it = m_chunks.find(chunk.getPosition());
-    if(it == m_chunks.end())
-    {
-        m_chunks.emplace( 
-            std::piecewise_construct,
-            std::forward_as_tuple(chunk.getPosition()),
-            std::forward_as_tuple(chunk, *this)
-            );
-    }
-}
-void ChunkManager::addChunks(const std::vector<Chunk>& chunks)
-{
-    for (auto chunk : chunks)
-    {
-        addChunk(chunk);
-    }
-}
-*/
+
 void ChunkManager::replaceChunk(const Chunk& chunk)
 {
     m_chunks.emplace( 

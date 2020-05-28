@@ -49,12 +49,12 @@ public:
     bool isOccupiable()   const  { return ( m_voxel_type == VoxelType::Empty ); }
     bool isDestructable() const  { return isVisible(); }
 
-    bool hasXMinusNeighbour() const { return m_neighbours && 0x01; } 
-    bool hasXPlusNeighbour()  const { return m_neighbours && 0x02; } 
-    bool hasYMinusNeighbour() const { return m_neighbours && 0x04; } 
-    bool hasYPlusNeighbour()  const { return m_neighbours && 0x08; } 
-    bool hasZMinusNeighbour() const { return m_neighbours && 0x10; } 
-    bool hasZPlusNeighbour()  const { return m_neighbours && 0x20; } 
+    bool hasXMinusNeighbour() const { return (m_neighbours & 0x01); } 
+    bool hasXPlusNeighbour()  const { return (m_neighbours & 0x02); } 
+    bool hasYMinusNeighbour() const { return (m_neighbours & 0x04); } 
+    bool hasYPlusNeighbour()  const { return (m_neighbours & 0x08); } 
+    bool hasZMinusNeighbour() const { return (m_neighbours & 0x10); } 
+    bool hasZPlusNeighbour()  const { return (m_neighbours & 0x20); } 
 
     // Debug
     void logVoxel() const { std::cout << "[" << (int)m_colour_id << "," << (int)(m_voxel_type) << "]"; }

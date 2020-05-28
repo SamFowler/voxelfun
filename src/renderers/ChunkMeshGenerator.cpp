@@ -47,18 +47,18 @@ void makeChunkMesh_Culling(const Chunk& chunk, const unsigned int& chunk_size, C
 
                 Colour voxel_colour = chunk.getColour(voxel.getColourId());
 
-                //if (voxel.hasXMinusNeighbour())
-                    addFace(chunk_mesh, voxel, voxel_pos, voxel_colour, element_count, X_MINUS_FACE, X_MINUS_NORMAL_INDEX);
-                //if (voxel.hasXPlusNeighbour())
-                    addFace(chunk_mesh, voxel, voxel_pos, voxel_colour, element_count, X_PLUS_FACE, X_PLUS_NORMAL_INDEX);
-                //if (voxel.hasYMinusNeighbour())
-                    addFace(chunk_mesh, voxel, voxel_pos, voxel_colour, element_count, Y_MINUS_FACE, Y_MINUS_NORMAL_INDEX);
-                //if (voxel.hasYPlusNeighbour())
-                    addFace(chunk_mesh, voxel, voxel_pos, voxel_colour, element_count, Y_PLUS_FACE, Y_PLUS_NORMAL_INDEX);
-                //if (voxel.hasZMinusNeighbour())
-                    addFace(chunk_mesh, voxel, voxel_pos, voxel_colour, element_count, Z_MINUS_FACE, Z_MINUS_NORMAL_INDEX);
-                //if (voxel.hasZPlusNeighbour())
-                    addFace(chunk_mesh, voxel, voxel_pos, voxel_colour, element_count, Z_PLUS_FACE, Z_PLUS_NORMAL_INDEX);
+                if (!voxel.hasXMinusNeighbour())
+              		addFace(chunk_mesh, voxel, voxel_pos, voxel_colour, element_count, X_MINUS_FACE, X_MINUS_NORMAL_INDEX);
+                if (!voxel.hasXPlusNeighbour())
+              		addFace(chunk_mesh, voxel, voxel_pos, voxel_colour, element_count, X_PLUS_FACE, X_PLUS_NORMAL_INDEX);
+                if (!voxel.hasYMinusNeighbour())
+              		addFace(chunk_mesh, voxel, voxel_pos, voxel_colour, element_count, Y_MINUS_FACE, Y_MINUS_NORMAL_INDEX);
+                if (!voxel.hasYPlusNeighbour())
+              		addFace(chunk_mesh, voxel, voxel_pos, voxel_colour, element_count, Y_PLUS_FACE, Y_PLUS_NORMAL_INDEX);
+                if (!voxel.hasZMinusNeighbour())
+                	addFace(chunk_mesh, voxel, voxel_pos, voxel_colour, element_count, Z_MINUS_FACE, Z_MINUS_NORMAL_INDEX);
+                if (!voxel.hasZPlusNeighbour())
+                	addFace(chunk_mesh, voxel, voxel_pos, voxel_colour, element_count, Z_PLUS_FACE, Z_PLUS_NORMAL_INDEX);
             }
         }
     }
