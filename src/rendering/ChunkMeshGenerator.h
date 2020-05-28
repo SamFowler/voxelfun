@@ -43,7 +43,7 @@ public:
     void makeChunkMesh_Greedy (const Chunk& chunk, const int& chunk_size, Mesh& chunk_mesh);
     void makeChunkMesh_Optimal(const Chunk& chunk, const int& chunk_size, Mesh& chunk_mesh);
 
-    void addFace(Mesh& mesh, const Voxel& voxel, const VoxelInChunkPos& voxel_pos, const NColour& voxel_colour,
+    void addFace(Mesh& mesh, const Voxel& voxel, const VoxelInChunkPos& voxel_pos, const Colour& voxel_colour,
                     int& element_count, const std::array<GLuint, 12>& face_verts);
 
 //private:

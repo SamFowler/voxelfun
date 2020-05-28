@@ -6,7 +6,7 @@
 
 #include "Voxel.h"
 #include "Coordinates.h"
-#include "NColour.h"
+#include "Colour.h"
 
 
 class ChunkManager;
@@ -16,7 +16,7 @@ class Chunk
 public:
     //Constructors
     Chunk (Chunk chunk, ChunkManager& manager_ptr);
-    Chunk (ChunkPos position, std::vector<Voxel> voxels, std::vector<NColour> colours, ChunkManager& manager_ptr);
+    Chunk (ChunkPos position, std::vector<Voxel> voxels, std::vector<Colour> colours, ChunkManager& manager_ptr);
 
     // Helpers
     unsigned int    indexFromInChunkPos   (const VoxelInChunkPos& voxel_coord) const;
@@ -25,39 +25,39 @@ public:
     bool isChunkEdge  (const VoxelInChunkPos& voxel_coord) const;
     bool isChunkEdge  (const int&             voxel_index) const;
 
-    ColourID addColour(const NColour& colour);
-    void removeColour (const NColour& colour);
+    ColourID addColour(const Colour& colour);
+    void removeColour (const Colour& colour);
     void removeColour (const ColourID& colour_id);
     void removeAllColours();
-    ColourID findColour (const NColour& colour) const;
+    ColourID findColour (const Colour& colour) const;
 
     // Getters
     ChunkPos    getPosition   () const  { return m_position;   }
 
-    NColour     getColour       (const ColourID&        colour_id  ) const;
-    NColour     getVoxelColour  (const VoxelInChunkPos& voxel_coord) const;
+    Colour     getColour       (const ColourID&        colour_id  ) const;
+    Colour     getVoxelColour  (const VoxelInChunkPos& voxel_coord) const;
     VoxelType  getVoxelType    (const VoxelInChunkPos& voxel_coord) const;
     const Voxel&    getVoxel        (const VoxelInChunkPos& voxel_coord) const;
     VoxelInChunkPos getTopVoxelPos (const VoxelInChunkPos& voxel_coord)  const;
 
     const std::vector<Voxel>& getVoxelDataRef() const;
-    const std::vector<NColour>& getColoursRef() const;
+    const std::vector<Colour>& getColoursRef() const;
 
     // Setters
     void setPosition(const ChunkPos& position) { m_position = position; }
     
-    void setVoxels(const std::vector<VoxelInChunkPos>& voxel_coords, const NColour&    colour);
+    void setVoxels(const std::vector<VoxelInChunkPos>& voxel_coords, const Colour&    colour);
     void setVoxels(const std::vector<VoxelInChunkPos>& voxel_coords, const VoxelType& type  );
     void setVoxels(const std::vector<VoxelInChunkPos>& voxel_coords, const Voxel&     voxel );
 
     void updateNeighbours(const VoxelInChunkPos& voxel_coord);
     void updateAllNeighbours();
 
-    void changeAllVoxels(const NColour&    colour);
+    void changeAllVoxels(const Colour&    colour);
     void changeAllVoxels(const VoxelType& type);
     void changeAllVoxels(const Voxel&     voxel);
 
-    void changeVoxelsFromTo(const NColour&    from_colour, const NColour&    to_colour);
+    void changeVoxelsFromTo(const Colour&    from_colour, const Colour&    to_colour);
     void changeVoxelsFromTo(const VoxelType& from_type,   const VoxelType& to_type  );
     void changeVoxelsFromTo(const Voxel&     from_voxel,  const Voxel&     to_voxel );
 
@@ -70,7 +70,7 @@ private:
     // Data
     std::vector<Voxel>  m_voxel_data;
 
-    std::vector<NColour> m_chunk_colours;
+    std::vector<Colour> m_chunk_colours;
     std::queue<ColourID> m_free_colour_ids;
 
     ChunkManager& mp_manager;

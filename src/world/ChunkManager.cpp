@@ -12,7 +12,7 @@ bool ChunkManager::init()
     ChunkPos pos = {0,0,0};
     Voxel voxel = {1, VoxelType::Grass};
     std::vector<Voxel> voxels(m_chunk_volume, voxel);
-    std::vector<NColour> colours = { {0,0,0,0}, {255, 0, 255, 255} };
+    std::vector<Colour> colours = { {0,0,0,0}, {255, 0, 255, 255} };
 
     addChunk(
         pos, voxels, colours
@@ -35,7 +35,7 @@ std::vector<ChunkPos> ChunkManager::update(const Input& input)
     return std::vector<ChunkPos>(3);
 }
 
-void ChunkManager::addChunk(const ChunkPos& position, const std::vector<Voxel>& voxels, const std::vector<NColour>& colours)
+void ChunkManager::addChunk(const ChunkPos& position, const std::vector<Voxel>& voxels, const std::vector<Colour>& colours)
 {
     
     auto it = m_chunks.find(position);

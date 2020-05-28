@@ -12,7 +12,7 @@ Chunk::Chunk (Chunk chunk, ChunkManager& manager_ptr)
         std::cout << "chunk created" << std::endl;
     }
 
-Chunk::Chunk (ChunkPos position, std::vector<Voxel> voxels, std::vector<NColour> colours, ChunkManager& manager_ptr)
+Chunk::Chunk (ChunkPos position, std::vector<Voxel> voxels, std::vector<Colour> colours, ChunkManager& manager_ptr)
     : m_voxel_data(std::move(voxels)),   m_chunk_colours(std::move(colours)),
       mp_manager  (manager_ptr),         m_position     (std::move(position)),
       m_remesh    (true)
@@ -58,7 +58,7 @@ bool Chunk::isChunkEdge(const int& voxel_index) const
     return isChunkEdge( inChunkPosFromIndex(voxel_index) );
 }
 
-ColourID Chunk::addColour(const NColour& colour)
+ColourID Chunk::addColour(const Colour& colour)
 {
     ColourID id = findColour(colour);
     if (id)
@@ -85,12 +85,12 @@ ColourID Chunk::addColour(const NColour& colour)
 void Chunk::removeAllColours()
 {
     m_chunk_colours.clear();
-    m_chunk_colours.reserve(8 * sizeof(NColour));
-    m_chunk_colours.push_back(NColour());
+    m_chunk_colours.reserve(8 * sizeof(Colour));
+    m_chunk_colours.push_back(Colour());
     std::queue<ColourID>().swap(m_free_colour_ids); 
 }
 
-void Chunk::removeColour (const NColour& colour)
+void Chunk::removeColour (const Colour& colour)
 {
     ColourID id = findColour(colour);
     removeColour(id);
@@ -109,7 +109,7 @@ void Chunk::removeColour (const ColourID& colour_id)
     
 }
 
-ColourID Chunk::findColour (const NColour& colour) const
+ColourID Chunk::findColour (const Colour& colour) const
 {   
     ColourID id = 0;
     for (auto it : m_chunk_colours)
@@ -125,12 +125,12 @@ ColourID Chunk::findColour (const NColour& colour) const
 
 // Getters
 
-NColour Chunk::getColour(const ColourID& colour_id) const
+Colour Chunk::getColour(const ColourID& colour_id) const
 {
     return m_chunk_colours[colour_id];
 }
 
-NColour Chunk::getVoxelColour(const VoxelInChunkPos& voxel_coord) const
+Colour Chunk::getVoxelColour(const VoxelInChunkPos& voxel_coord) const
 {
     return m_chunk_colours[ m_voxel_data[ indexFromInChunkPos(voxel_coord) ].getColourId() ];
 }
@@ -163,7 +163,7 @@ const std::vector<Voxel>& Chunk::getVoxelDataRef() const
     return m_voxel_data;
 }
 
-const std::vector<NColour>& Chunk::getColoursRef() const
+const std::vector<Colour>& Chunk::getColoursRef() const
 {
     return m_chunk_colours;
 }
@@ -172,7 +172,7 @@ const std::vector<NColour>& Chunk::getColoursRef() const
 
 // Setters
 
-void Chunk::setVoxels(const std::vector<VoxelInChunkPos>& voxel_coords, const NColour& colour)
+void Chunk::setVoxels(const std::vector<VoxelInChunkPos>& voxel_coords, const Colour& colour)
 {
     ColourID id = addColour(colour);
     for (auto it : voxel_coords)
@@ -245,7 +245,7 @@ void Chunk::updateAllNeighbours()
 }
 
 
-void Chunk::changeAllVoxels(const NColour& colour)
+void Chunk::changeAllVoxels(const Colour& colour)
 {
     removeAllColours();
     ColourID id = addColour(colour);
@@ -274,7 +274,7 @@ void Chunk::changeAllVoxels(const Voxel& voxel)
     m_remesh = true;
 }
 
-void Chunk::changeVoxelsFromTo(const NColour& from_colour, const NColour& to_colour)
+void Chunk::changeVoxelsFromTo(const Colour& from_colour, const Colour& to_colour)
 {
     ColourID from_id = findColour(from_colour);
     ColourID to_id = addColour(to_colour);

@@ -36,7 +36,7 @@ public:
 
     // Getters
     int getNumChunks() const;
-    void addChunk(const ChunkPos& position, const std::vector<Voxel>& voxels, const std::vector<NColour>& colours);
+    void addChunk(const ChunkPos& position, const std::vector<Voxel>& voxels, const std::vector<Colour>& colours);
     //void addChunk    (const Chunk&              chunk          );
     //void addChunks   (const std::vector<Chunk>& chunks         );
     void replaceChunk(const Chunk&              chunk          );
@@ -57,7 +57,7 @@ public:
 
     // Public setters (take in voxel world coordinates and call private functions with chunk/voxel positions)
     void setVoxels      (const std::vector<VoxelWorldPos>& voxel_world_positions, const Voxel& new_voxel);
-    void setVoxelsColour(const std::vector<VoxelWorldPos>& voxel_world_positions, const NColour& new_colour);
+    void setVoxelsColour(const std::vector<VoxelWorldPos>& voxel_world_positions, const Colour& new_colour);
     void setVoxelsType  (const std::vector<VoxelWorldPos>& voxel_world_positions, const VoxelType& new_type);
 
     void updateVAOs(std::vector<VertexArrayObject>& chunk_vaos);
@@ -81,7 +81,7 @@ private:
 
     // Private setters
     void setVoxelsInChunk      (const ChunkPos& chunk_position, const std::vector<glm::ivec3>& chunk_voxel_positions, const Voxel& new_voxel);
-    void setVoxelColoursInChunk(const ChunkPos& chunk_position, const std::vector<glm::ivec3>& chunk_voxel_positions, const NColour& new_colour);
+    void setVoxelColoursInChunk(const ChunkPos& chunk_position, const std::vector<glm::ivec3>& chunk_voxel_positions, const Colour& new_colour);
     void setVoxelTypesInChunk  (const ChunkPos& chunk_position, const std::vector<glm::ivec3>& chunk_voxel_positions, const VoxelType& new_type);
 
 

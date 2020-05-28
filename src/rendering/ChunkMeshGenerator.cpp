@@ -75,7 +75,7 @@ void makeChunkMesh_Culling(const Chunk& chunk, const int& chunk_size, Mesh& chun
 
                 Voxel voxel = chunk.getVoxel( voxel_pos );
 
-                NColour voxel_colour = chunk.getColour(voxel.getColourId());
+                Colour voxel_colour = chunk.getColour(voxel.getColourId());
 
                 //if (voxel.hasXMinusNeighbour())
                     addFace(chunk_mesh, voxel, voxel_pos, voxel_colour, element_count, X_MINUS_FACE);
@@ -107,7 +107,7 @@ void makeChunkMesh_Optimal(const Chunk& chunk, const int& chunk_size, Mesh& chun
 
 
 
-void addFace(Mesh& mesh, const Voxel& voxel, const VoxelInChunkPos& voxel_pos, const NColour& voxel_colour,
+void addFace(Mesh& mesh, const Voxel& voxel, const VoxelInChunkPos& voxel_pos, const Colour& voxel_colour,
                                  int& element_count, const std::array<GLuint, 12>& face_verts)
 {
 
