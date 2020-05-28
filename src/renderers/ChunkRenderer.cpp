@@ -23,7 +23,7 @@ void ChunkRenderer::init(const unsigned int& chunk_size)
     //uniform_normalMat = m_shader.getUniformLocation("normal_matrix");
 
     uniform_lightpos = m_shader.getUniformLocation("lightPos");
-    glm::vec3 light_position = {10.0f, 5.0f, 10.0f};
+    glm::vec3 light_position = {10.0f, 15.0f, 10.0f};
     glUniform3fv(uniform_lightpos, 1, glm::value_ptr(light_position));
     //glUniformMatrixfv(uniform_mvp, 1, GL_FALSE, glm::value_ptr(vp * model));
 

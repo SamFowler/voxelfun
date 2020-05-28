@@ -8,6 +8,9 @@ enum class VoxelType : uint8_t
     Empty = 0,
     Grass = 1,
     Dirt  = 2,
+    Tree  = 3,
+    LightSrc = 4,
+    Debug
 };
 
 using ColourID = uint8_t;

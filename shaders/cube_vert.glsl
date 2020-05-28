@@ -1,7 +1,7 @@
 #version 330 core
 
 layout (location = 0) in uvec3 coord3d;
-layout (location = 1) in vec3 v_colour;
+layout (location = 1) in vec4 v_colour;
 layout (location = 2) in uint v_normal_index;
 
 uniform mat4 model;
@@ -18,7 +18,7 @@ vec3 normals[6] = vec3[6](
 );
 
 out vec3 f_fragPos;
-out vec3 f_colour;
+out vec4 f_colour;
 out vec3 f_normal;
 
 void main(void)

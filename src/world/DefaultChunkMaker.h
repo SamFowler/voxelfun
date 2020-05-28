@@ -11,7 +11,9 @@ enum ChunkMakeType
     GRASS_CHUNK,
     DIRT_CHUNK,
     TREE_CHUNK,
-    RANDOM_CHUNK
+    LIGHT_CHUNK,
+    RANDOM_CHUNK,
+    DEBUG_CHUNK
 };
 
 namespace DefaultChunkMaker
@@ -26,4 +28,5 @@ namespace DefaultChunkMaker
     void makeTreeChunk  (std::vector<Voxel>& voxels, std::vector<Colour>& colours, const unsigned int& chunk_size);
     void makeRandomChunk(std::vector<Voxel>& voxels, std::vector<Colour>& colours, const unsigned int& chunk_size);
     void makeDebugChunk (std::vector<Voxel>& voxels, std::vector<Colour>& colours, const unsigned int& chunk_size);
+    void makeLightChunk (std::vector<Voxel>& voxels, std::vector<Colour>& colours, const unsigned int& chunk_size);
 }

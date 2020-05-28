@@ -1,6 +1,6 @@
 #version 330 core
         
-varying vec3 f_colour;
+varying vec4 f_colour;
 in vec3 f_normal;
 in vec3 f_fragPos;
 
@@ -27,5 +27,5 @@ void main()
     vec3 diffuse = diff * lightColour * diffuseStrength;
 
     vec3 result = (ambient + diffuse) * vec3(f_colour.r, f_colour.g, f_colour.b);
-    gl_FragColor = vec4(result, 1.0);
+    gl_FragColor = vec4(result, f_colour.a);
 }
