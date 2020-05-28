@@ -7,7 +7,7 @@ namespace ChunkMeshGenerator
 
 VertexArrayObject makeChunkVAO(const Chunk& chunk, const int& chunk_size, const MeshMethod& mesh_method)
 {
-    Mesh chunk_mesh;
+    ChunkMesh chunk_mesh;
     if (mesh_method == CULL_MESH_FAST) // doesn't check neighbouring chunks
         makeChunkMesh_Culling(chunk, chunk_size, chunk_mesh);
     else if (mesh_method == CULL_MESH_OPTIMAL) // checks neighbouring chunks for voxel visibility
@@ -24,12 +24,12 @@ VertexArrayObject makeChunkVAO(const Chunk& chunk, const int& chunk_size, const 
     return chunk_mesh.createChunkBuffer();
 }
 
-void makeChunkMesh_Naive  (const Chunk& chunk, const int& chunk_size, Mesh& chunk_mesh)
+void makeChunkMesh_Naive  (const Chunk& chunk, const int& chunk_size, ChunkMesh& chunk_mesh)
 {
 
 }
 
-void makeChunkMesh_Culling(const Chunk& chunk, const int& chunk_size, Mesh& chunk_mesh)
+void makeChunkMesh_Culling(const Chunk& chunk, const int& chunk_size, ChunkMesh& chunk_mesh)
 {
     int element_count = 0;
     //int chunk_size = 8;
@@ -48,37 +48,37 @@ void makeChunkMesh_Culling(const Chunk& chunk, const int& chunk_size, Mesh& chun
                 Colour voxel_colour = chunk.getColour(voxel.getColourId());
 
                 //if (voxel.hasXMinusNeighbour())
-                    addFace(chunk_mesh, voxel, voxel_pos, voxel_colour, element_count, X_MINUS_FACE);
+                    addFace(chunk_mesh, voxel, voxel_pos, voxel_colour, element_count, X_MINUS_FACE, X_MINUS_NORMAL_INDEX);
                 //if (voxel.hasXPlusNeighbour())
-                    addFace(chunk_mesh, voxel, voxel_pos, voxel_colour, element_count, X_PLUS_FACE);
+                    addFace(chunk_mesh, voxel, voxel_pos, voxel_colour, element_count, X_PLUS_FACE, X_PLUS_NORMAL_INDEX);
                 //if (voxel.hasYMinusNeighbour())
-                    addFace(chunk_mesh, voxel, voxel_pos, voxel_colour, element_count, Y_MINUS_FACE);
+                    addFace(chunk_mesh, voxel, voxel_pos, voxel_colour, element_count, Y_MINUS_FACE, Y_MINUS_NORMAL_INDEX);
                 //if (voxel.hasYPlusNeighbour())
-                    addFace(chunk_mesh, voxel, voxel_pos, voxel_colour, element_count, Y_PLUS_FACE);
+                    addFace(chunk_mesh, voxel, voxel_pos, voxel_colour, element_count, Y_PLUS_FACE, Y_PLUS_NORMAL_INDEX);
                 //if (voxel.hasZMinusNeighbour())
-                    addFace(chunk_mesh, voxel, voxel_pos, voxel_colour, element_count, Z_MINUS_FACE);
+                    addFace(chunk_mesh, voxel, voxel_pos, voxel_colour, element_count, Z_MINUS_FACE, Z_MINUS_NORMAL_INDEX);
                 //if (voxel.hasZPlusNeighbour())
-                    addFace(chunk_mesh, voxel, voxel_pos, voxel_colour, element_count, Z_PLUS_FACE);
+                    addFace(chunk_mesh, voxel, voxel_pos, voxel_colour, element_count, Z_PLUS_FACE, Z_PLUS_NORMAL_INDEX);
             }
         }
     }
 
 }
 
-void makeChunkMesh_Greedy (const Chunk& chunk, const int& chunk_size, Mesh& chunk_mesh)
+void makeChunkMesh_Greedy (const Chunk& chunk, const int& chunk_size, ChunkMesh& chunk_mesh)
 {
 
 }
 
-void makeChunkMesh_Optimal(const Chunk& chunk, const int& chunk_size, Mesh& chunk_mesh)
+void makeChunkMesh_Optimal(const Chunk& chunk, const int& chunk_size, ChunkMesh& chunk_mesh)
 {
 
 }
 
 
 
-void addFace(Mesh& mesh, const Voxel& voxel, const VoxelInChunkPos& voxel_pos, const Colour& voxel_colour,
-                                 int& element_count, const std::array<GLuint, 12>& face_verts)
+void addFace(ChunkMesh& mesh, const Voxel& voxel, const VoxelInChunkPos& voxel_pos, const Colour& voxel_colour,
+                                 int& element_count, const std::array<GLuint, 12>& face_verts, const GLuint& normal_index)
 {
 
         //TODO: make this pack bits into a few bytes rather than large number of bytes for each vertex attribute
@@ -93,6 +93,8 @@ void addFace(Mesh& mesh, const Voxel& voxel, const VoxelInChunkPos& voxel_pos, c
             mesh.colours.push_back(voxel_colour.g/255.0f);
             mesh.colours.push_back(voxel_colour.b/255.0f);
             mesh.colours.push_back(voxel_colour.a/255.0f);
+
+            mesh.normals.push_back(normal_index);          
         }
 
         // add elements for two polygons representing the voxel face

@@ -3,9 +3,9 @@
 #include <vector>
 #include <GL/glew.h>
 
-#include "VertexArrayObject.hpp"
+#include "../opengl_api/VertexArrayObject.hpp"
 
-class Mesh
+class ChunkMesh
 {
 
 public:
@@ -16,7 +16,7 @@ public:
 
     std::vector<GLuint> vertices;
     std::vector<GLfloat> colours;
-    std::vector<GLfloat> normals;
+    std::vector<GLuint> normals;
 
     std::vector<GLuint> elements;
 };

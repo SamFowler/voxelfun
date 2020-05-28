@@ -5,7 +5,7 @@
 
 #include "../world/Chunk.h"
 #include "Renderables.h"
-#include "../opengl_api/Mesh.hpp"
+#include "ChunkMesh.hpp"
 #include <GL/glew.h>
 
 
@@ -37,13 +37,13 @@ public:
     };
 
     VertexArrayObject makeChunkVAO(const Chunk& chunk, const int& chunk_size, const MeshMethod& mesh_method = CULL_MESH_FAST);
-    void makeChunkMesh_Naive  (const Chunk& chunk, const int& chunk_size, Mesh& chunk_mesh);
-    void makeChunkMesh_Culling(const Chunk& chunk, const int& chunk_size, Mesh& chunk_mesh);
-    void makeChunkMesh_Greedy (const Chunk& chunk, const int& chunk_size, Mesh& chunk_mesh);
-    void makeChunkMesh_Optimal(const Chunk& chunk, const int& chunk_size, Mesh& chunk_mesh);
+    void makeChunkMesh_Naive  (const Chunk& chunk, const int& chunk_size, ChunkMesh& chunk_mesh);
+    void makeChunkMesh_Culling(const Chunk& chunk, const int& chunk_size, ChunkMesh& chunk_mesh);
+    void makeChunkMesh_Greedy (const Chunk& chunk, const int& chunk_size, ChunkMesh& chunk_mesh);
+    void makeChunkMesh_Optimal(const Chunk& chunk, const int& chunk_size, ChunkMesh& chunk_mesh);
 
-    void addFace(Mesh& mesh, const Voxel& voxel, const VoxelInChunkPos& voxel_pos, const Colour& voxel_colour,
-                    int& element_count, const std::array<GLuint, 12>& face_verts);
+    void addFace(ChunkMesh& mesh, const Voxel& voxel, const VoxelInChunkPos& voxel_pos, const Colour& voxel_colour,
+                    int& element_count, const std::array<GLuint, 12>& face_verts, const GLuint& normal_index);
 
 //private:
     //unsigned int m_chunk_size;
@@ -56,4 +56,11 @@ public:
     const std::array<GLuint, 12> X_PLUS_FACE =  {1, 0, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1};
     const std::array<GLuint, 12> Y_PLUS_FACE =  {1, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1};
     const std::array<GLuint, 12> Z_PLUS_FACE =  {1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1};
+
+    const GLuint X_MINUS_NORMAL_INDEX = 0;
+    const GLuint X_PLUS_NORMAL_INDEX  = 1;
+    const GLuint Y_MINUS_NORMAL_INDEX = 2;
+    const GLuint Y_PLUS_NORMAL_INDEX  = 3;
+    const GLuint Z_MINUS_NORMAL_INDEX = 4;
+    const GLuint Z_PLUS_NORMAL_INDEX  = 5;
 };
