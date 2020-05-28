@@ -11,12 +11,12 @@
 
 class ChunkManager;
 
-class NChunk
+class Chunk
 {
 public:
     //Constructors
-    NChunk (NChunk chunk, ChunkManager& manager_ptr);
-    NChunk (ChunkPos position, std::vector<Voxel> voxels, std::vector<NColour> colours, ChunkManager& manager_ptr);
+    Chunk (Chunk chunk, ChunkManager& manager_ptr);
+    Chunk (ChunkPos position, std::vector<Voxel> voxels, std::vector<NColour> colours, ChunkManager& manager_ptr);
 
     // Helpers
     unsigned int    indexFromInChunkPos   (const VoxelInChunkPos& voxel_coord) const;

@@ -75,7 +75,7 @@ void ChunkManager::addChunks(const std::vector<Chunk>& chunks)
     }
 }
 */
-void ChunkManager::replaceChunk(const NChunk& chunk)
+void ChunkManager::replaceChunk(const Chunk& chunk)
 {
     m_chunks.emplace( 
         std::piecewise_construct,
@@ -108,7 +108,7 @@ void ChunkManager::clearUpdatedChunkList()
     m_updated_chunk_list.clear();
 }
 
-std::vector<const NChunk*> ChunkManager::getUpdatedChunkList() const
+std::vector<const Chunk*> ChunkManager::getUpdatedChunkList() const
 {
     return m_updated_chunk_list;
 
@@ -141,7 +141,7 @@ std::pair<bool, const Chunk&> ChunkManager::getChunk(const ChunkPos& chunk_pos) 
 
 
 
-const NChunk* ChunkManager::getChunkPtr(const ChunkPos& chunk_pos) const
+const Chunk* ChunkManager::getChunkPtr(const ChunkPos& chunk_pos) const
 {
     auto it = m_chunks.find(chunk_pos);
     if (it != m_chunks.cend())
@@ -160,9 +160,9 @@ void ChunkManager::updateVAOs(std::vector<VertexArrayObject>& chunk_vaos)
 {
     for (auto chunk_pos : m_chunk_update_list)
     {
-        //NChunk& chu = m_chunks.find(chunk_pos)->second;
+        //Chunk& chu = m_chunks.find(chunk_pos)->second;
         //chu->second
-        //NChunk chunk = m_chunks[chunk_pos];
+        //Chunk chunk = m_chunks[chunk_pos];
         //VertexArrayObject vao = ChunkMeshGenerator::makeChunkVAO(m_chunks[chunk_pos], m_chunk_size));
         chunk_vaos.push_back(ChunkMeshGenerator::makeChunkVAO(m_chunks.find(chunk_pos)->second, m_chunk_size));
 

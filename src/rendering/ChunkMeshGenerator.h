@@ -3,7 +3,7 @@
 #include <vector>
 #include <array>
 
-#include "../world/NChunk.h"
+#include "../world/Chunk.h"
 #include "Renderables.h"
 #include "../Mesh.hpp"
 #include <GL/glew.h>
@@ -37,11 +37,11 @@ public:
         COUNT
     };
 
-    VertexArrayObject makeChunkVAO(const NChunk& chunk, const int& chunk_size, const MeshMethod& mesh_method = CULL_MESH_FAST);
-    void makeChunkMesh_Naive  (const NChunk& chunk, const int& chunk_size, Mesh& chunk_mesh);
-    void makeChunkMesh_Culling(const NChunk& chunk, const int& chunk_size, Mesh& chunk_mesh);
-    void makeChunkMesh_Greedy (const NChunk& chunk, const int& chunk_size, Mesh& chunk_mesh);
-    void makeChunkMesh_Optimal(const NChunk& chunk, const int& chunk_size, Mesh& chunk_mesh);
+    VertexArrayObject makeChunkVAO(const Chunk& chunk, const int& chunk_size, const MeshMethod& mesh_method = CULL_MESH_FAST);
+    void makeChunkMesh_Naive  (const Chunk& chunk, const int& chunk_size, Mesh& chunk_mesh);
+    void makeChunkMesh_Culling(const Chunk& chunk, const int& chunk_size, Mesh& chunk_mesh);
+    void makeChunkMesh_Greedy (const Chunk& chunk, const int& chunk_size, Mesh& chunk_mesh);
+    void makeChunkMesh_Optimal(const Chunk& chunk, const int& chunk_size, Mesh& chunk_mesh);
 
     void addFace(Mesh& mesh, const Voxel& voxel, const VoxelInChunkPos& voxel_pos, const NColour& voxel_colour,
                     int& element_count, const std::array<GLuint, 12>& face_verts);

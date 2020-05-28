@@ -5,7 +5,7 @@
 #include <vector>
 #include <utility>
 
-#include "NChunk.h"
+#include "Chunk.h"
 
 #include "../Input.hpp" // TODO: unsure if this should go here or not
 
@@ -18,7 +18,7 @@ class ChunkManager
 
 
 public:
-    friend class NChunk;
+    friend class Chunk;
     //friend class ChunkMeshGenerator;
 
     // Constructors
@@ -39,17 +39,17 @@ public:
     void addChunk(const ChunkPos& position, const std::vector<Voxel>& voxels, const std::vector<NColour>& colours);
     //void addChunk    (const Chunk&              chunk          );
     //void addChunks   (const std::vector<Chunk>& chunks         );
-    void replaceChunk(const NChunk&              chunk          );
+    void replaceChunk(const Chunk&              chunk          );
     void addChunkToUpdateList(const ChunkPos& chunk_pos);
 
     void clearUpdatedChunkList();
-    std::vector<const NChunk*> getUpdatedChunkList() const;
+    std::vector<const Chunk*> getUpdatedChunkList() const;
     //void updateUpdatedChunkList(const std::vector<const Chunk*>& chunks_still_to_update);
     
     //const Chunk&              getChunk  (const VoxelWorldPos&               voxel_world_pos      ) const;
     //std::pair<bool, const Chunk&> getChunk(const ChunkPos& chunk_pos) const;
-    const NChunk* getChunkPtr(const ChunkPos& chunk_pos) const;
-    const std::vector<NChunk>& getChunks (const std::vector<VoxelWorldPos>&  voxel_world_position ) const;
+    const Chunk* getChunkPtr(const ChunkPos& chunk_pos) const;
+    const std::vector<Chunk>& getChunks (const std::vector<VoxelWorldPos>&  voxel_world_position ) const;
     
 
     Voxel              getVoxel (const VoxelWorldPos&              voxel_world_pos       ) const;
@@ -90,11 +90,11 @@ private:
 private:
 
     // Data
-    std::unordered_map<ChunkPos, NChunk, ChunkPositionHash> m_chunks;
+    std::unordered_map<ChunkPos, Chunk, ChunkPositionHash> m_chunks;
     int m_num_chunks;
 
     //std::queue<> m_updated_chunk_list;
-    std::vector<const NChunk*> m_updated_chunk_list;
+    std::vector<const Chunk*> m_updated_chunk_list;
 
     std::vector<ChunkPos> m_chunk_update_list;
     std::vector<VertexArrayObject> m_chunk_vaos;
