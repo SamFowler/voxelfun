@@ -39,7 +39,6 @@ public:
 
     DrawableVAO getDrawable() const;
 
-
     void addVertexBuffer(int num_elements_per_vertex, const std::vector<GLfloat>& vertices);
     void addVertexBuffer(int num_elements_per_vertex, const std::vector<GLuint>& vertices);
 

@@ -35,6 +35,11 @@ std::vector<ChunkPos> ChunkManager::update(const Input& input)
     return std::vector<ChunkPos>(3);
 }
 
+void ChunkManager::destroy()
+{
+
+}
+
 void ChunkManager::addChunk(const ChunkPos& position, const std::vector<Voxel>& voxels, const std::vector<Colour>& colours)
 {
     
@@ -160,11 +165,6 @@ void ChunkManager::updateVAOs(std::vector<VertexArrayObject>& chunk_vaos)
 {
     for (auto chunk_pos : m_chunk_update_list)
     {
-        //Chunk& chu = m_chunks.find(chunk_pos)->second;
-        //chu->second
-        //Chunk chunk = m_chunks[chunk_pos];
-        //VertexArrayObject vao = ChunkMeshGenerator::makeChunkVAO(m_chunks[chunk_pos], m_chunk_size));
         chunk_vaos.push_back(ChunkMeshGenerator::makeChunkVAO(m_chunks.find(chunk_pos)->second, m_chunk_size));
-
     }
 }

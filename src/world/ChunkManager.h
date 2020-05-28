@@ -32,7 +32,7 @@ public:
     // Processors
     bool init();
     std::vector<ChunkPos> update(const Input& input); // returns list of chunk positions that have been updated
-
+    void destroy();
 
     // Getters
     int getNumChunks() const;

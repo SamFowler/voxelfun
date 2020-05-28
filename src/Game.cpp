@@ -30,9 +30,12 @@ bool Game::handleInput(Input& input)
 
 }
 
-void Game::update(const float& timestep) 
+void Game::update(Input& input, const float& timestep) 
 {
+    m_perspectiveCameraController.update(input, timestep); // TODO: separate camera input handling and ticking
+
     m_world.update(timestep);
+
     //m_camera.update(timestep);
     //m_player.update(timestep);
     //m_enetities.update(timestep);
@@ -41,7 +44,7 @@ void Game::update(const float& timestep)
 
 void Game::render()
 {
-    m_world.render();
+    m_world.render(m_perspectiveCameraController.GetCamera());
     //m_camera.draw();
     //m_player.draw();
     //m_entities.draw();

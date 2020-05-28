@@ -3,11 +3,11 @@
 
 bool Engine::init()
 {
-    
-    if (!m_game.init())
-        return false;
 
     if( !m_renderer.init(1280, 960) )
+        return false;
+ 
+    if (!m_game.init())
         return false;
 
     if (!m_input.init())
@@ -48,11 +48,16 @@ void Engine::frameSetup()
 
 void Engine::update()
 {
-    float timestep = 0.0f;
+    float ticks = (SDL_GetTicks() / 1000.0);
+    float timestep = (last_ticks - ticks);
 
-    m_game.update(timestep); 
+
+    m_game.update(m_input, timestep); //TODO input here temporary
     
-    m_renderer.tempUpdate(m_input);
+    
+
+    last_ticks = ticks;
+
 }
 
 void Engine::render()

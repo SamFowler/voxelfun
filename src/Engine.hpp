@@ -1,9 +1,5 @@
 #pragma once
 
-#include <memory>
-#include <SDL2/SDL.h>
-#include "sdl2_shared.cpp"
-
 #include "Game.hpp"
 #include "Renderer.hpp"
 #include "Input.hpp"
@@ -27,5 +23,7 @@ public:
 
 private:
     bool m_is_running;
+
+    float last_ticks = 0.0f; //TODO move into timer/clock class
 
 };

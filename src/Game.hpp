@@ -1,7 +1,7 @@
 #pragma once
 #include "Input.hpp"
 #include "world/World.hpp"
-
+#include "camera/PerspectiveCameraController.hpp"
 
 class Game 
 {
@@ -12,7 +12,7 @@ public:
     bool handleInput(Input& input);
     void tick(float timestep);
 
-    void update(const float& timestep);
+    void update(Input& input, const float& timestep);
     void render();
 
 private:
@@ -20,9 +20,9 @@ private:
 
     World m_world;
 
-
     PerspectiveCameraController m_perspectiveCameraController = {45, (1280.0f/960.0f), 0.1f, 500.0f};
     //OrthographicCameraController m_ortho_camera_controller = {(1280.0f/960.0f)};
+
     //Camera m_camera;
     //Player m_player;
     //std::vector<Entities> m_entities;

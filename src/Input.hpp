@@ -2,7 +2,7 @@
 #include <SDL2/SDL.h>
 #include <map>
 #include <iostream>
-#include <glm/glm.hpp>
+#include <glm/vec2.hpp>
 
 //TODO: Mouse input needs work - not collecting relative mouse motion and only taking one mouse position per update frame. 
 //      Need to explore updating mouse position multiple times per update.
