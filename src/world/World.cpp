@@ -8,10 +8,10 @@ void World::init()
 
     m_chunk_manager = ChunkManager(m_chunk_size);
     m_chunk_manager.init();
-
-    for (int i = 0; i < 12; i++)
+    
+    for (int i = 0; i < 35; i++)
     {
-        for (int j = 0; j < 12; j++)
+        for (int j = 0; j < 35; j++)
         {
             if((rand() % 6) == 0)
                 m_chunk_manager.addChunk({i,-1,j}, ChunkMakeType::DIRT_CHUNK);
@@ -27,7 +27,14 @@ void World::init()
             }
         }   
     }
+    
 
+    //m_chunk_manager.addChunk({1,2,1}, ChunkMakeType::GRASS_CHUNK);
+    //m_chunk_manager.addChunk({0,0,1}, ChunkMakeType::GRASS_CHUNK);
+
+   //m_chunk_manager.addChunk({1,0,0}, ChunkMakeType::GRASS_CHUNK);
+   //m_chunk_manager.addChunk({0,0,0}, ChunkMakeType::RANDOM_CHUNK);
+   
     m_chunk_manager.addChunk({10, 15, 10}, ChunkMakeType::LIGHT_CHUNK);
 
     m_chunk_manager.addChunk({-2, -1, -2}, ChunkMakeType::RANDOM_CHUNK);

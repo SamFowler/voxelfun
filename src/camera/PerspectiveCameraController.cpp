@@ -18,19 +18,19 @@ void PerspectiveCameraController::update(Input& input, const float timestep)
 { 
 
     float camera_move_speed = m_camera_speed + m_zoom;
-    if (input.isKeyHeld(SDLK_s)) 
+    if (input.isKeyHeld(SDLK_w)) 
     {
         moveForwards(m_camera_speed * timestep);
     }
-    else if (input.isKeyHeld(SDLK_w)) 
+    else if (input.isKeyHeld(SDLK_s)) 
     {   
         moveForwards(-m_camera_speed * timestep);
     }
-    if (input.isKeyHeld(SDLK_a)) 
+    if (input.isKeyHeld(SDLK_d)) 
     {   
         moveSideways(camera_move_speed * timestep);
     }
-    else if (input.isKeyHeld(SDLK_d)) 
+    else if (input.isKeyHeld(SDLK_a)) 
     {   
        moveSideways(-camera_move_speed * timestep);
     }
@@ -98,7 +98,7 @@ void PerspectiveCameraController::moveSideways(const float& amount)
 
 void PerspectiveCameraController::moveUpwards(const float& amount)
 {
-    glm::vec3 side_direction = glm::normalize(glm::cross(m_camera.getDirection(), glm::vec3(0.0f, 1.0f, 0.0f)));
+    glm::vec3 side_direction = glm::normalize(glm::cross(m_camera.getDirection(), glm::vec3(0.0f, -1.0f, 0.0f)));
     glm::vec3 camera_up_direction = glm::normalize(glm::cross(m_camera.getDirection(), side_direction));
     m_camera_position += camera_up_direction * amount;
 }
