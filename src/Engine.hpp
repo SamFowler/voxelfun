@@ -3,6 +3,7 @@
 #include "Game.hpp"
 #include "Renderer.hpp"
 #include "Input.hpp"
+#include "Timer.h"
 
 class Engine 
 {
@@ -23,6 +24,8 @@ public:
 
 private:
     bool m_is_running;
+
+    Timer m_timer;
 
     float last_ticks = 0.0f; //TODO move into timer/clock class
 

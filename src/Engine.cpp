@@ -1,6 +1,10 @@
 #include "Engine.hpp"
 #include <iostream>
 
+
+#include <chrono>
+
+
 bool Engine::init()
 {
 
@@ -12,6 +16,8 @@ bool Engine::init()
 
     if (!m_input.init())
         return false;
+
+    m_timer.init();
 
     m_is_running = true;
 
@@ -27,6 +33,7 @@ void Engine::run()
         frameSetup();
         update();
         render();
+        m_timer.printFPS();
     }
 
 
@@ -36,7 +43,8 @@ void Engine::run()
 
 void Engine::frameSetup()
 {
-    
+    m_timer.frameStart();
+
     m_input.collect();
     m_renderer.clear();
 
@@ -51,10 +59,12 @@ void Engine::update()
     float ticks = (SDL_GetTicks() / 1000.0);
     float timestep = (last_ticks - ticks);
 
+    while (m_timer.checkDeltaTimeReached())
+    {
+        m_game.update(m_input, m_timer.getDeltaTime()); //TODO input here temporary
+       m_timer.endUpdateLoop();
+    }
 
-    m_game.update(m_input, timestep); //TODO input here temporary
-    
-    
 
     last_ticks = ticks;
 
@@ -62,6 +72,8 @@ void Engine::update()
 
 void Engine::render()
 {
+    m_timer.frameEnd();
+
     m_game.render();
 
     m_renderer.draw();
