@@ -22,18 +22,32 @@ struct ValRLpair
     unsigned y = 0;
 };
 
+void mesh_rect(ValRLpair& pair) {
+    if (pair.val == 0 || pair.wid == 0) {return;}
+    std::cout << "Meshing: x: " << pair.x << ", y: " << pair.y << ", rl: " << pair.rl << ", wid: " << pair.wid << " (val=" << pair.val << ")" << std::endl;
+}
+
 int main()
 {
     unsigned side_size = 8;
 
     std::vector<int> data = { 1, 1, 1, 2, 1, 1, 2, 1,
                               1, 1, 1, 1, 1, 1, 2, 2,
-                              1, 1, 3, 3, 3, 2, 1, 2,
+                              1, 1, 1, 3, 3, 2, 1, 2,
                               3, 3, 2, 1, 1, 0, 0, 0,
                               1, 1, 1, 2, 3, 3, 3, 0,
-                              1, 1, 2, 2, 2, 3, 3, 3, 
+                              1, 1, 2, 2, 3, 3, 3, 3, 
                               0, 0, 0, 2, 2, 4, 4, 4,
                               0, 0, 2, 1, 1, 4, 4, 1 };
+
+   /*  std::vector<int> data = { 1,1,1,1,1,1,1,1,
+                              1,1,1,1,1,1,1,1,
+                              1,1,1,1,1,1,1,1,
+                              1,1,1,1,1,1,1,1,
+                              1,1,1,1,1,1,1,1,
+                              1,1,1,1,1,1,1,1, 
+                              1,1,1,1,1,1,1,1,
+                              1,1,1,1,1,1,1,1 }; */
 
     /* std::vector<int> data(64);
     for (auto& it : data)
@@ -105,7 +119,7 @@ int main()
 
         if ( voxel_val != prev_voxel_val )
         {   
-            holder[xzToIndex( (x-run_length), z, side_size )] = {prev_voxel_val, run_length, 1};
+            holder[xzToIndex( (x-run_length), z, side_size )] = {prev_voxel_val, run_length, 1, (x-run_length), z};
             run_length = 0;
         }
 
@@ -113,7 +127,7 @@ int main()
      }
 
     //Put last rectangle from first column in rectangle holder
-    holder[xzToIndex( ((x-1)-run_length), z, side_size )] = {prev_voxel_val, (run_length+1), 1};
+    holder[xzToIndex( ((x-1)-run_length), z, side_size )] = {prev_voxel_val, (run_length+1), 1, ((x-1)-run_length), z};
     /* ------------END FIRST Z COLUMN----------- */
 
     std::cout << std::endl;
@@ -124,7 +138,7 @@ int main()
     for (unsigned z = 1; z < side_size; z++)
     {   
 
-        previous_last_row_rectangle = {0,0,0};
+        previous_last_row_rectangle = {0,0,0,0,0};
         run_length = 0;
         x = 0;
 
@@ -137,6 +151,12 @@ int main()
             previous_last_row_rectangle = holder[xzToIndex(x, z-1, side_size)];
             previous_last_row_rectangle.wid++; 
         }
+        else
+        {
+            //mesh?
+            mesh_rect(holder[xzToIndex(x, z-1, side_size)]);
+        }
+        
 
         prev_voxel_val = data[xzToIndex(0, z, side_size)];
         /* ------------END X = 0----------- */
@@ -149,6 +169,11 @@ int main()
             voxel_val = data[xzToIndex(x,z,side_size)];
             run_length++;
 
+            if (x==4 && z ==2)
+            {
+                std::cout <<"";
+            }
+
             // Check if we are currently trying to expand a rectangle from the previous column
             if ( (previous_last_row_rectangle.wid > 0) ) 
             {   
@@ -160,16 +185,20 @@ int main()
                     //We have a group of voxels that match the previous column rectangle - place them in
                     holder[xzToIndex( (x-run_length), z, side_size )] = previous_last_row_rectangle;
 
+                    //mesh the rectangle
+
+
                     // as the runlength of the rectangle from previous column has been reached, 
                     // a new, different, rectangle must be at this row value in the previous column -
                     if (voxel_val == data[xzToIndex(x, z-1, side_size)])
                     {   // We fetch it if it is of the same voxel type
                         previous_last_row_rectangle = holder[xzToIndex(x, z-1, side_size)];  
                         previous_last_row_rectangle.wid++; 
+                        
                     }
                     else 
                     {   //else set rectangle to empty so we don't look to match to it
-                        previous_last_row_rectangle = {0, 0, 0};
+                        previous_last_row_rectangle = {0, 0, 0, 0, 0};
                     }
 
                     run_length = 0;
@@ -180,35 +209,49 @@ int main()
                 // create a new rectangle for the runlength that was reached and set rectangle to empty so we don't look to match to it
                 else if (voxel_val != prev_voxel_val)
                 {
-                    holder[xzToIndex( (x-run_length), z, side_size )] = {prev_voxel_val, run_length, 1};
+                    holder[xzToIndex( (x-run_length), z, side_size )] = {prev_voxel_val, run_length, 1, (x-run_length), z};
                     
 
                     //SEND previous_last_row_rectangle TO MESHER
                     previous_last_row_rectangle.wid--;
+                    mesh_rect(previous_last_row_rectangle);
 
 
-
-                    previous_last_row_rectangle = {0, 0, 0};
+                    previous_last_row_rectangle = {0, 0, 0, 0, 0};
                     run_length = 0;
                 }
+                else
+                {
+                    
+                }
+                
+                
             }
 
             // else if we are not trying to match to rectangle from previous column,
             // get the rectangle from the previous column and check if the voxels match with this voxel
             else if (voxel_val == holder[xzToIndex(x, z-1, side_size)].val)
             {
+                holder[xzToIndex( (x-run_length), z, side_size )] = {prev_voxel_val, run_length, 1, (x-run_length), z};
+
+
                 previous_last_row_rectangle = holder[xzToIndex(x, z-1, side_size)];
                 previous_last_row_rectangle.wid++;
 
-                holder[xzToIndex( (x-run_length), z, side_size )] = {prev_voxel_val, run_length, 1};
                 run_length = 0;
             } 
             // else if there are no rectangles to match to, create a new one for the previous run length
             else if (voxel_val != prev_voxel_val)
             {
-                holder[xzToIndex( (x-run_length), z, side_size )] = {prev_voxel_val, run_length, 1};
+                holder[xzToIndex( (x-run_length), z, side_size )] = {prev_voxel_val, run_length, 1, (x-run_length), z};
                 run_length = 0;
             }
+            else
+            {   
+                mesh_rect(holder[xzToIndex( x, z-1, side_size )]);
+
+            }
+            
              
             prev_voxel_val = voxel_val;
 
@@ -237,7 +280,7 @@ int main()
                 }
                 else 
                 {
-                    previous_last_row_rectangle = {0, 0, 0};
+                    previous_last_row_rectangle = {0, 0, 0, 0, 0};
                 }
                 run_length = 0;
             }
@@ -245,7 +288,7 @@ int main()
         }
         else 
         {
-            holder[xzToIndex( (x-run_length), z, side_size )] = {prev_voxel_val, run_length, 1};
+            holder[xzToIndex( (x-run_length), z, side_size )] = {prev_voxel_val, run_length, 1, (x-run_length), z};
             run_length = 0;
         }
     }
@@ -259,8 +302,8 @@ int main()
             unsigned index = xzToIndex(x,z,side_size);
 
             //print layer
-            std::cout << "["; if (index < 10) {std::cout << " ";}
-            std::cout << index << ": " << holder[index].val << "," << holder[index].rl << "," << holder[index].wid << "], ";
+            std::cout << "[" << holder[index].x << "," << holder[index].y;
+            std::cout << ": " << holder[index].val << "," << holder[index].rl << "," << holder[index].wid << "], ";
         }
         std::cout << std::endl;
     }
