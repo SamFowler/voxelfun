@@ -22,9 +22,9 @@ struct ValRLpair
     unsigned y = 0;
 };
 
-std::vector<int> count_meshes(64,0);
-std::vector<int> check_data(64,0);
-unsigned side_size = 8;
+std::vector<int> count_meshes;
+std::vector<int> check_data;
+unsigned side_size = 32;
 int mesh_count = 0;
 
 void mesh_rect(ValRLpair& pair) {
@@ -63,12 +63,23 @@ int main()
                               1,1,1,1,1,1,1,1,
                               1,1,1,1,1,1,1,1 }; */
 
+
+for (int seed = 19; seed < 20; seed++)
+{
+//for (unsigned values = 9; values < 10; values++)
+//{
+  //  std::cout << values << std::endl;
     srand(11);
-    std::vector<int> data(64);
+    std::vector<int> data(side_size*side_size);
     for (auto& it : data)
     {
-        it = rand()%3;
+        it = rand() % 5;
     }
+
+
+    mesh_count = 0;
+    check_data = std::vector<int>(side_size*side_size,0);
+    count_meshes = std::vector<int>(side_size*side_size,0);
 
 
  /*  std::vector<int> data = {  3, 2, 1, 3, 1, 3, 2, 0,
@@ -79,6 +90,16 @@ int main()
 1, 1, 1, 3, 0, 1, 2, 0,
 3, 2, 1, 2, 3, 0, 0, 1,
 2, 2, 0, 1, 1, 1, 0, 3 }; */
+
+/* std::vector<int> data = {5, 5, 6, 8, 6, 4, 4, 7,
+5, 1, 2, 6, 2, 5, 8, 1,
+1, 2, 1, 6, 6, 4, 1, 4,
+5, 8, 7, 5, 1, 1, 5, 4,
+4, 2, 4, 0, 6, 6, 7, 1,
+7, 1, 7, 7, 6, 4, 0, 6,
+6, 8, 1, 4, 3, 2, 8, 6,
+8, 4, 2, 0, 3, 7, 5, 8}; */
+
 
 /* 
    std::vector<int> data = {  1, 1, 1, 1, 1, 1, 1, 1,
@@ -127,7 +148,7 @@ int main()
     /* ------------END PRINTING----------- */
 
  
-    std::vector<ValRLpair> holder(64, {0,0});
+    std::vector<ValRLpair> holder(side_size*side_size, {0,0});
 
     unsigned voxel_val = 0;
     unsigned run_length = 0;
@@ -194,12 +215,6 @@ int main()
         {
             voxel_val = data[xzToIndex(x,z,side_size)];
             run_length++;
-
-            if (x==7 && z == 3)
-            {
-                std::cout << "";
-            }
-
 
             // Check if we are currently trying to expand a rectangle from the previous column
             if ( (previous_last_row_rectangle.wid > 0) ) 
@@ -282,7 +297,6 @@ int main()
                 }
                 else
                 {
-                    //std::cout <<"";
                     if (voxel_val != data[xzToIndex(x, z-1, side_size)])
                     {
                         mesh_rect(holder[xzToIndex( x, z-1, side_size )]);
@@ -434,5 +448,8 @@ int main()
     
 
     std::cout << "meshes meshed: " << mesh_count << std::endl;
+
+}
+//}
 
 }
