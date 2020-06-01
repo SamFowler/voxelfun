@@ -2,9 +2,12 @@
 
 #include <vector>
 
-unsigned xzToIndex(unsigned x, unsigned z, unsigned side_size)
+unsigned xzToIndex(unsigned x, unsigned z, unsigned side_size, unsigned dir = 0)
 {
-    return z * side_size + x;
+    if (dir == 0) 
+        return z * side_size + x;
+    else if (dir == 1)
+        return x * side_size + z;
 }
 
 struct ValRLpair
@@ -24,7 +27,7 @@ struct ValRLpair
 
 std::vector<int> count_meshes;
 std::vector<int> check_data;
-unsigned side_size = 32;
+unsigned side_size = 8;
 int mesh_count = 0;
 
 void mesh_rect(ValRLpair& pair) {
@@ -45,14 +48,14 @@ void mesh_rect(ValRLpair& pair) {
 int main()
 {
 
-    /* std::vector<int> data = { 1, 1, 1, 2, 1, 1, 2, 1,
+    std::vector<int> data1 = { 1, 1, 1, 2, 1, 1, 2, 1,
                               1, 1, 1, 1, 1, 1, 2, 2,
                               1, 1, 1, 3, 3, 2, 1, 2,
                               3, 3, 2, 1, 1, 0, 0, 0,
                               1, 1, 1, 2, 3, 3, 3, 0,
                               1, 1, 2, 2, 3, 3, 3, 3, 
                               0, 0, 0, 2, 2, 4, 4, 4,
-                              0, 0, 2, 1, 1, 4, 4, 1 }; */
+                              0, 0, 2, 1, 1, 4, 4, 1 };
 
    /*  std::vector<int> data = { 1,1,1,1,1,1,1,1,
                               1,1,1,1,1,1,1,1,
@@ -70,11 +73,11 @@ for (int seed = 19; seed < 20; seed++)
 //{
   //  std::cout << values << std::endl;
     srand(11);
-    std::vector<int> data(side_size*side_size);
+    /* std::vector<int> data(side_size*side_size);
     for (auto& it : data)
     {
         it = rand() % 5;
-    }
+    } */
 
 
     mesh_count = 0;
@@ -91,14 +94,14 @@ for (int seed = 19; seed < 20; seed++)
 3, 2, 1, 2, 3, 0, 0, 1,
 2, 2, 0, 1, 1, 1, 0, 3 }; */
 
-/* std::vector<int> data = {5, 5, 6, 8, 6, 4, 4, 7,
+std::vector<int> data2 = {5, 5, 6, 8, 6, 4, 4, 7,
 5, 1, 2, 6, 2, 5, 8, 1,
 1, 2, 1, 6, 6, 4, 1, 4,
 5, 8, 7, 5, 1, 1, 5, 4,
 4, 2, 4, 0, 6, 6, 7, 1,
 7, 1, 7, 7, 6, 4, 0, 6,
 6, 8, 1, 4, 3, 2, 8, 6,
-8, 4, 2, 0, 3, 7, 5, 8}; */
+8, 4, 2, 0, 3, 7, 5, 8};
 
 
 /* 
@@ -120,14 +123,14 @@ for (int seed = 19; seed < 20; seed++)
 
     /* ------------PRINTING----------- */
     {
-        LOG(data.size());
+        LOG(data1.size());
         std::cout << std::endl;
         for (unsigned z = 0; z < side_size; z++)
         {   
             for (unsigned x = 0; x < side_size; x++)
             {
                 unsigned index = xzToIndex(x,z,side_size);
-                std::cout << data[index] << ", ";
+                std::cout << data1[index] << ", ";
             }
             std::cout << std::endl;
         }
@@ -140,14 +143,17 @@ for (int seed = 19; seed < 20; seed++)
                 unsigned index = xzToIndex(x,z,side_size);
                 std::cout << "[" << x << "," << z << " (" << index;
                 if (index < 10) {std::cout << " ";}
-                std::cout << "): " << data[index] << "], ";
+                std::cout << "): " << data1[index] << "], ";
             }
             std::cout << std::endl;
         }
     }
     /* ------------END PRINTING----------- */
 
- 
+
+
+    std::vector<int> data = data2;
+    
     std::vector<ValRLpair> holder(side_size*side_size, {0,0});
 
     unsigned voxel_val = 0;
