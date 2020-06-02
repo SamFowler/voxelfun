@@ -177,7 +177,7 @@ std::vector<int> data2 = {5, 5, 6, 8, 6, 4, 4, 7,
         }
 
         prev_voxel_val = voxel_val;
-     }
+    }
 
     //Put last rectangle from first column in rectangle holder
     holder[xzToIndex( ((x-1)-run_length), z, side_size )] = {prev_voxel_val, (run_length+1), 1, ((x-1)-run_length), z};

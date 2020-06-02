@@ -49,7 +49,7 @@ void ChunkRenderer::updateVAOs()
         if (chunk_ptr != nullptr)
         {
             //m_chunk_vaos.push_back(ChunkMeshGenerator::makeChunkVAO(*chunk_ptr, chunk_size) );
-            m_chunk_renderables.push_back({chunk_ptr->getPosition(), ChunkMeshGenerator::makeChunkVAO(*chunk_ptr, m_chunk_size) });
+            m_chunk_renderables.push_back({chunk_ptr->getPosition(), ChunkMeshGenerator::makeChunkVAO(*chunk_ptr, m_chunk_size, ChunkMeshGenerator::GREEDY_MESH) });
         }
     }
 

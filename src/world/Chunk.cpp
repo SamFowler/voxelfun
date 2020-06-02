@@ -138,6 +138,11 @@ Colour Chunk::getColour(const ColourID& colour_id) const
     return m_chunk_colours[colour_id];
 }
 
+ColourID Chunk::getVoxelColourID(const VoxelInChunkPos& voxel_coord) const
+{
+    return m_voxel_data[ indexFromInChunkPos(voxel_coord) ].getColourId();
+}
+
 Colour Chunk::getVoxelColour(const VoxelInChunkPos& voxel_coord) const
 {
     return m_chunk_colours[ m_voxel_data[ indexFromInChunkPos(voxel_coord) ].getColourId() ];

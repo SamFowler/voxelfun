@@ -36,6 +36,7 @@ public:
     ChunkPos    getPosition   () const  { return m_position;   }
 
     Colour     getColour       (const ColourID&        colour_id  ) const;
+    ColourID   getVoxelColourID(const VoxelInChunkPos& voxel_coord) const;
     Colour     getVoxelColour  (const VoxelInChunkPos& voxel_coord) const;
     VoxelType  getVoxelType    (const VoxelInChunkPos& voxel_coord) const;
     const Voxel&    getVoxel        (const VoxelInChunkPos& voxel_coord) const;

@@ -36,6 +36,10 @@ public:
     {
         return ( m_colour_id == other.m_colour_id && m_voxel_type == other.m_voxel_type);
     }
+    bool operator!=(const Voxel& other) const 
+    {
+        return !(*this == other);
+    }
 
     // Getters
     ColourID  getColourId()   const { return m_colour_id;  }

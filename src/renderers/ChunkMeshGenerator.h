@@ -13,6 +13,20 @@
 
 namespace ChunkMeshGenerator
 {
+    struct ChunkMeshFace
+    {
+        ChunkMeshFace() : colour(0), run_length(0), run_width(0), origin_i(0), origin_j(0) {};
+        ChunkMeshFace(const ColourID& colour_id, const unsigned& length, const unsigned& width, const unsigned& i, const unsigned j) 
+        : colour(colour_id), run_length(length), run_width(width), origin_i(i), origin_j(j) {};
+
+        ColourID colour;
+        unsigned run_length = 0;
+        unsigned run_width = 0;
+
+        unsigned origin_i = 0;
+        unsigned origin_j = 0;
+    };
+
     /*
 public:
     ChunkMeshGenerator() 
@@ -39,7 +53,14 @@ public:
     VertexArrayObject makeChunkVAO(const Chunk& chunk, const unsigned int& chunk_size, const MeshMethod& mesh_method = CULL_MESH_FAST);
     void makeChunkMesh_Naive  (const Chunk& chunk, const unsigned int& chunk_size, ChunkMesh& chunk_mesh);
     void makeChunkMesh_Culling(const Chunk& chunk, const unsigned int& chunk_size, ChunkMesh& chunk_mesh);
+
+    void meshRectangle(ChunkMesh& mesh, const ChunkMeshFace& rectangle, const Chunk& chunk, const unsigned& direction, const unsigned& layer, const std::array<GLuint, 12>& face, unsigned& element_count);
+    //const Voxel& getChunkVoxel(const unsigned& i, const unsigned& j, const unsigned& layer, const unsigned& direction, const Chunk& chunk);
+    ColourID getVoxelColour(const unsigned& i, const unsigned& j, const unsigned& layer, const unsigned& chunk_size, const unsigned& direction, const Chunk& chunk);
+
+    unsigned getLocalIndex(const unsigned& i, const unsigned& j, const unsigned& chunk_size);
     void makeChunkMesh_Greedy (const Chunk& chunk, const unsigned int& chunk_size, ChunkMesh& chunk_mesh);
+
     void makeChunkMesh_Optimal(const Chunk& chunk, const unsigned int& chunk_size, ChunkMesh& chunk_mesh);
 
     void addFace(ChunkMesh& mesh, const Voxel& voxel, const VoxelInChunkPos& voxel_pos, const Colour& voxel_colour,

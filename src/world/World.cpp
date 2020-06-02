@@ -44,7 +44,7 @@ void World::init()
 
     m_chunk_manager.addChunk({-1, -1, -5}, ChunkMakeType::DEBUG_CHUNK);
 
-
+    m_chunk_manager.addChunk({-3, -1, -3}, ChunkMakeType::GRASS_CHUNK);
         
     m_chunk_renderer.init(m_chunk_size);
 
