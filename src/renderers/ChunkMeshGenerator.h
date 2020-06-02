@@ -58,6 +58,7 @@ public:
     //const Voxel& getChunkVoxel(const unsigned& i, const unsigned& j, const unsigned& layer, const unsigned& direction, const Chunk& chunk);
     ColourID getVoxelColour(const unsigned& i, const unsigned& j, const unsigned& layer, const unsigned& chunk_size, const unsigned& direction, const Chunk& chunk);
 
+    bool isFaceVisible(const unsigned& i, const unsigned& j, const unsigned& layer, const unsigned& normal_index, const Chunk& chunk);
     unsigned getLocalIndex(const unsigned& i, const unsigned& j, const unsigned& chunk_size);
     void makeChunkMesh_Greedy (const Chunk& chunk, const unsigned int& chunk_size, ChunkMesh& chunk_mesh);
 
@@ -77,6 +78,13 @@ public:
     const std::array<GLuint, 12> X_PLUS_FACE =  {1, 0, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1};
     const std::array<GLuint, 12> Y_PLUS_FACE =  {1, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1};
     const std::array<GLuint, 12> Z_PLUS_FACE =  {1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1};
+
+    const std::array<GLuint, 12> X_GREEDY_MINUS_FACE = {0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 0};
+    const std::array<GLuint, 12> Y_GREEDY_MINUS_FACE = {0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1};
+    const std::array<GLuint, 12> Z_GREEDY_MINUS_FACE = {0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0};
+    const std::array<GLuint, 12> X_GREEDY_PLUS_FACE =  {1, 0, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1};
+    const std::array<GLuint, 12> Y_GREEDY_PLUS_FACE =  {1, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1};
+    const std::array<GLuint, 12> Z_GREEDY_PLUS_FACE =  {1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1};
 
     const GLuint X_MINUS_NORMAL_INDEX = 0;
     const GLuint X_PLUS_NORMAL_INDEX  = 1;

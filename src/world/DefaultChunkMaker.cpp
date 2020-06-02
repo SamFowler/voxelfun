@@ -72,7 +72,7 @@ namespace DefaultChunkMaker
         }
 
         voxels = std::move(these_voxels);
-        colours = { {0,0,0,0}, {150, 100, 100, 255}, {0, 255, 0, 255}, {0, 170, 0, 255}};
+        colours = { {0,0,0,0}, {150, 100, 100, 255}, {0, 200, 0, 255}, {0, 170, 0, 255}};
     }
 
     void makeDirtChunk  (std::vector<Voxel>& voxels, std::vector<Colour>& colours, const unsigned int& chunk_size)

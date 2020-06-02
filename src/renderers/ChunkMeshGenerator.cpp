@@ -88,6 +88,28 @@ ColourID getVoxelColour(const unsigned& i, const unsigned& j, const unsigned& la
         return chunk.getVoxelColourID({i, j, layer}); 
 }
 
+bool isFaceVisible(const unsigned& i, const unsigned& j, const unsigned& layer, const unsigned& normal_index, const Chunk& chunk)
+{
+
+
+    if (normal_index == X_MINUS_NORMAL_INDEX) 
+        return !chunk.getVoxel({layer, j, i}).hasXMinusNeighbour();
+    else if (normal_index == X_PLUS_NORMAL_INDEX) 
+        return !chunk.getVoxel({layer, j, i}).hasXPlusNeighbour();    
+    else if (normal_index == Y_MINUS_NORMAL_INDEX) 
+        return !chunk.getVoxel({i, layer, j}).hasYMinusNeighbour();
+    else if (normal_index == Y_PLUS_NORMAL_INDEX) 
+        return !chunk.getVoxel({i, layer, j}).hasYPlusNeighbour(); 
+    else if (normal_index == Z_MINUS_NORMAL_INDEX) 
+        return !chunk.getVoxel({i, j, layer}).hasZMinusNeighbour(); 
+    else if (normal_index == Z_PLUS_NORMAL_INDEX) 
+        return !chunk.getVoxel({i, j, layer}).hasZPlusNeighbour();
+    else {
+        std::cout << "[ERROR] Greedy meshing isFaceVisible bad return";
+        return true;
+    }
+}
+
 unsigned getLocalIndex(const unsigned& i, const unsigned& j, const unsigned& chunk_size)
 {
     return (j * chunk_size) + i;
@@ -104,23 +126,71 @@ void meshRectangle(ChunkMesh& mesh, const ChunkMeshFace& rectangle, const Chunk&
         x = rectangle.origin_i; 
         y = layer; 
         z = rectangle.origin_j;
+
+        mesh.vertices.push_back(face[0] + x + rectangle.run_length-1 );
+        mesh.vertices.push_back(face[1] + y);
+        mesh.vertices.push_back(face[2] + z );
+
+        mesh.vertices.push_back(face[3] + x);
+        mesh.vertices.push_back(face[4] + y);
+        mesh.vertices.push_back(face[5] + z);
+
+        mesh.vertices.push_back(face[6] + x );
+        mesh.vertices.push_back(face[7] + y);
+        mesh.vertices.push_back(face[8] + z + rectangle.run_width-1);
+
+        mesh.vertices.push_back(face[9]  + x + rectangle.run_length-1 );
+        mesh.vertices.push_back(face[10] + y);
+        mesh.vertices.push_back(face[11] + z  + rectangle.run_width-1 );
     }
-    
-    mesh.vertices.push_back(face[0] + x + rectangle.run_length-1 );
-    mesh.vertices.push_back(face[1] + y);
-    mesh.vertices.push_back(face[2] + z );
+    else if (direction == 1)
+    {
+        x = layer;
+        y = rectangle.origin_j;
+        z = rectangle.origin_i;
 
-    mesh.vertices.push_back(face[3] + x);
-    mesh.vertices.push_back(face[4] + y);
-    mesh.vertices.push_back(face[5] + z);
+        mesh.vertices.push_back(face[0] + x );  
+        mesh.vertices.push_back(face[1] + y );
+        mesh.vertices.push_back(face[2] + z );
 
-    mesh.vertices.push_back(face[6] + x );
-    mesh.vertices.push_back(face[7] + y);
-    mesh.vertices.push_back(face[8] + z + rectangle.run_width-1);
+        mesh.vertices.push_back(face[3] + x );
+        mesh.vertices.push_back(face[4] + y + rectangle.run_width-1 );
+        mesh.vertices.push_back(face[5] + z );
 
-    mesh.vertices.push_back(face[9]  + x + rectangle.run_length-1 );
-    mesh.vertices.push_back(face[10] + y);
-    mesh.vertices.push_back(face[11] + z  + rectangle.run_width-1 );
+        mesh.vertices.push_back(face[6] + x );
+        mesh.vertices.push_back(face[7] + y + rectangle.run_width-1 );
+        mesh.vertices.push_back(face[8] + z + rectangle.run_length-1 );
+
+        mesh.vertices.push_back(face[9]  + x );
+        mesh.vertices.push_back(face[10] + y  );
+        mesh.vertices.push_back(face[11] + z + rectangle.run_length-1 );
+    }
+    else if (direction == 2)
+    {
+        x = rectangle.origin_i;
+        y = rectangle.origin_j;
+        z = layer;
+
+        mesh.vertices.push_back(face[0] + x + rectangle.run_length-1);
+        mesh.vertices.push_back(face[1] + y  + rectangle.run_width-1 );
+        mesh.vertices.push_back(face[2] + z );
+
+        mesh.vertices.push_back(face[3] + x );
+        mesh.vertices.push_back(face[4] + y + rectangle.run_width-1);
+        mesh.vertices.push_back(face[5] + z );
+
+        mesh.vertices.push_back(face[6] + x );
+        mesh.vertices.push_back(face[7] + y );
+        mesh.vertices.push_back(face[8] + z );
+
+        mesh.vertices.push_back(face[9]  + x + rectangle.run_length-1 );
+        mesh.vertices.push_back(face[10] + y );
+        mesh.vertices.push_back(face[11] + z );
+    }
+
+
+
+
 
     Colour colour = chunk.getColour(rectangle.colour);
 
@@ -183,7 +253,26 @@ void makeChunkMesh_Greedy (const Chunk& chunk, const unsigned int& chunk_size, C
 
     unsigned element_count = 0;
 
-for (unsigned layer = chunk_size-1; layer < chunk_size; layer++ )
+for (direction = 0; direction < 3; direction++)
+{
+
+if (direction == 0) 
+{
+    face = Y_PLUS_FACE;
+    normal_index = Y_PLUS_NORMAL_INDEX;
+}
+else if (direction == 1)
+{
+    face = X_PLUS_FACE;
+    normal_index = X_PLUS_NORMAL_INDEX;
+}
+else if (direction == 2)
+{
+    face = Z_PLUS_FACE;
+    normal_index = Z_PLUS_NORMAL_INDEX;
+}
+
+for (unsigned layer = 0; layer < chunk_size; layer++ )
 {
 
     std::vector<ChunkMeshFace> mesh_faces(chunk_size*chunk_size*chunk_size, {0,0,0,0,0});
@@ -199,13 +288,21 @@ for (unsigned layer = chunk_size-1; layer < chunk_size; layer++ )
 
 
     //const Voxel& previous_voxel = getChunkVoxel(i, j, layer, direction, chunk); //get first data element
-    ColourID previous_colour = getVoxelColour(i, j, layer, chunk_size, direction, chunk);
+    ColourID previous_colour;
+    if (isFaceVisible(i, j, layer, normal_index, chunk))
+        previous_colour = getVoxelColour(i, j, layer, chunk_size, direction, chunk);
+    else
+        previous_colour = 0;
 
     /* ------------START FIRST i COLUMN----------- */
     //loop over first column only to initialise rectangle array
     for (i = 1; i < chunk_size; i++)
     {
-        current_colour = getVoxelColour(i, j, layer, chunk_size, direction, chunk);
+        if (isFaceVisible(i, j, layer, normal_index, chunk))
+            current_colour = getVoxelColour(i, j, layer, chunk_size, direction, chunk);
+        else
+            current_colour = 0;
+
         run_length++;
 
         if ( current_colour != previous_colour )
@@ -233,7 +330,11 @@ for (unsigned layer = chunk_size-1; layer < chunk_size; layer++ )
 
         /* ------------START X = 0 ----------- */
         // run x=0 separately before loop so we don't have extra if checks for it in each loop
-        current_colour = getVoxelColour(i, j, layer, chunk_size, direction, chunk);
+        if (isFaceVisible(i, j, layer, normal_index, chunk))
+            current_colour = getVoxelColour(i, j, layer, chunk_size, direction, chunk);
+        else
+            current_colour = 0;
+        
 
         
         if ( current_colour == getVoxelColour(i, j-1, layer, chunk_size, direction, chunk) )
@@ -247,8 +348,11 @@ for (unsigned layer = chunk_size-1; layer < chunk_size; layer++ )
             meshRectangle(chunk_mesh, mesh_faces[getLocalIndex(i, j-1, chunk_size)], chunk, direction, layer, face, element_count);
         }
         
-                
-        previous_colour = getVoxelColour(0, j, layer, chunk_size, direction, chunk);
+        if (isFaceVisible(i, j, layer, normal_index, chunk))
+            previous_colour = getVoxelColour(0, j, layer, chunk_size, direction, chunk);
+        else
+            previous_colour = 0;
+        //previous_colour = getVoxelColour(0, j, layer, chunk_size, direction, chunk);
         /* ------------END X = 0----------- */
 
 
@@ -256,7 +360,11 @@ for (unsigned layer = chunk_size-1; layer < chunk_size; layer++ )
         /* ------------START X = 1 onwards LOOP----------- */
         for (unsigned i = 1; i < chunk_size; i++)
         {
-            current_colour = getVoxelColour(i, j, layer, chunk_size, direction, chunk);
+            if (isFaceVisible(i, j, layer, normal_index, chunk))
+                current_colour = getVoxelColour(i, j, layer, chunk_size, direction, chunk);
+            else
+                current_colour = 0;
+            //current_colour = getVoxelColour(i, j, layer, chunk_size, direction, chunk);
             run_length++;
 
             // Check if we are currently trying to expand a rectangle from the previous column
@@ -433,6 +541,8 @@ for (unsigned layer = chunk_size-1; layer < chunk_size; layer++ )
     /* ------------END z = SIDE_SIZE ----------- */
 std::cout << "";
 }//end layer
+
+}//direction
 
 }
 
