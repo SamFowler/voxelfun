@@ -110,6 +110,15 @@ bool isFaceVisible(const unsigned& i, const unsigned& j, const unsigned& layer, 
     }
 }
 
+ColourID getVoxelColour(const unsigned& i, const unsigned& j, const unsigned& layer, const unsigned& normal_index, const Chunk& chunk, const unsigned& chunk_size, const unsigned& direction)
+{
+    if (isFaceVisible(i, j, layer, normal_index, chunk))
+        return getVoxelColour(i, j, layer, chunk_size, direction, chunk);
+    else
+        return 0;
+}
+
+
 unsigned getLocalIndex(const unsigned& i, const unsigned& j, const unsigned& chunk_size)
 {
     return (j * chunk_size) + i;
@@ -253,296 +262,285 @@ void makeChunkMesh_Greedy (const Chunk& chunk, const unsigned int& chunk_size, C
 
     unsigned element_count = 0;
 
-for (direction = 0; direction < 3; direction++)
-{
 
-if (direction == 0) 
-{
-    face = Y_PLUS_FACE;
-    normal_index = Y_PLUS_NORMAL_INDEX;
-}
-else if (direction == 1)
-{
-    face = X_PLUS_FACE;
-    normal_index = X_PLUS_NORMAL_INDEX;
-}
-else if (direction == 2)
-{
-    face = Z_PLUS_FACE;
-    normal_index = Z_PLUS_NORMAL_INDEX;
-}
-
-for (unsigned layer = 0; layer < chunk_size; layer++ )
-{
-
-    std::vector<ChunkMeshFace> mesh_faces(chunk_size*chunk_size*chunk_size, {0,0,0,0,0});
-
-    //Voxel temp;
-    //const Voxel& current_voxel = temp;
-    ColourID current_colour;
-    unsigned run_length = 0;
-
-    unsigned i = 0;
-    unsigned j = 0;     
-
-
-
-    //const Voxel& previous_voxel = getChunkVoxel(i, j, layer, direction, chunk); //get first data element
-    ColourID previous_colour;
-    if (isFaceVisible(i, j, layer, normal_index, chunk))
-        previous_colour = getVoxelColour(i, j, layer, chunk_size, direction, chunk);
-    else
-        previous_colour = 0;
-
-    /* ------------START FIRST i COLUMN----------- */
-    //loop over first column only to initialise rectangle array
-    for (i = 1; i < chunk_size; i++)
+    for (direction = 0; direction < 3; direction++)
     {
-        if (isFaceVisible(i, j, layer, normal_index, chunk))
-            current_colour = getVoxelColour(i, j, layer, chunk_size, direction, chunk);
-        else
-            current_colour = 0;
+        GreedyProcessState plus_state(direction, chunk, chunk_size, true); // state for positive normal of direction
+        GreedyProcessState minus_state(direction, chunk, chunk_size, false); //state for negative normal of direction
 
-        run_length++;
-
-        if ( current_colour != previous_colour )
-        {   
-            mesh_faces[getLocalIndex( (i-run_length), j, chunk_size )] = {previous_colour, run_length, 1, (i-run_length), j};
-            run_length = 0;
+        if (direction == 0) 
+        {
+            face = Y_PLUS_FACE;
+            normal_index = Y_PLUS_NORMAL_INDEX;
+        }
+        else if (direction == 1)
+        {
+            face = X_PLUS_FACE;
+            normal_index = X_PLUS_NORMAL_INDEX;
+        }
+        else if (direction == 2)
+        {
+            face = Z_PLUS_FACE;
+            normal_index = Z_PLUS_NORMAL_INDEX;
         }
 
-        previous_colour = current_colour;
-    }
-
-    //Put last rectangle from first column in rectangle holder
-    mesh_faces[getLocalIndex( ((i-1)-run_length), j, chunk_size )] = {previous_colour, (run_length+1), 1, ((i-1)-run_length), j};
-    /* ------------END FIRST j COLUMN----------- */
-
-
-    ChunkMeshFace previous_rectangle;
-    /* ------------START j = 1 onwards LOOP----------- */
-    for (unsigned j = 1; j < chunk_size; j++)
-    {   
-
-        previous_rectangle = {0,0,0,0,0};
-        run_length = 0;
-        i = 0;
-
-        /* ------------START X = 0 ----------- */
-        // run x=0 separately before loop so we don't have extra if checks for it in each loop
-        if (isFaceVisible(i, j, layer, normal_index, chunk))
-            current_colour = getVoxelColour(i, j, layer, chunk_size, direction, chunk);
-        else
-            current_colour = 0;
-        
-
-        
-        if ( current_colour == getVoxelColour(i, j-1, layer, chunk_size, direction, chunk) )
+        for (unsigned layer = 0; layer < chunk_size; layer++ )
         {
-            previous_rectangle = mesh_faces[getLocalIndex(i, j-1, chunk_size)];
-            previous_rectangle.run_width++; 
-        }
-        else
-        {
-            //mesh?
-            meshRectangle(chunk_mesh, mesh_faces[getLocalIndex(i, j-1, chunk_size)], chunk, direction, layer, face, element_count);
-        }
-        
-        if (isFaceVisible(i, j, layer, normal_index, chunk))
-            previous_colour = getVoxelColour(0, j, layer, chunk_size, direction, chunk);
-        else
-            previous_colour = 0;
-        //previous_colour = getVoxelColour(0, j, layer, chunk_size, direction, chunk);
-        /* ------------END X = 0----------- */
+
+                std::vector<ChunkMeshFace> mesh_faces(chunk_size*chunk_size*chunk_size, {0,0,0,0,0});
+
+                //Voxel temp;
+                //const Voxel& current_voxel = temp;
+                ColourID current_colour;
+                unsigned run_length = 0;
+
+                unsigned i = 0;
+                unsigned j = 0;     
 
 
 
-        /* ------------START X = 1 onwards LOOP----------- */
-        for (unsigned i = 1; i < chunk_size; i++)
-        {
-            if (isFaceVisible(i, j, layer, normal_index, chunk))
-                current_colour = getVoxelColour(i, j, layer, chunk_size, direction, chunk);
-            else
-                current_colour = 0;
-            //current_colour = getVoxelColour(i, j, layer, chunk_size, direction, chunk);
-            run_length++;
+                //const Voxel& previous_voxel = getChunkVoxel(i, j, layer, direction, chunk); //get first data element
+                ColourID previous_colour;
 
-            // Check if we are currently trying to expand a rectangle from the previous column
-            if ( (previous_rectangle.run_width > 0) ) 
-            {   
+                previous_colour = getVoxelColour(i, j, layer, normal_index, chunk, chunk_size, direction);
+                
 
-                // if the voxels in this row have reached the same run length as the rectangle we are trying to expand,
-                // we can add these voxels to that rectangle
-                if (run_length == previous_rectangle.run_length) 
+                /* ------------START FIRST i COLUMN----------- */
+                //loop over first column only to initialise rectangle array
+                for (i = 1; i < chunk_size; i++)
                 {
-                    //We have a group of voxels that match the previous column rectangle - place them in
-                    mesh_faces[getLocalIndex( (i-run_length), j, chunk_size)] = previous_rectangle;
-                    //holder[xzToIndex( (x-run_length), z, side_size )] = previous_last_row_rectangle;
+                    //processFirstColumn(i, j, layer, normal_index, chunk, run_length, current_colour, previous_colour )
 
-                    //mesh the rectangle
+                    run_length++;
+                    current_colour = getVoxelColour(i, j, layer, normal_index, chunk, chunk_size, direction);
+ 
+                    if ( current_colour != previous_colour )
+                    {   
+                        mesh_faces[getLocalIndex( (i-run_length), j, chunk_size )] = {previous_colour, run_length, 1, (i-run_length), j};
+                        run_length = 0;
+                    }
+
+                    previous_colour = current_colour;
+                }
+
+                //Put last rectangle from first column in rectangle holder
+                mesh_faces[getLocalIndex( ((i-1)-run_length), j, chunk_size )] = {previous_colour, (run_length+1), 1, ((i-1)-run_length), j};
+                /* ------------END FIRST j COLUMN----------- */
 
 
-                    // as the runlength of the rectangle from previous column has been reached, 
-                    // a new, different, rectangle must be at this row value in the previous column -
-                     
-                    if (current_colour == getVoxelColour(i, j-1, layer, chunk_size, direction, chunk))
-                    {   // We fetch it if it is of the same voxel type
+                ChunkMeshFace previous_rectangle;
+                /* ------------START j = 1 onwards LOOP----------- */
+                for (unsigned j = 1; j < chunk_size; j++)
+                {   
+
+                    previous_rectangle = {0,0,0,0,0};
+                    run_length = 0;
+                    i = 0;
+
+                    /* ------------START X = 0 ----------- */
+                    // run x=0 separately before loop so we don't have extra if checks for it in each loop
+                    current_colour = getVoxelColour(i, j, layer, normal_index, chunk, chunk_size, direction);
+                                       
+
+                    
+                    if ( current_colour == getVoxelColour(i, j-1, layer, chunk_size, direction, chunk) )
+                    {
                         previous_rectangle = mesh_faces[getLocalIndex(i, j-1, chunk_size)];
                         previous_rectangle.run_width++; 
-                        
                     }
-                    else 
-                    {   //else set rectangle to empty so we don't look to match to it
-                        previous_rectangle = {0, 0, 0, 0, 0};
+                    else
+                    {
+                        //mesh?
                         meshRectangle(chunk_mesh, mesh_faces[getLocalIndex(i, j-1, chunk_size)], chunk, direction, layer, face, element_count);
                     }
+                    previous_colour = getVoxelColour(0, j, layer, normal_index, chunk, chunk_size, direction);
+                    /* ------------END X = 0----------- */
 
-                    run_length = 0;
 
-                }
 
-                // if rectangle runlength hasn't been reached and the voxel type has changed,
-                // create a new rectangle for the runlength that was reached and set rectangle to empty so we don't look to match to it
-                else if (current_colour != previous_colour)
-                {
-                    mesh_faces[getLocalIndex( (i-run_length), j, chunk_size)] =  {previous_colour, run_length, 1, (i-run_length), j};
-                    //holder[xzToIndex( (x-run_length), z, side_size )] = {prev_voxel_val, run_length, 1, (x-run_length), z};
-                    
+                    /* ------------START X = 1 onwards LOOP----------- */
+                    for (unsigned i = 1; i < chunk_size; i++)
+                    {
+                        current_colour = getVoxelColour(i, j, layer, normal_index, chunk, chunk_size, direction);
                         
-                    if (current_colour == getVoxelColour(i, j-1, layer, chunk_size, direction, chunk))
-                    {   // We fetch it if it is of the same voxel type
-                        previous_rectangle = mesh_faces[getLocalIndex(i, j-1, chunk_size)];
-                        //previous_last_row_rectangle = holder[xzToIndex(x, z-1, side_size)];  
+                        run_length++;
 
-                        if (previous_rectangle.colour > 0)
+                        // Check if we are currently trying to expand a rectangle from the previous column
+                        if ( (previous_rectangle.run_width > 0) ) 
+                        {   
+
+                            // if the voxels in this row have reached the same run length as the rectangle we are trying to expand,
+                            // we can add these voxels to that rectangle
+                            if (run_length == previous_rectangle.run_length) 
+                            {
+                                //We have a group of voxels that match the previous column rectangle - place them in
+                                mesh_faces[getLocalIndex( (i-run_length), j, chunk_size)] = previous_rectangle;
+                                //holder[xzToIndex( (x-run_length), z, side_size )] = previous_last_row_rectangle;
+
+                                //mesh the rectangle
+
+
+                                // as the runlength of the rectangle from previous column has been reached, 
+                                // a new, different, rectangle must be at this row value in the previous column -
+                                
+                                if (current_colour == getVoxelColour(i, j-1, layer, chunk_size, direction, chunk))
+                                {   // We fetch it if it is of the same voxel type
+                                    previous_rectangle = mesh_faces[getLocalIndex(i, j-1, chunk_size)];
+                                    previous_rectangle.run_width++; 
+                                    
+                                }
+                                else 
+                                {   //else set rectangle to empty so we don't look to match to it
+                                    previous_rectangle = {0, 0, 0, 0, 0};
+                                    meshRectangle(chunk_mesh, mesh_faces[getLocalIndex(i, j-1, chunk_size)], chunk, direction, layer, face, element_count);
+                                }
+
+                                run_length = 0;
+
+                            }
+
+                            // if rectangle runlength hasn't been reached and the voxel type has changed,
+                            // create a new rectangle for the runlength that was reached and set rectangle to empty so we don't look to match to it
+                            else if (current_colour != previous_colour)
+                            {
+                                mesh_faces[getLocalIndex( (i-run_length), j, chunk_size)] =  {previous_colour, run_length, 1, (i-run_length), j};
+                                //holder[xzToIndex( (x-run_length), z, side_size )] = {prev_voxel_val, run_length, 1, (x-run_length), z};
+                                
+                                    
+                                if (current_colour == getVoxelColour(i, j-1, layer, chunk_size, direction, chunk))
+                                {   // We fetch it if it is of the same voxel type
+                                    previous_rectangle = mesh_faces[getLocalIndex(i, j-1, chunk_size)];
+                                    //previous_last_row_rectangle = holder[xzToIndex(x, z-1, side_size)];  
+
+                                    if (previous_rectangle.colour > 0)
+                                    {
+                                        //previous_last_row_rectangle = holder[xzToIndex(x, z-1, side_size)];  
+                                        previous_rectangle.run_width++; 
+                                    }
+                                    else
+                                    {
+                                        previous_rectangle = {0, 0, 0, 0, 0};
+                                    }
+                                    
+                                }
+                                else 
+                                {   //else set rectangle to empty so we don't look to match to it
+                                    previous_rectangle.run_width--;
+                                    if (previous_rectangle.run_width > 0)
+                                        meshRectangle(chunk_mesh, previous_rectangle, chunk, direction, layer, face, element_count);
+                                    else 
+                                        meshRectangle(chunk_mesh, mesh_faces[getLocalIndex(i, j-1, chunk_size)], chunk, direction, layer, face, element_count);
+                                    
+
+                                    previous_rectangle = {0, 0, 0, 0, 0};
+
+                                }
+
+                                run_length = 0;
+                            }
+                            else
+                            {                       
+                                if (current_colour != getVoxelColour(i, j-1, layer, chunk_size, direction, chunk))
+                                {
+                                    meshRectangle(chunk_mesh, mesh_faces[getLocalIndex(i, j-1, chunk_size)], chunk, direction, layer, face, element_count);
+                                }
+                            }
+                            
+                            
+                        }
+
+                        // else if we are not trying to match to rectangle from previous column,
+                        // get the rectangle from the previous column and check if the voxels match with this voxel
+                                                
+                        else if (current_colour == mesh_faces[getLocalIndex(i, j-1, chunk_size)].colour)
                         {
-                            //previous_last_row_rectangle = holder[xzToIndex(x, z-1, side_size)];  
-                            previous_rectangle.run_width++; 
+                            //holder[xzToIndex( (x-run_length), z, side_size )] = {prev_voxel_val, run_length, 1, (x-run_length), z};
+                            mesh_faces[getLocalIndex( (i-run_length), j, chunk_size )] = {previous_colour, run_length, 1, (i-run_length), j};
+
+                            previous_rectangle = mesh_faces[getLocalIndex(i, j-1, chunk_size)];
+                            previous_rectangle.run_width++;
+
+                            run_length = 0;
+                        } 
+                        // else if there are no rectangles to match to, create a new one for the previous run length
+                        else if (current_colour != previous_colour)
+                        {
+                            mesh_faces[getLocalIndex( (i-run_length), j, chunk_size )] = {previous_colour, run_length, 1, (i-run_length), j};
+                            //holder[xzToIndex( (x-run_length), z, side_size )] = {prev_voxel_val, run_length, 1, (x-run_length), z};
+                            run_length = 0;
+                                                
+                            if (current_colour != getVoxelColour(i, j-1, layer, chunk_size, direction, chunk))
+                            {
+                                meshRectangle(chunk_mesh, mesh_faces[getLocalIndex(i, j-1, chunk_size)], chunk, direction, layer, face, element_count);
+                                //mesh_rect(holder[xzToIndex( x, z-1, side_size )]);
+                            }
+                            
                         }
                         else
-                        {
-                            previous_rectangle = {0, 0, 0, 0, 0};
+                        {   
+                            meshRectangle(chunk_mesh, mesh_faces[getLocalIndex(i, j-1, chunk_size)], chunk, direction, layer, face, element_count);
+
                         }
                         
+                        
+                        previous_colour = current_colour;
+
+                    } 
+                    /* ------------END X = 1 onwards LOOP----------- */
+
+
+
+                    /* ------------START X = SIDE_SIZE ----------- */
+                    // need special case for this as it needs to fill in the rectangle array before starting next z loop
+                    i = chunk_size;
+                    run_length++;
+
+                
+
+                    if ( (previous_rectangle.run_width > 0) )
+                    {
+                        if (run_length == previous_rectangle.run_length)
+                        {
+                            //WE HAVE A SET THAT MATCHES A PREVIOUS ROW RECTANGLE - place it in
+                            mesh_faces[getLocalIndex( (i-run_length), j, chunk_size )] = previous_rectangle;
+                            //holder[xzToIndex( (x-run_length), z, side_size )] = previous_last_row_rectangle;
+
+                            // as runlength of previous row has been reached, a new rectanlge must be there
+                                            
+                            if (current_colour == getVoxelColour(i, j-1, layer, chunk_size, direction, chunk))
+                            {                   
+                                previous_rectangle = mesh_faces[getLocalIndex(i, j-1, chunk_size)];  
+                                previous_rectangle.run_width++; 
+                            }
+                            else 
+                            {
+                                previous_rectangle = {0, 0, 0, 0, 0};
+                            }
+                            run_length = 0;
+                        }
+                        else {/*carry on...?*/}
                     }
                     else 
-                    {   //else set rectangle to empty so we don't look to match to it
-                        previous_rectangle.run_width--;
-                        if (previous_rectangle.run_width > 0)
-                            meshRectangle(chunk_mesh, previous_rectangle, chunk, direction, layer, face, element_count);
-                        else 
-                            meshRectangle(chunk_mesh, mesh_faces[getLocalIndex(i, j-1, chunk_size)], chunk, direction, layer, face, element_count);
-                        
-
-                        previous_rectangle = {0, 0, 0, 0, 0};
-
-                    }
-
-                    run_length = 0;
-                }
-                else
-                {                       
-                    if (current_colour != getVoxelColour(i, j-1, layer, chunk_size, direction, chunk))
                     {
-                        meshRectangle(chunk_mesh, mesh_faces[getLocalIndex(i, j-1, chunk_size)], chunk, direction, layer, face, element_count);
+                    
+                        mesh_faces[getLocalIndex( (i-run_length), j, chunk_size )] = {previous_colour, run_length, 1, (i-run_length), j};
+                        //holder[xzToIndex( (x-run_length), z, side_size )] = {prev_voxel_val, run_length, 1, (x-run_length), z};
+                        run_length = 0;
                     }
                 }
-                
-                
-            }
-
-            // else if we are not trying to match to rectangle from previous column,
-            // get the rectangle from the previous column and check if the voxels match with this voxel
-                                    
-            else if (current_colour == mesh_faces[getLocalIndex(i, j-1, chunk_size)].colour)
-            {
-                //holder[xzToIndex( (x-run_length), z, side_size )] = {prev_voxel_val, run_length, 1, (x-run_length), z};
-                mesh_faces[getLocalIndex( (i-run_length), j, chunk_size )] = {previous_colour, run_length, 1, (i-run_length), j};
-
-                previous_rectangle = mesh_faces[getLocalIndex(i, j-1, chunk_size)];
-                previous_rectangle.run_width++;
-
-                run_length = 0;
-            } 
-            // else if there are no rectangles to match to, create a new one for the previous run length
-            else if (current_colour != previous_colour)
-            {
-                mesh_faces[getLocalIndex( (i-run_length), j, chunk_size )] = {previous_colour, run_length, 1, (i-run_length), j};
-                //holder[xzToIndex( (x-run_length), z, side_size )] = {prev_voxel_val, run_length, 1, (x-run_length), z};
-                run_length = 0;
-                                    
-                if (current_colour != getVoxelColour(i, j-1, layer, chunk_size, direction, chunk))
+                /* ------------START Z = SIDE_SIZE ----------- */
+                std::cout << "";
+                j = chunk_size;
+                for (unsigned i = 0; i < chunk_size; i++)
                 {
-                    meshRectangle(chunk_mesh, mesh_faces[getLocalIndex(i, j-1, chunk_size)], chunk, direction, layer, face, element_count);
+                    meshRectangle(chunk_mesh, mesh_faces[getLocalIndex( i, j-1, chunk_size )], chunk, direction, layer, face, element_count);
                     //mesh_rect(holder[xzToIndex( x, z-1, side_size )]);
                 }
-                
-            }
-            else
-            {   
-                meshRectangle(chunk_mesh, mesh_faces[getLocalIndex(i, j-1, chunk_size)], chunk, direction, layer, face, element_count);
+                /* ------------END z = SIDE_SIZE ----------- */
+            std::cout << "";
+        }//end layer
 
-            }
-            
-             
-            previous_colour = current_colour;
-
-        } 
-        /* ------------END X = 1 onwards LOOP----------- */
-
-
-
-        /* ------------START X = SIDE_SIZE ----------- */
-        // need special case for this as it needs to fill in the rectangle array before starting next z loop
-        i = chunk_size;
-        run_length++;
-
-      
-
-        if ( (previous_rectangle.run_width > 0) )
-        {
-            if (run_length == previous_rectangle.run_length)
-            {
-                //WE HAVE A SET THAT MATCHES A PREVIOUS ROW RECTANGLE - place it in
-                mesh_faces[getLocalIndex( (i-run_length), j, chunk_size )] = previous_rectangle;
-                //holder[xzToIndex( (x-run_length), z, side_size )] = previous_last_row_rectangle;
-
-                // as runlength of previous row has been reached, a new rectanlge must be there
-                                
-                if (current_colour == getVoxelColour(i, j-1, layer, chunk_size, direction, chunk))
-                {                   
-                    previous_rectangle = mesh_faces[getLocalIndex(i, j-1, chunk_size)];  
-                    previous_rectangle.run_width++; 
-                }
-                else 
-                {
-                    previous_rectangle = {0, 0, 0, 0, 0};
-                }
-                run_length = 0;
-            }
-            else {/*carry on...?*/}
-        }
-        else 
-        {
-           
-            mesh_faces[getLocalIndex( (i-run_length), j, chunk_size )] = {previous_colour, run_length, 1, (i-run_length), j};
-            //holder[xzToIndex( (x-run_length), z, side_size )] = {prev_voxel_val, run_length, 1, (x-run_length), z};
-            run_length = 0;
-        }
-    }
-    /* ------------START Z = SIDE_SIZE ----------- */
-    std::cout << "";
-    j = chunk_size;
-    for (unsigned i = 0; i < chunk_size; i++)
-    {
-        meshRectangle(chunk_mesh, mesh_faces[getLocalIndex( i, j-1, chunk_size )], chunk, direction, layer, face, element_count);
-        //mesh_rect(holder[xzToIndex( x, z-1, side_size )]);
-    }
-    /* ------------END z = SIDE_SIZE ----------- */
-std::cout << "";
-}//end layer
-
-}//direction
+    }//direction
 
 }
 
