@@ -518,6 +518,9 @@ void fillLastGreedyRow(const unsigned& i, const unsigned& j, const unsigned& lay
 
 void makeChunkMesh_Greedy (const Chunk& chunk, const unsigned int& chunk_size, ChunkMesh& chunk_mesh)
 {
+
+    // TODO: this whole greedy meshing pipeline is disgustingly written and hard to follow through. needs major clean up
+
     unsigned direction = 0;
     unsigned layer = 0;
 

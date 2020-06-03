@@ -19,6 +19,8 @@ namespace DefaultChunkMaker
             makeGrassChunk(voxels, colours, chunk_size);
         else if (type == EMPTY_CHUNK)
             makeEmptyChunk(voxels, colours,chunk_size);
+        else if (type == REVEAL_DIRT_CHUNK)
+            makeRevealEarthChunk(voxels, colours, chunk_size);
         else if (type == DIRT_CHUNK)
             makeDirtChunk(voxels, colours,chunk_size);
         else if (type == TREE_CHUNK)
@@ -75,6 +77,49 @@ namespace DefaultChunkMaker
         colours = { {0,0,0,0}, {150, 100, 100, 255}, {0, 200, 0, 255}, {0, 170, 0, 255}};
     }
 
+    void makeRevealEarthChunk  (std::vector<Voxel>& voxels, std::vector<Colour>& colours, const unsigned int& chunk_size)
+    {
+        Voxel voxel = {1, VoxelType::Dirt};
+        Voxel voxel2 = {2, VoxelType::Dirt};
+        Voxel empty_vox = {0, VoxelType::Empty};
+        std::vector<Voxel> these_voxels(chunk_size*chunk_size*chunk_size, voxel);
+        int y = chunk_size-1;
+
+        for (unsigned z = 0; z < chunk_size; z++) 
+        {
+            for (unsigned x = 0; x < chunk_size; x++)
+            {
+                int index = indexFromXYZ(x,y,z, chunk_size);
+                
+                    these_voxels[index] = empty_vox;
+                
+                
+            }
+        }
+
+        y = chunk_size-2;
+
+        for (unsigned z = 0; z < chunk_size; z++) 
+        {
+            for (unsigned x = 0; x < chunk_size; x++)
+            {
+                int index = indexFromXYZ(x,y,z, chunk_size);
+                if ( (rand() % 15) == 0)
+                {
+                    these_voxels[index] = voxel2;
+                }
+                else 
+                {
+                    these_voxels[index] = empty_vox;
+                }
+                
+            }
+        }
+
+        voxels = std::move(these_voxels);
+        colours = { {0,0,0,0}, {150, 100, 100, 255}, {120, 80, 80, 255}};
+    }
+
     void makeDirtChunk  (std::vector<Voxel>& voxels, std::vector<Colour>& colours, const unsigned int& chunk_size)
     {
         Voxel voxel = {1, VoxelType::Dirt};
@@ -94,8 +139,6 @@ namespace DefaultChunkMaker
                 
             }
         }
-
-
 
         voxels = std::move(these_voxels);
         colours = { {0,0,0,0}, {150, 100, 100, 255}, {120, 80, 80, 255}};

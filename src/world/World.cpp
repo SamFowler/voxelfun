@@ -14,7 +14,7 @@ void World::init()
         for (int j = 0; j < 35; j++)
         {
             if((rand() % 6) == 0)
-                m_chunk_manager.addChunk({i,-1,j}, ChunkMakeType::DIRT_CHUNK);
+                m_chunk_manager.addChunk({i,-1,j}, ChunkMakeType::REVEAL_DIRT_CHUNK);
             else
                 m_chunk_manager.addChunk({i,-1,j}, ChunkMakeType::GRASS_CHUNK);
 
