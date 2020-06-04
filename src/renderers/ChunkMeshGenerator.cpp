@@ -66,27 +66,6 @@ void makeChunkMesh_Culling(const Chunk& chunk, const unsigned int& chunk_size, C
     }
 
 }
-/*
-const Voxel& getChunkVoxel(const unsigned& i, const unsigned& j, const unsigned& layer, const unsigned& chunk_size, const unsigned& direction, const Chunk& chunk)
-{
-    if (direction == 0)
-        return chunk.getVoxel({i, layer, j});
-    else if (direction == 1)
-        return chunk.getVoxel({layer, j, i});
-    else
-        return chunk.getVoxel({i, j, layer});
-
-}*/
-
-ColourID getVoxelColour(const unsigned& i, const unsigned& j, const unsigned& layer, const unsigned& chunk_size, const unsigned& direction, const Chunk& chunk)
-{
-    if (direction == 0)
-        return chunk.getVoxelColourID({i, layer, j});
-    else if (direction == 1)
-        return chunk.getVoxelColourID({layer, j, i});
-    else
-        return chunk.getVoxelColourID({i, j, layer}); 
-}
 
 bool isFaceVisible(const unsigned& i, const unsigned& j, const unsigned& layer, const unsigned& normal_index, const Chunk& chunk)
 {
@@ -110,10 +89,19 @@ bool isFaceVisible(const unsigned& i, const unsigned& j, const unsigned& layer, 
     }
 }
 
+
 ColourID getVoxelColour(const unsigned& i, const unsigned& j, const unsigned& layer, const unsigned& normal_index, const Chunk& chunk, const unsigned& chunk_size, const unsigned& direction)
 {
     if (isFaceVisible(i, j, layer, normal_index, chunk))
-        return getVoxelColour(i, j, layer, chunk_size, direction, chunk);
+    {
+        //return getVoxelColour(i, j, layer, chunk_size, direction, chunk);
+        if (direction == 0)
+            return chunk.getVoxelColourID({i, layer, j});
+        else if (direction == 1)
+            return chunk.getVoxelColourID({layer, j, i});
+        else
+            return chunk.getVoxelColourID({i, j, layer}); 
+    }
     else
         return 0;
 }
@@ -301,7 +289,6 @@ void processFirstGreedyColumn(const unsigned& i, const unsigned& j, unsigned& ru
     }
 }
 
-//processFirstGreedyRow(i, j, layer, run_length, previous_rectangle, mesh_faces, current_colour, previous_colour, chunk_mesh, chunk_size, face, element_count);
 void processFirstGreedyRow(const unsigned& i, const unsigned& j, const unsigned& layer, unsigned& run_length, ChunkMeshFace& previous_rectangle, std::vector<ChunkMeshFace>& mesh_faces, const ColourID& current_colour, 
                                 const ColourID& previous_colour,  ChunkMesh& chunk_mesh, const unsigned& chunk_size, const std::array<GLuint, 12>& face,
                                 unsigned& element_count, const unsigned& direction, const Chunk& chunk, unsigned& normal_index)
@@ -310,8 +297,6 @@ void processFirstGreedyRow(const unsigned& i, const unsigned& j, const unsigned&
     previous_rectangle = {0,0,0,0,0};
     run_length = 0;
             
-                            //getVoxelColour(i, j-1, layer, chunk_size, direction, chunk)
-                            //getVoxelColour(i, j-1, layer, normal_index_plus, chunk, chunk_size, direction);
     if ( current_colour == getVoxelColour(i, j-1, layer, normal_index, chunk, chunk_size, direction) )
     {
         previous_rectangle = mesh_faces[getLocalIndex(i, j-1, chunk_size)];
@@ -343,15 +328,12 @@ void processMainBody(const unsigned& i, const unsigned& j, const unsigned& layer
         {
             //We have a group of voxels that match the previous column rectangle - place them in
             mesh_faces[getLocalIndex( (i-run_length), j, chunk_size)] = previous_rectangle;
-            //holder[xzToIndex( (x-run_length), z, side_size )] = previous_last_row_rectangle;
 
             //mesh the rectangle
 
 
             // as the runlength of the rectangle from previous column has been reached, 
             // a new, different, rectangle must be at this row value in the previous column -
-                                    //getVoxelColour(i, j-1, layer, chunk_size, direction, chunk)
-                                    //getVoxelColour(i, j-1, layer, normal_index, chunk, chunk_size, direction)
             if (current_colour == getVoxelColour(i, j-1, layer, normal_index, chunk, chunk_size, direction))
             {   // We fetch it if it is of the same voxel type
                 previous_rectangle = mesh_faces[getLocalIndex(i, j-1, chunk_size)];
@@ -373,17 +355,14 @@ void processMainBody(const unsigned& i, const unsigned& j, const unsigned& layer
         else if (current_colour != previous_colour)
         {
             mesh_faces[getLocalIndex( (i-run_length), j, chunk_size)] =  {previous_colour, run_length, 1, (i-run_length), j};
-            //holder[xzToIndex( (x-run_length), z, side_size )] = {prev_voxel_val, run_length, 1, (x-run_length), z};
                                     
-                                    //getVoxelColour(i, j-1, layer, chunk_size, direction, chunk)   
+                                    
             if (current_colour == getVoxelColour(i, j-1, layer, normal_index, chunk, chunk_size, direction))
             {   // We fetch it if it is of the same voxel type
                 previous_rectangle = mesh_faces[getLocalIndex(i, j-1, chunk_size)];
-                //previous_last_row_rectangle = holder[xzToIndex(x, z-1, side_size)];  
 
                 if (previous_rectangle.colour > 0)
                 {
-                    //previous_last_row_rectangle = holder[xzToIndex(x, z-1, side_size)];  
                     previous_rectangle.run_width++; 
                 }
                 else
@@ -409,7 +388,7 @@ void processMainBody(const unsigned& i, const unsigned& j, const unsigned& layer
         }
         else
         {                       
-            if (current_colour != getVoxelColour(i, j-1, layer, normal_index, chunk, chunk_size, direction))//getVoxelColour(i, j-1, layer, chunk_size, direction, chunk))
+            if (current_colour != getVoxelColour(i, j-1, layer, normal_index, chunk, chunk_size, direction))
             {
                 meshRectangle(chunk_mesh, mesh_faces[getLocalIndex(i, j-1, chunk_size)], chunk, direction, layer, face, element_count, normal_index);
             }
@@ -423,7 +402,6 @@ void processMainBody(const unsigned& i, const unsigned& j, const unsigned& layer
                             
     else if (current_colour == mesh_faces[getLocalIndex(i, j-1, chunk_size)].colour)
     {
-        //holder[xzToIndex( (x-run_length), z, side_size )] = {prev_voxel_val, run_length, 1, (x-run_length), z};
         mesh_faces[getLocalIndex( (i-run_length), j, chunk_size )] = {previous_colour, run_length, 1, (i-run_length), j};
 
         previous_rectangle = mesh_faces[getLocalIndex(i, j-1, chunk_size)];
@@ -435,13 +413,12 @@ void processMainBody(const unsigned& i, const unsigned& j, const unsigned& layer
     else if (current_colour != previous_colour)
     {
         mesh_faces[getLocalIndex( (i-run_length), j, chunk_size )] = {previous_colour, run_length, 1, (i-run_length), j};
-        //holder[xzToIndex( (x-run_length), z, side_size )] = {prev_voxel_val, run_length, 1, (x-run_length), z};
+
         run_length = 0;
                             
-        if (current_colour != getVoxelColour(i, j-1, layer, normal_index, chunk, chunk_size, direction))//getVoxelColour(i, j-1, layer, chunk_size, direction, chunk))
+        if (current_colour != getVoxelColour(i, j-1, layer, normal_index, chunk, chunk_size, direction))
         {
             meshRectangle(chunk_mesh, mesh_faces[getLocalIndex(i, j-1, chunk_size)], chunk, direction, layer, face, element_count, normal_index);
-            //mesh_rect(holder[xzToIndex( x, z-1, side_size )]);
         }
         
     }
@@ -466,11 +443,10 @@ void fillLastGreedyRow(const unsigned& i, const unsigned& j, const unsigned& lay
         {
             //WE HAVE A SET THAT MATCHES A PREVIOUS ROW RECTANGLE - place it in
             mesh_faces[getLocalIndex( (i-run_length), j, chunk_size )] = previous_rectangle;
-            //holder[xzToIndex( (x-run_length), z, side_size )] = previous_last_row_rectangle;
 
             // as runlength of previous row has been reached, a new rectanlge must be there
                             
-            if (current_colour == getVoxelColour(i, j-1, layer, normal_index, chunk, chunk_size, direction))//getVoxelColour(i, j-1, layer, chunk_size, direction, chunk))
+            if (current_colour == getVoxelColour(i, j-1, layer, normal_index, chunk, chunk_size, direction))
             {                   
                 previous_rectangle = mesh_faces[getLocalIndex(i, j-1, chunk_size)];  
                 previous_rectangle.run_width++; 
@@ -487,7 +463,6 @@ void fillLastGreedyRow(const unsigned& i, const unsigned& j, const unsigned& lay
     {
     
         mesh_faces[getLocalIndex( (i-run_length), j, chunk_size )] = {previous_colour, run_length, 1, (i-run_length), j};
-        //holder[xzToIndex( (x-run_length), z, side_size )] = {prev_voxel_val, run_length, 1, (x-run_length), z};
         run_length = 0;
     }
 }
@@ -558,17 +533,14 @@ void makeChunkMesh_Greedy (const Chunk& chunk, const unsigned int& chunk_size, C
 
 
 
-            //const Voxel& previous_voxel = getChunkVoxel(i, j, layer, direction, chunk); //get first data element
             ColourID previous_colour_plus = getVoxelColour(i, j, layer, normal_index_plus, chunk, chunk_size, direction);
             ColourID previous_colour_minus = getVoxelColour(i, j, layer, normal_index_minus, chunk, chunk_size, direction);
-            //previous_colour = getVoxelColour(i, j, layer, normal_index, chunk, chunk_size, direction);
             
 
             /* ------------START FIRST i ROW----------- */
             //loop over first column only to initialise rectangle array
             for (i = 1; i < chunk_size; i++)
             {
-                //processFirstColumn(i, j, layer, normal_index, chunk, run_length, current_colour, previous_colour )
                 current_colour_plus = getVoxelColour(i, j, layer, normal_index_plus, chunk, chunk_size, direction);
                 current_colour_minus = getVoxelColour(i, j, layer, normal_index_minus, chunk, chunk_size, direction);
 
@@ -595,7 +567,6 @@ void makeChunkMesh_Greedy (const Chunk& chunk, const unsigned int& chunk_size, C
             for (unsigned j = 1; j < chunk_size; j++)
             {   
 
-                //current_colour = getVoxelColour(i, j, layer, normal_index, chunk, chunk_size, direction);
                 i = 0;  
                 current_colour_plus = getVoxelColour(i, j, layer, normal_index_plus, chunk, chunk_size, direction);
                 current_colour_minus = getVoxelColour(i, j, layer, normal_index_minus, chunk, chunk_size, direction);

@@ -4,14 +4,14 @@
 void World::init()
 {
 
-    m_chunk_size = 8;
+    m_chunk_size = 16;
 
     m_chunk_manager = ChunkManager(m_chunk_size);
     m_chunk_manager.init();
     
-    for (int i = 0; i < 35; i++)
+    for (int i = 0; i < 25; i++)
     {
-        for (int j = 0; j < 35; j++)
+        for (int j = 0; j < 25; j++)
         {
             if((rand() % 6) == 0)
                 m_chunk_manager.addChunk({i,-1,j}, ChunkMakeType::REVEAL_DIRT_CHUNK);
