@@ -1,6 +1,6 @@
 #include "Chunk.h"
 
-#include <iostream> //change to LOG for debug
+//#include <iostream> //change to LOG for debug
 
 #include "ChunkManager.h"
 

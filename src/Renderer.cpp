@@ -1,6 +1,7 @@
 #include "Renderer.hpp"
-#include <iostream>
+//#include <iostream>
 
+#include "sdl2_shared.cpp"
 
 bool Renderer::init(int win_width = 640, int win_height = 480)
 {
@@ -14,7 +15,7 @@ bool Renderer::init(int win_width = 640, int win_height = 480)
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
     SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
     SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
-
+ 
     m_window = sdl_shared(SDL_CreateWindow(
             "hello_sdl2",
             SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,

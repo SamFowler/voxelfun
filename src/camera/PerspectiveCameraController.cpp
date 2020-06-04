@@ -1,6 +1,8 @@
 #include "PerspectiveCameraController.hpp"
 
-#include <iostream>
+//#include <iostream>
+
+#include "../pch/pch_std.h"
 
 PerspectiveCameraController::PerspectiveCameraController(float fov, float aspect_ratio) 
 : m_fov(fov), m_aspect_ratio(aspect_ratio), m_camera(m_fov, m_aspect_ratio, m_z_near, m_z_far)
@@ -15,7 +17,7 @@ PerspectiveCameraController::PerspectiveCameraController(float fov, float aspect
 }
 
 void PerspectiveCameraController::update(Input& input, const float timestep)
-{ 
+{
 
     float camera_move_speed = m_camera_speed + m_zoom;
     if (input.isKeyHeld(SDLK_w)) 

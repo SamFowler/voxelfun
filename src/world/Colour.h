@@ -1,7 +1,9 @@
 #pragma once
 
-#include <cstdint>
-#include <iostream> //debug
+//#include <cstdint>
+//#include <iostream> //debug
+
+#include "../pch/pch_std.h"
 
 struct Colour
 {

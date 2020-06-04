@@ -1,9 +1,11 @@
 #pragma once
 
-#include <GL/glew.h>
-#include <GL/glu.h>
+//#include <GL/glew.h>
+//#include <GL/glu.h>
+//
+//#include <vector>
 
-#include <vector>
+#include "../pch/pch_std.h"
 
 
 class DrawableVAO 

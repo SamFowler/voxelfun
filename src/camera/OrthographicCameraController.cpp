@@ -1,6 +1,8 @@
 #include "OrthographicCameraController.hpp"
 
-#include <iostream>
+
+#include "../pch/pch_std.h"
+//#include <iostream>
 
 OrthographicCameraController::OrthographicCameraController(float aspect_ratio) 
 : m_aspect_ratio(aspect_ratio), m_camera(-m_aspect_ratio * m_zoom, m_aspect_ratio * m_zoom, -m_zoom, m_zoom), m_camera_rotation({0.0f, 270.0f, 0.0f})

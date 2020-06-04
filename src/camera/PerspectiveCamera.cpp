@@ -1,5 +1,5 @@
 #include "PerspectiveCamera.hpp"
-#include <iostream>
+//#include <iostream>
 
 PerspectiveCamera::PerspectiveCamera(float fov, float aspect_ratio, float z_near, float z_far) 
 : m_projection(glm::perspective(fov, aspect_ratio, z_near, z_far)), m_view(1.0f)

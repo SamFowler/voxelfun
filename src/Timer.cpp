@@ -1,7 +1,8 @@
 #include "Timer.h"
-#include <iostream>
 
+//#include <iostream>
 
+ 
 
 void Timer::init()
 {

@@ -1,6 +1,6 @@
 #include "OrthographicCamera.hpp"
 
-#include <iostream>
+//#include <iostream>
 
 OrthographicCamera::OrthographicCamera(float left, float right, float bottom, float top)
     : m_projection(glm::ortho(left, right, bottom, top, -1.0f, 100.0f)), m_view(1.0f)

@@ -1,11 +1,12 @@
 #include "ChunkMeshGenerator.h"
 
-#include <iostream>
+#include "../pch/pch_std.h"
+//#include <iostream>
 
 namespace ChunkMeshGenerator
 {
 
-
+ 
 
 VertexArrayObject makeChunkVAO(const Chunk& chunk, const unsigned int& chunk_size, const MeshMethod& mesh_method)
 {

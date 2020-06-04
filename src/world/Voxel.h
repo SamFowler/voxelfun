@@ -1,7 +1,9 @@
 #pragma once
 
-#include <cstdint>
-#include <iostream> //debug TODO replace with log
+//#include <cstdint>
+//#include <iostream> //debug TODO replace with log
+
+#include "../pch/pch_std.h"
 
 enum class VoxelType : uint8_t 
 {

@@ -1,7 +1,9 @@
 #pragma once
 
-#include <vector>
-#include <GL/glew.h>
+//#include <vector>
+//#include <GL/glew.h>
+
+#include "../pch/pch_std.h"
 
 #include "../opengl_api/VertexArrayObject.hpp"
 

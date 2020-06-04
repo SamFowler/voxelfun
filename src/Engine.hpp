@@ -1,5 +1,7 @@
 #pragma once
 
+#include "pch/pch_std.h"
+
 #include "Game.hpp"
 #include "Renderer.hpp"
 #include "Input.hpp"

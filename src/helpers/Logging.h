@@ -1,8 +1,9 @@
 /*
 Logging Namespace
 */
-#include <cstdarg>
-#include <iostream>
+//#include <cstdarg>
+//#include <iostream>
+#include "../pch/pch_std.h"
 
 namespace logger{
 

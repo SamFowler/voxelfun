@@ -6,10 +6,10 @@
 #include "ChunkManager.h"
 #include "../renderers/ChunkRenderer.h"
 
-#include <vector>
-#include <memory>
+//#include <vector>
+//#include <memory>
 
-#include "../opengl_api/Shader.hpp" // temp, to be moved to world renderer
+#include "../pch/pch_std.h"
 
 class World
 {

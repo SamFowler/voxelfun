@@ -1,8 +1,9 @@
 #ifndef SDL2SHARED
 #define SDL2SHARED
 
-#include <memory>
-#include <SDL2/SDL.h>
+#include "pch/pch_std.h"
+//#include <memory>
+//#include <SDL2/SDL.h>
 
 static void SDL_DelRes(SDL_Window* r) { SDL_DestroyWindow(r); }
 //static void SDL_DelRes(SDL_Renderer* r) { SDL_DestroyRenderer(r); }

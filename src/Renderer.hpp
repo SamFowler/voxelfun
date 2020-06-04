@@ -1,11 +1,6 @@
 #pragma once
 
-#include <SDL2/SDL.h>
-#include <GL/glew.h>
-#include <SDL2/SDL_opengl.h>
-#include <GL/glu.h>
-
-#include "sdl2_shared.cpp"
+#include "pch/pch_std.h"
 
 class Renderer 
 {

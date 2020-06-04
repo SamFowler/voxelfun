@@ -1,7 +1,7 @@
 #include "ChunkManager.h"
 
-#include <iostream> //TODO: replace with log
-
+//#include <iostream> //TODO: replace with log
+ 
 bool ChunkManager::init() 
 {
     /*
@@ -40,6 +40,7 @@ void ChunkManager::addChunk(const ChunkPos& position, const ChunkMakeType& type)
 
     addChunk(position, voxels, colours);
 }
+
 void ChunkManager::addChunk(const ChunkPos& position, const std::vector<Voxel>& voxels, const std::vector<Colour>& colours)
 {
     

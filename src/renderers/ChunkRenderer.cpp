@@ -1,12 +1,15 @@
 #include "ChunkRenderer.h"
 
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
+//#include <glm/glm.hpp>
+//#include <glm/gtc/matrix_transform.hpp>
+//#include <glm/gtc/type_ptr.hpp>
+//#include <iostream>
+
+#include "../pch/pch_std.h"
+
 
 #include "ChunkMeshGenerator.h"
 
-#include <iostream>
 #include "../helpers/Logging.h"
 
 void ChunkRenderer::init(const unsigned int& chunk_size)
