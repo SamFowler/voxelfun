@@ -83,7 +83,7 @@ namespace DefaultChunkMaker
         Voxel voxel2 = {2, VoxelType::Dirt};
         Voxel empty_vox = {0, VoxelType::Empty};
         std::vector<Voxel> these_voxels(chunk_size*chunk_size*chunk_size, voxel);
-        int y = chunk_size-1;
+        /* int y = chunk_size-1;
 
         for (unsigned z = 0; z < chunk_size; z++) 
         {
@@ -95,9 +95,9 @@ namespace DefaultChunkMaker
                 
                 
             }
-        }
+        } */
 
-        y = chunk_size-2;
+        int y = chunk_size-1;
 
         for (unsigned z = 0; z < chunk_size; z++) 
         {

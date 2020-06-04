@@ -133,30 +133,6 @@ void meshRectangle(ChunkMesh& mesh, const ChunkMeshFace& rectangle, const Chunk&
     unsigned x,y,z;
 
 
-    if (normal_index == X_MINUS_NORMAL_INDEX)
-    {
-
-    } 
-    else if (normal_index == X_PLUS_NORMAL_INDEX)
-    {
-
-    }
-    else if (normal_index == Y_MINUS_NORMAL_INDEX)
-    {
-        
-    }
-    else if (normal_index == Y_PLUS_NORMAL_INDEX)
-    {
-        
-    }
-    else if (normal_index == Z_MINUS_NORMAL_INDEX)
-    {
-        
-    }
-    else if (normal_index == Z_PLUS_NORMAL_INDEX)
-    {
-        
-    }
 
     if (direction == 0)
     {
@@ -334,9 +310,9 @@ void processFirstGreedyRow(const unsigned& i, const unsigned& j, const unsigned&
     previous_rectangle = {0,0,0,0,0};
     run_length = 0;
             
-
-    
-    if ( current_colour == getVoxelColour(i, j-1, layer, chunk_size, direction, chunk) )
+                            //getVoxelColour(i, j-1, layer, chunk_size, direction, chunk)
+                            //getVoxelColour(i, j-1, layer, normal_index_plus, chunk, chunk_size, direction);
+    if ( current_colour == getVoxelColour(i, j-1, layer, normal_index, chunk, chunk_size, direction) )
     {
         previous_rectangle = mesh_faces[getLocalIndex(i, j-1, chunk_size)];
         previous_rectangle.run_width++; 
@@ -374,8 +350,9 @@ void processMainBody(const unsigned& i, const unsigned& j, const unsigned& layer
 
             // as the runlength of the rectangle from previous column has been reached, 
             // a new, different, rectangle must be at this row value in the previous column -
-            
-            if (current_colour == getVoxelColour(i, j-1, layer, chunk_size, direction, chunk))
+                                    //getVoxelColour(i, j-1, layer, chunk_size, direction, chunk)
+                                    //getVoxelColour(i, j-1, layer, normal_index, chunk, chunk_size, direction)
+            if (current_colour == getVoxelColour(i, j-1, layer, normal_index, chunk, chunk_size, direction))
             {   // We fetch it if it is of the same voxel type
                 previous_rectangle = mesh_faces[getLocalIndex(i, j-1, chunk_size)];
                 previous_rectangle.run_width++; 
@@ -397,9 +374,9 @@ void processMainBody(const unsigned& i, const unsigned& j, const unsigned& layer
         {
             mesh_faces[getLocalIndex( (i-run_length), j, chunk_size)] =  {previous_colour, run_length, 1, (i-run_length), j};
             //holder[xzToIndex( (x-run_length), z, side_size )] = {prev_voxel_val, run_length, 1, (x-run_length), z};
-            
-                
-            if (current_colour == getVoxelColour(i, j-1, layer, chunk_size, direction, chunk))
+                                    
+                                    //getVoxelColour(i, j-1, layer, chunk_size, direction, chunk)   
+            if (current_colour == getVoxelColour(i, j-1, layer, normal_index, chunk, chunk_size, direction))
             {   // We fetch it if it is of the same voxel type
                 previous_rectangle = mesh_faces[getLocalIndex(i, j-1, chunk_size)];
                 //previous_last_row_rectangle = holder[xzToIndex(x, z-1, side_size)];  
@@ -432,7 +409,7 @@ void processMainBody(const unsigned& i, const unsigned& j, const unsigned& layer
         }
         else
         {                       
-            if (current_colour != getVoxelColour(i, j-1, layer, chunk_size, direction, chunk))
+            if (current_colour != getVoxelColour(i, j-1, layer, normal_index, chunk, chunk_size, direction))//getVoxelColour(i, j-1, layer, chunk_size, direction, chunk))
             {
                 meshRectangle(chunk_mesh, mesh_faces[getLocalIndex(i, j-1, chunk_size)], chunk, direction, layer, face, element_count, normal_index);
             }
@@ -461,7 +438,7 @@ void processMainBody(const unsigned& i, const unsigned& j, const unsigned& layer
         //holder[xzToIndex( (x-run_length), z, side_size )] = {prev_voxel_val, run_length, 1, (x-run_length), z};
         run_length = 0;
                             
-        if (current_colour != getVoxelColour(i, j-1, layer, chunk_size, direction, chunk))
+        if (current_colour != getVoxelColour(i, j-1, layer, normal_index, chunk, chunk_size, direction))//getVoxelColour(i, j-1, layer, chunk_size, direction, chunk))
         {
             meshRectangle(chunk_mesh, mesh_faces[getLocalIndex(i, j-1, chunk_size)], chunk, direction, layer, face, element_count, normal_index);
             //mesh_rect(holder[xzToIndex( x, z-1, side_size )]);
@@ -479,7 +456,7 @@ void processMainBody(const unsigned& i, const unsigned& j, const unsigned& layer
 
 void fillLastGreedyRow(const unsigned& i, const unsigned& j, const unsigned& layer, unsigned& run_length, ChunkMeshFace& previous_rectangle, std::vector<ChunkMeshFace>& mesh_faces, const ColourID& current_colour, 
                                 const ColourID& previous_colour, const unsigned& chunk_size, const std::array<GLuint, 12>& face,
-                                const unsigned& direction, const Chunk& chunk)
+                                const unsigned& direction, const Chunk& chunk, unsigned& normal_index)
 {
     run_length++;
 
@@ -493,7 +470,7 @@ void fillLastGreedyRow(const unsigned& i, const unsigned& j, const unsigned& lay
 
             // as runlength of previous row has been reached, a new rectanlge must be there
                             
-            if (current_colour == getVoxelColour(i, j-1, layer, chunk_size, direction, chunk))
+            if (current_colour == getVoxelColour(i, j-1, layer, normal_index, chunk, chunk_size, direction))//getVoxelColour(i, j-1, layer, chunk_size, direction, chunk))
             {                   
                 previous_rectangle = mesh_faces[getLocalIndex(i, j-1, chunk_size)];  
                 previous_rectangle.run_width++; 
@@ -562,8 +539,12 @@ void makeChunkMesh_Greedy (const Chunk& chunk, const unsigned int& chunk_size, C
         for (unsigned layer = 0; layer < chunk_size; layer++ )
         {
 
-            std::vector<ChunkMeshFace> mesh_faces_plus(chunk_size*chunk_size*chunk_size, {0,0,0,0,0});
-            std::vector<ChunkMeshFace> mesh_faces_minus(chunk_size*chunk_size*chunk_size, {0,0,0,0,0});
+            if (direction == 0 && layer == chunk_size-3)
+                std::cout << "";
+
+
+            std::vector<ChunkMeshFace> mesh_faces_plus(chunk_size*chunk_size, {0,0,0,0,0});
+            std::vector<ChunkMeshFace> mesh_faces_minus(chunk_size*chunk_size, {0,0,0,0,0});
             //Voxel temp;
             //const Voxel& current_voxel = temp;
             ColourID current_colour_plus;
@@ -583,7 +564,7 @@ void makeChunkMesh_Greedy (const Chunk& chunk, const unsigned int& chunk_size, C
             //previous_colour = getVoxelColour(i, j, layer, normal_index, chunk, chunk_size, direction);
             
 
-            /* ------------START FIRST i COLUMN----------- */
+            /* ------------START FIRST i ROW----------- */
             //loop over first column only to initialise rectangle array
             for (i = 1; i < chunk_size; i++)
             {
@@ -650,9 +631,9 @@ void makeChunkMesh_Greedy (const Chunk& chunk, const unsigned int& chunk_size, C
 
                 i = chunk_size;
                 fillLastGreedyRow(i, j, layer, run_length_plus, previous_rectangle_plus, mesh_faces_plus, current_colour_plus, 
-                                                previous_colour_plus, chunk_size, face_plus, direction, chunk);
+                                                previous_colour_plus, chunk_size, face_plus, direction, chunk, normal_index_plus);
                 fillLastGreedyRow(i, j, layer, run_length_minus, previous_rectangle_minus, mesh_faces_minus, current_colour_minus, 
-                                                previous_colour_minus, chunk_size, face_minus, direction, chunk);
+                                                previous_colour_minus, chunk_size, face_minus, direction, chunk, normal_index_minus);
 
             }
 
@@ -664,7 +645,7 @@ void makeChunkMesh_Greedy (const Chunk& chunk, const unsigned int& chunk_size, C
             }
 
         }//end layer
-
+    
     }//direction
 
 }

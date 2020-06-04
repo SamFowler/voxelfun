@@ -29,22 +29,22 @@ void World::init()
     }
     
 
-    //m_chunk_manager.addChunk({1,2,1}, ChunkMakeType::GRASS_CHUNK);
-    //m_chunk_manager.addChunk({0,0,1}, ChunkMakeType::GRASS_CHUNK);
+    m_chunk_manager.addChunk({1,2,1}, ChunkMakeType::GRASS_CHUNK);
+    m_chunk_manager.addChunk({0,0,1}, ChunkMakeType::GRASS_CHUNK);
 
-   //m_chunk_manager.addChunk({1,0,0}, ChunkMakeType::GRASS_CHUNK);
-   //m_chunk_manager.addChunk({0,0,0}, ChunkMakeType::RANDOM_CHUNK);
+    m_chunk_manager.addChunk({1,0,0}, ChunkMakeType::GRASS_CHUNK);
+    m_chunk_manager.addChunk({0,0,0}, ChunkMakeType::RANDOM_CHUNK);
    
     m_chunk_manager.addChunk({10, 15, 10}, ChunkMakeType::LIGHT_CHUNK);
-
+  
     m_chunk_manager.addChunk({-2, -1, -2}, ChunkMakeType::RANDOM_CHUNK);
     m_chunk_manager.addChunk({-2, -1, -3}, ChunkMakeType::RANDOM_CHUNK);
     m_chunk_manager.addChunk({-3, -1, -2}, ChunkMakeType::RANDOM_CHUNK);
     m_chunk_manager.addChunk({-3, -1, -3}, ChunkMakeType::RANDOM_CHUNK);
-
+//
     m_chunk_manager.addChunk({-1, -1, -5}, ChunkMakeType::DEBUG_CHUNK);
 
-    m_chunk_manager.addChunk({-3, -1, -3}, ChunkMakeType::GRASS_CHUNK);
+    m_chunk_manager.addChunk({-3, -1, -3}, ChunkMakeType::REVEAL_DIRT_CHUNK);
         
     m_chunk_renderer.init(m_chunk_size);
 
