@@ -60,19 +60,21 @@ void ChunkRenderer::updateVAOs()
     m_updated_chunk_list.clear();
 }
 
-void ChunkRenderer::draw(const PerspectiveCamera& camera)
+//void ChunkRenderer::draw(const PerspectiveCamera& camera)
+void ChunkRenderer::draw(const Camera& camera)
 {
     m_shader.use();
 
-    glm::mat4 vp = camera.getViewProjection();
+    glm::mat4 vp = camera.getProjectionViewMatrix();
     //glm::mat4 vp = m_ortho_camera_controller.getCamera().getProjectionViewMatrix();
     
-    glm::mat4 model(0.0f);
+    glm::mat4 model(1.0f);
+    glm::mat4 scale = glm::scale(model, glm::vec3(0.01, 0.01, 0.01));
     glm::mat4 normal(0.0f);
     for (auto it = m_chunk_renderables.begin(); it != m_chunk_renderables.end(); ++it)
     {   
         it->vao.getDrawable().bind();
-        model = glm::translate(glm::mat4(1), glm::vec3(it->position.pos) * m_chunk_offset);
+        model = glm::translate(scale, glm::vec3(it->position.pos) * m_chunk_offset);
         glUniformMatrix4fv(uniform_vp, 1, GL_FALSE, glm::value_ptr(vp));
         glUniformMatrix4fv(uniform_model, 1, GL_FALSE, glm::value_ptr(model));
 

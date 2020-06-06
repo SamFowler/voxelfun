@@ -2,7 +2,8 @@
 
 #include "../opengl_api/Shader.hpp"
 #include "../opengl_api/VertexArrayObject.hpp"
-#include "../camera/PerspectiveCamera.hpp"
+//#include "../camera/PerspectiveCamera.hpp"
+#include "../camera/Camera.hpp"
 
 #include "../world/Chunk.h"
 //#include <vector>
@@ -17,7 +18,8 @@ public:
     void init(const unsigned int& chunk_size);
     void getNewChunkUpdates(const std::vector<const Chunk*> updated_chunks);
     void updateVAOs();
-    void draw(const PerspectiveCamera& camera);
+    //void draw(const PerspectiveCamera& camera);
+    void draw(const Camera& camera);
     void destroy();
 private:
 

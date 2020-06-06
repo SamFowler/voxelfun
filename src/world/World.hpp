@@ -2,9 +2,10 @@
 
 #include "../Input.hpp"
 
-#include "../camera/PerspectiveCamera.hpp"
+//#include "../camera/PerspectiveCamera.hpp"
 #include "ChunkManager.h"
 #include "../renderers/ChunkRenderer.h"
+#include "../camera/Camera.hpp"
 
 //#include <vector>
 //#include <memory>
@@ -16,7 +17,8 @@ class World
 public:
     void init();
     void update(const float& timestep);
-    void render(const PerspectiveCamera& camera);
+    //void render(const PerspectiveCamera& camera);
+    void render(const Camera& camera);
    
     void destroy();
 

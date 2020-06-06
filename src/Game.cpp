@@ -1,12 +1,18 @@
 #include "Game.hpp"
 //#include <iostream>
 
+#include "camera/OrthographicCameraController.hpp"
+#include "camera/PerspectiveCameraController.hpp"
+
 bool Game::init() 
 {
     m_world.init();
     //m_camera.init();
     //m_player.init();
     //m_entities.init();
+
+    //m_camera_controller = std::make_unique<PerspectiveCameraController>(45, (1280.0f/960.0f), 0.1f, 500.0f);
+    m_camera_controller = std::make_unique<OrthographicCameraController>(1280.0f/960.0f);
 
     m_is_running = true;
     return m_is_running;
@@ -32,7 +38,10 @@ bool Game::handleInput(Input& input)
 
 void Game::update(Input& input, const float& timestep) 
 {
-    m_perspectiveCameraController.update(input, timestep); // TODO: separate camera input handling and ticking
+    //m_perspectiveCameraController.update(input, timestep); // TODO: separate camera input handling and ticking
+    //m_ortho_camera_controller.update(input, timestep);
+
+    m_camera_controller->update(input, timestep);
 
     m_world.update(timestep);
 
@@ -44,7 +53,9 @@ void Game::update(Input& input, const float& timestep)
 
 void Game::render()
 {
-    m_world.render(m_perspectiveCameraController.GetCamera());
+    //m_world.render(m_ortho_camera_controller.getCamera()); //m_perspectiveCameraController.GetCamera());
+    m_world.render(m_camera_controller->getCamera()); //m_perspectiveCameraController.GetCamera());
+    
     //m_camera.draw();
     //m_player.draw();
     //m_entities.draw();

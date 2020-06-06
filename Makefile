@@ -10,6 +10,8 @@ INCLUDE := include
 LIBRARIES   := 
 EXECUTABLE  := mygame
 
+#g++ -std=c++17 -ggdb -Wall -g -H -Wno-unused -Winvalid-pch -c src/pch/pch_std.h #compile pch
+
 PCH_SRC = pch_std.h
 
 all: $(BIN)/$(EXECUTABLE)

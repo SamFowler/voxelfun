@@ -4,14 +4,14 @@
 void World::init()
 {
 
-    m_chunk_size = 16;
+    m_chunk_size = 8;
 
     m_chunk_manager = ChunkManager(m_chunk_size);
     m_chunk_manager.init();
     
-    for (int i = 0; i < 25; i++)
+    for (int i = 0; i < 45; i++)
     {
-        for (int j = 0; j < 25; j++)
+        for (int j = 0; j < 45; j++)
         {
             if((rand() % 6) == 0)
                 m_chunk_manager.addChunk({i,-1,j}, ChunkMakeType::REVEAL_DIRT_CHUNK);
@@ -19,32 +19,35 @@ void World::init()
                 m_chunk_manager.addChunk({i,-1,j}, ChunkMakeType::GRASS_CHUNK);
 
 
-            if((rand() % 40) == 0)
+            if((rand() % 60) == 0)
             {
                 m_chunk_manager.addChunk({i,0,j}, ChunkMakeType::TREE_CHUNK);
                 m_chunk_manager.addChunk({i,1,j}, ChunkMakeType::TREE_CHUNK);
                 m_chunk_manager.addChunk({i,2,j}, ChunkMakeType::TREE_CHUNK);
+                m_chunk_manager.addChunk({i,3,j}, ChunkMakeType::TREE_CHUNK);
+                m_chunk_manager.addChunk({i,4,j}, ChunkMakeType::TREE_CHUNK);
+                m_chunk_manager.addChunk({i,5,j}, ChunkMakeType::TREE_CHUNK);
             }
         }   
     }
     
 
-    m_chunk_manager.addChunk({1,2,1}, ChunkMakeType::GRASS_CHUNK);
-    m_chunk_manager.addChunk({0,0,1}, ChunkMakeType::GRASS_CHUNK);
+    //m_chunk_manager.addChunk({1,2,1}, ChunkMakeType::GRASS_CHUNK);
+    //m_chunk_manager.addChunk({0,0,1}, ChunkMakeType::GRASS_CHUNK);
 
-    m_chunk_manager.addChunk({1,0,0}, ChunkMakeType::GRASS_CHUNK);
-    m_chunk_manager.addChunk({0,0,0}, ChunkMakeType::RANDOM_CHUNK);
+    //m_chunk_manager.addChunk({1,0,0}, ChunkMakeType::GRASS_CHUNK);
+    //m_chunk_manager.addChunk({0,0,0}, ChunkMakeType::RANDOM_CHUNK);
    
     m_chunk_manager.addChunk({10, 15, 10}, ChunkMakeType::LIGHT_CHUNK);
   
-    m_chunk_manager.addChunk({-2, -1, -2}, ChunkMakeType::RANDOM_CHUNK);
-    m_chunk_manager.addChunk({-2, -1, -3}, ChunkMakeType::RANDOM_CHUNK);
-    m_chunk_manager.addChunk({-3, -1, -2}, ChunkMakeType::RANDOM_CHUNK);
-    m_chunk_manager.addChunk({-3, -1, -3}, ChunkMakeType::RANDOM_CHUNK);
+    //m_chunk_manager.addChunk({-2, -1, -2}, ChunkMakeType::RANDOM_CHUNK);
+    //m_chunk_manager.addChunk({-2, -1, -3}, ChunkMakeType::RANDOM_CHUNK);
+    //m_chunk_manager.addChunk({-3, -1, -2}, ChunkMakeType::RANDOM_CHUNK);
+    //m_chunk_manager.addChunk({-3, -1, -3}, ChunkMakeType::RANDOM_CHUNK);
 //
-    m_chunk_manager.addChunk({-1, -1, -5}, ChunkMakeType::DEBUG_CHUNK);
+    //m_chunk_manager.addChunk({-1, -1, -5}, ChunkMakeType::DEBUG_CHUNK);
 
-    m_chunk_manager.addChunk({-3, -1, -3}, ChunkMakeType::REVEAL_DIRT_CHUNK);
+    //m_chunk_manager.addChunk({-3, -1, -3}, ChunkMakeType::REVEAL_DIRT_CHUNK);
         
     m_chunk_renderer.init(m_chunk_size);
 
@@ -63,7 +66,8 @@ void World::update(const float& timestep)
 }
 
 
-void World::render(const PerspectiveCamera& camera)
+//void World::render(const PerspectiveCamera& camera)
+void World::render(const Camera& camera)
 {
     m_chunk_renderer.draw(camera);
 
