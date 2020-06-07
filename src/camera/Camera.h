@@ -5,12 +5,8 @@
 class Camera
 {
 public:
-    //OrthographicCamera(float left, float right, float bottom, float top);
-    //PerspectiveCamera(float fov, float aspect_ratio, float z_near, float z_far);
-
     Camera();
 
-    //virtual void setProjection() = 0;
     void setPerspectiveProjection(float fov, float aspect_ratio, float z_near, float z_far);
     void setOrthographicProjection(float left, float right, float bottom, float top, float z_near, float z_far);
     void setOrthographicProjection(float left, float right, float bottom, float top);

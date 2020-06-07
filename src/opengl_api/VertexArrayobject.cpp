@@ -62,9 +62,7 @@ VertexArrayObject& VertexArrayObject::operator=(VertexArrayObject&& other)
     m_num_elements = other.m_num_elements;
     other.reset();
     return *this;
-}
-
-    
+}    
 
 void VertexArrayObject::create()
 {

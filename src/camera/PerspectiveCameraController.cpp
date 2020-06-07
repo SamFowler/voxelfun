@@ -51,20 +51,12 @@ void PerspectiveCameraController::update(Input& input, const float timestep)
         changeZoom(-m_camera_zoom_speed * timestep);
     }
 
- 
-
-
-    //std::cout << "setting position: " << m_camera_position.x << "," << m_camera_position.y << "," << m_camera_position.z << std::endl;
     m_camera.setPosition(m_camera_position);
 
-
     glm::ivec2 rel_pos = input.getRelMousePos();
-    //std::cout << "rel:" << rel_pos.x << "," << rel_pos.y << ", relmult: " << rel_pos.x * m_camera_rotation_speed<< "," << rel_pos.y * m_camera_rotation_speed<< std::endl;
     updatePitch(-rel_pos.y * m_camera_rotation_speed);
     updateYaw(rel_pos.x * m_camera_rotation_speed);
     
-    //std::cout << "setting direction: " << m_camera_rotation.x << "," << m_camera_rotation.y << "," << m_camera_rotation.z << std::endl;
-
     m_camera.setDirection(m_camera_rotation);
 
     printCamera();

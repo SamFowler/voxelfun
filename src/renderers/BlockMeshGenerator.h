@@ -5,9 +5,6 @@
 #include "../world/Block.h"
 #include "BlockMesh.h"
 
-
-
-
 namespace BlockMeshGenerator
 {
 
@@ -38,75 +35,6 @@ namespace BlockMeshGenerator
         unsigned origin_i = 0;
         unsigned origin_j = 0;
     };
-
-    struct GreedyProcessState
-    {
-        GreedyProcessState(unsigned& direction_, const Block& block_, const unsigned& block_size_, const bool plusState)
-        : direction(direction_), block_size(block_size_), block(block_) 
-        {
-
-            if (direction == 0) 
-            {
-                if (plusState) {
-                    face = BlockMeshGenerator::Y_PLUS_FACE;
-                    normal_index = BlockMeshGenerator::Y_PLUS_NORMAL_INDEX;
-                } else {
-                    face = BlockMeshGenerator::Y_MINUS_FACE;
-                    normal_index = BlockMeshGenerator::Y_MINUS_NORMAL_INDEX; 
-                }
-            }
-            else if (direction == 1)
-            {
-                if (plusState) {
-                    face = BlockMeshGenerator::X_PLUS_FACE;
-                    normal_index = BlockMeshGenerator::X_PLUS_NORMAL_INDEX;
-                } else {
-                    face = BlockMeshGenerator::X_MINUS_FACE;
-                    normal_index = BlockMeshGenerator::X_MINUS_NORMAL_INDEX; 
-                }
-            }
-            else if (direction == 2)
-            {
-                if (plusState) {
-                    face = BlockMeshGenerator::Z_PLUS_FACE;
-                    normal_index = BlockMeshGenerator::Z_PLUS_NORMAL_INDEX;
-                } else {
-                    face = Z_MINUS_FACE;
-                    normal_index = Z_MINUS_NORMAL_INDEX; 
-                }
-            }
-
-        };
-        //GreedyProcessState(unsigned& normal_index_, unsigned& direction_, const Block& block_, const unsigned& block_size_, std::array<GLuint, 12> mesh_face)
-        //: normal_index(normal_index_), direction(direction_), block_size(block_size_), block(block_), face(mesh_face) {};
-
-        unsigned direction = 0;
-        const unsigned block_size = 0;
-        const Block& block;
-        unsigned normal_index = 0;
-        std::array<GLuint, 12> face;
-
-        unsigned run_length = 0;
-
-        ColourID current_colour = 0;
-        ColourID previous_colour = 0;
-        BlockMeshFace previous_rectangle = {0,0,0,0,0};
-
-    };
-
-    /*
-public:
-    BlockMeshGenerator() 
-        : m_block_size    (16), 
-          m_block_size_sq (m_block_size*m_block_size),
-          m_block_volume  (m_block_size*m_block_size*m_block_size)
-        {};
-    BlockMeshGenerator(const unsigned int& block_size) 
-        : m_block_size    (block_size), 
-          m_block_size_sq (block_size*block_size),
-          m_block_volume  (block_size*block_size*block_size)
-        {};
-*/
 
     enum MeshMethod {
         NAIVE_MESH = 0,

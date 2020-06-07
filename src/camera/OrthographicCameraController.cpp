@@ -112,7 +112,6 @@ void OrthographicCameraController::changeZoom(const float& amount)
         m_zoom = std::min(m_zoom, 25.0f);
 
         m_camera.setOrthographicProjection(-m_aspect_ratio * m_zoom, m_aspect_ratio * m_zoom, -m_zoom, m_zoom, m_z_near, m_z_far);
-		//mp_camera->setProjection(-m_aspect_ratio * m_zoom, m_aspect_ratio * m_zoom, -m_zoom, m_zoom);
         std::cout << "zoom set to " << m_zoom << std::endl;
 
         //m_camera_speed = m_zoom;

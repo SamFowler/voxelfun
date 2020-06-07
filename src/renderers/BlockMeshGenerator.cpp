@@ -487,9 +487,6 @@ void makeBlockMesh_Greedy (const Block& block, const unsigned int& block_size, B
 
     for (direction = 0; direction < 3; direction++)
     {
-        GreedyProcessState plus_state(direction, block, block_size, true); // state for positive normal of direction
-        GreedyProcessState minus_state(direction, block, block_size, false); //state for negative normal of direction
-
         if (direction == 0) 
         {
             face_plus = Y_PLUS_FACE;
