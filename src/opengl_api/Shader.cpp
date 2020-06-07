@@ -1,8 +1,6 @@
-#include "Shader.hpp"
-//#include <fstream>
-//#include <iostream>
+#include "Shader.h"
 
- 
+
 namespace 
 {
     struct ShaderReader

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "CameraController.hpp"
+#include "CameraController.h"
 
 class PerspectiveCameraController : public CameraController
 {

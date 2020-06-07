@@ -2,9 +2,9 @@
 
 #include "pch/pch_std.h"
 
-#include "Game.hpp"
-#include "Renderer.hpp"
-#include "Input.hpp"
+#include "Game.h"
+#include "Renderer.h"
+#include "Input.h"
 #include "Timer.h"
 
 class Engine 

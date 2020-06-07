@@ -1,15 +1,9 @@
 #pragma once
 
 #include "../pch/pch_std.h"
-
-#include "../opengl_api/Shader.hpp"
-//#include "../opengl_api/VertexArrayObject.hpp"
-
-#include "../camera/Camera.hpp"
-
+#include "../opengl_api/Shader.h"
+#include "../camera/Camera.h"
 #include "../world/Block.h"
-
-
 #include "Renderables.h"
 
 class BlockRenderer

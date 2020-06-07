@@ -1,23 +1,18 @@
 #pragma once
 
-#include "../Input.hpp"
+#include "../pch/pch_std.h"
 
-//#include "../camera/PerspectiveCamera.hpp"
+#include "../Input.h"
 #include "BlockManager.h"
 #include "../renderers/BlockRenderer.h"
-#include "../camera/Camera.hpp"
+#include "../camera/Camera.h"
 
-//#include <vector>
-//#include <memory>
-
-#include "../pch/pch_std.h"
 
 class World
 {
 public:
     void init();
     void update(const float& timestep);
-    //void render(const PerspectiveCamera& camera);
     void render(const Camera& camera);
    
     void destroy();

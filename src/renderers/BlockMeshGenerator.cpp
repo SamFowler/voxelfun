@@ -475,7 +475,7 @@ void makeBlockMesh_Greedy (const Block& block, const unsigned int& block_size, B
     // TODO: this whole greedy meshing pipeline is disgustingly written and hard to follow through. needs major clean up
 
     unsigned direction = 0;
-    unsigned layer = 0;
+    unsigned layer = 0; 
 
     std::array<GLuint, 12> face_plus;
     std::array<GLuint, 12> face_minus;

@@ -1,4 +1,4 @@
-#include "CameraController.hpp"
+#include "CameraController.h"
 
 void CameraController::updatePitch(const float& amount)
 {

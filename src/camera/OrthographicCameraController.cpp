@@ -1,4 +1,4 @@
-#include "OrthographicCameraController.hpp"
+#include "OrthographicCameraController.h"
 
 OrthographicCameraController::OrthographicCameraController(float aspect_ratio, float z_near, float z_far) 
 {

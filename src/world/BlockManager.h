@@ -9,7 +9,7 @@
 
 #include "Block.h"
 
-#include "../Input.hpp" // TODO: unsure if this should go here or not
+#include "../Input.h" // TODO: unsure if this should go here or not
 
 #include "DefaultBlockMaker.h"
 

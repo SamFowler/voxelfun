@@ -1,11 +1,11 @@
 #pragma once
-#include "Input.hpp"
-#include "world/World.hpp"
+#include "Input.h"
+#include "world/World.h"
 
-//#include "camera/PerspectiveCameraController.hpp"
-//#include "camera/OrthographicCameraController.hpp"
+//#include "camera/PerspectiveCameraController.h"
+//#include "camera/OrthographicCameraController.h"
 
-#include "camera/CameraController.hpp"
+#include "camera/CameraController.h"
 
 #include "pch/pch_std.h"
 

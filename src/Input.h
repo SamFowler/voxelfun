@@ -2,7 +2,7 @@
 //#include <SDL2/SDL.h>
 //#include <map>
 //#include <iostream>
-//#include <glm/vec2.hpp>
+//#include <glm/vec2.h>
 
 #include "pch/pch_std.h"
 

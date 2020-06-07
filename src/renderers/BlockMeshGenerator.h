@@ -1,14 +1,9 @@
 #pragma once
 
-//#include <vector>
-//#include <array>
-//#include <GL/glew.h>
-
 #include "../pch/pch_std.h"
 
 #include "../world/Block.h"
-#include "Renderables.h"
-#include "BlockMesh.hpp"
+#include "BlockMesh.h"
 
 
 

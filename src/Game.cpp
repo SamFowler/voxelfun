@@ -1,8 +1,8 @@
-#include "Game.hpp"
+#include "Game.h"
 //#include <iostream>
 
-#include "camera/OrthographicCameraController.hpp"
-#include "camera/PerspectiveCameraController.hpp"
+#include "camera/OrthographicCameraController.h"
+#include "camera/PerspectiveCameraController.h"
 
 bool Game::init() 
 {

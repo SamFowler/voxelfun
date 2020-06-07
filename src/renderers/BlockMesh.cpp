@@ -1,4 +1,4 @@
-#include "BlockMesh.hpp"
+#include "BlockMesh.h"
 
 VertexArrayObject BlockMesh::createBuffer()
 {

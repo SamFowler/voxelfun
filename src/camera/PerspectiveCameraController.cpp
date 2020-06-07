@@ -1,4 +1,4 @@
-#include "PerspectiveCameraController.hpp"
+#include "PerspectiveCameraController.h"
 
 PerspectiveCameraController::PerspectiveCameraController(float fov, float aspect_ratio, float z_near, float z_far) 
 : m_fov(fov)

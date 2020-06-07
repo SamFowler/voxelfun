@@ -1,6 +1,4 @@
-#include "VertexArrayObject.hpp"
-
-//#include <iostream>
+#include "VertexArrayObject.h"
 
 /* 
     ---------------------------------------------------------------------------------------------------------------

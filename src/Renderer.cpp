@@ -1,4 +1,4 @@
-#include "Renderer.hpp"
+#include "Renderer.h"
 //#include <iostream>
 
 #include "sdl2_shared.cpp"

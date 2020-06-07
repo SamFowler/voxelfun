@@ -1,9 +1,5 @@
 #pragma once
 
-//#include <GL/glew.h>
-//#include <SDL2/SDL_opengl.h>
-//#include <string>
-
 #include "../pch/pch_std.h"
 
 class Shader 

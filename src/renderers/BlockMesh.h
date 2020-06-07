@@ -1,11 +1,10 @@
 #pragma once
 
-//#include <vector>
-//#include <GL/glew.h>
-
 #include "../pch/pch_std.h"
 
-#include "../opengl_api/VertexArrayObject.hpp"
+#include "../opengl_api/VertexArrayObject.h"
+
+class VertexArrayObject;
 
 class BlockMesh
 {

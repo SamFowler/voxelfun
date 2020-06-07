@@ -2,8 +2,8 @@
 
 #include "../pch/pch_std.h"
 
-#include "Camera.hpp"
-#include "../Input.hpp"
+#include "Camera.h"
+#include "../Input.h"
 
 
 class CameraController
