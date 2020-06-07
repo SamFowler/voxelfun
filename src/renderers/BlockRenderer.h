@@ -5,30 +5,30 @@
 //#include "../camera/PerspectiveCamera.hpp"
 #include "../camera/Camera.hpp"
 
-#include "../world/Chunk.h"
+#include "../world/Block.h"
 //#include <vector>
 
 #include "../pch/pch_std.h"
 
 #include "Renderables.h"
 
-class ChunkRenderer
+class BlockRenderer
 {
 public:
-    void init(const unsigned int& chunk_size);
-    void getNewChunkUpdates(const std::vector<const Chunk*> updated_chunks);
+    void init(const unsigned int& block_size);
+    void getNewBlockUpdates(const std::vector<const Block*> updated_blocks);
     void updateVAOs();
     //void draw(const PerspectiveCamera& camera);
     void draw(const Camera& camera);
     void destroy();
 private:
 
-    float m_chunk_offset;
-    unsigned int m_chunk_size;
+    float m_block_offset;
+    unsigned int m_block_size;
 
-    std::vector<const Chunk*> m_updated_chunk_list;
-    std::vector<VertexArrayObject> m_chunk_vaos;
-    std::vector<ChunkRenderable> m_chunk_renderables;
+    std::vector<const Block*> m_updated_block_list;
+    std::vector<VertexArrayObject> m_block_vaos;
+    std::vector<BlockRenderable> m_block_renderables;
     GLint uniform_model;
     GLint uniform_vp;
     GLint uniform_lightpos;

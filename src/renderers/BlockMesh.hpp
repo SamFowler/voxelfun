@@ -7,13 +7,13 @@
 
 #include "../opengl_api/VertexArrayObject.hpp"
 
-class ChunkMesh
+class BlockMesh
 {
 
 public:
 
     VertexArrayObject createBuffer();
-    VertexArrayObject createChunkBuffer();
+    VertexArrayObject createBlockBuffer();
 
 
     std::vector<GLuint> vertices;

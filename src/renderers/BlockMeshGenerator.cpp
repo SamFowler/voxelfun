@@ -1,89 +1,89 @@
-#include "ChunkMeshGenerator.h"
+#include "BlockMeshGenerator.h"
 
 #include "../pch/pch_std.h"
 //#include <iostream>
 
-namespace ChunkMeshGenerator
+namespace BlockMeshGenerator
 {
 
  
 
-VertexArrayObject makeChunkVAO(const Chunk& chunk, const unsigned int& chunk_size, const MeshMethod& mesh_method)
+VertexArrayObject makeBlockVAO(const Block& block, const unsigned int& block_size, const MeshMethod& mesh_method)
 {
-    ChunkMesh chunk_mesh;
-    if (mesh_method == CULL_MESH_FAST) // doesn't check neighbouring chunks
-        makeChunkMesh_Culling(chunk, chunk_size, chunk_mesh);
-    else if (mesh_method == CULL_MESH_OPTIMAL) // checks neighbouring chunks for voxel visibility
-        makeChunkMesh_Culling(chunk, chunk_size, chunk_mesh);
+    BlockMesh block_mesh;
+    if (mesh_method == CULL_MESH_FAST) // doesn't check neighbouring blocks
+        makeBlockMesh_Culling(block, block_size, block_mesh);
+    else if (mesh_method == CULL_MESH_OPTIMAL) // checks neighbouring blocks for voxel visibility
+        makeBlockMesh_Culling(block, block_size, block_mesh);
     else if (mesh_method == GREEDY_MESH)
-        makeChunkMesh_Greedy(chunk, chunk_size ,chunk_mesh);
+        makeBlockMesh_Greedy(block, block_size ,block_mesh);
     else if (mesh_method == NAIVE_MESH)
-        makeChunkMesh_Naive(chunk,chunk_size , chunk_mesh);
+        makeBlockMesh_Naive(block,block_size , block_mesh);
     else if (mesh_method == OPTIMAL_MESH)
-        makeChunkMesh_Optimal(chunk, chunk_size, chunk_mesh);
+        makeBlockMesh_Optimal(block, block_size, block_mesh);
     else 
-        makeChunkMesh_Culling(chunk,chunk_size, chunk_mesh);
+        makeBlockMesh_Culling(block,block_size, block_mesh);
 
-    return chunk_mesh.createChunkBuffer();
+    return block_mesh.createBlockBuffer();
 }
 
-void makeChunkMesh_Naive  (const Chunk& chunk, const unsigned int& chunk_size, ChunkMesh& chunk_mesh)
+void makeBlockMesh_Naive  (const Block& block, const unsigned int& block_size, BlockMesh& block_mesh)
 {
 
 }
 
-void makeChunkMesh_Culling(const Chunk& chunk, const unsigned int& chunk_size, ChunkMesh& chunk_mesh)
+void makeBlockMesh_Culling(const Block& block, const unsigned int& block_size, BlockMesh& block_mesh)
 {
     int element_count = 0;
-    //int chunk_size = 8;
-    for (unsigned int y = 0; y < chunk_size; y++)
+    //int block_size = 8;
+    for (unsigned int y = 0; y < block_size; y++)
     {
-        for (unsigned int z = 0; z < chunk_size; z++)
+        for (unsigned int z = 0; z < block_size; z++)
         {
-            for (unsigned int x = 0; x < chunk_size; x++)
+            for (unsigned int x = 0; x < block_size; x++)
             {
-                VoxelInChunkPos voxel_pos = {x,y,z};
+                VoxelInBlockPos voxel_pos = {x,y,z};
                 
-                unsigned int voxel_index = chunk.indexFromInChunkPos( voxel_pos );
+                unsigned int voxel_index = block.indexFromInBlockPos( voxel_pos );
 
-                Voxel voxel = chunk.getVoxel( voxel_pos );
+                Voxel voxel = block.getVoxel( voxel_pos );
 
-                Colour voxel_colour = chunk.getColour(voxel.getColourId());
+                Colour voxel_colour = block.getColour(voxel.getColourId());
 
                 if (!voxel.hasXMinusNeighbour())
-              		addFace(chunk_mesh, voxel, voxel_pos, voxel_colour, element_count, X_MINUS_FACE, X_MINUS_NORMAL_INDEX);
+              		addFace(block_mesh, voxel, voxel_pos, voxel_colour, element_count, X_MINUS_FACE, X_MINUS_NORMAL_INDEX);
                 if (!voxel.hasXPlusNeighbour())
-              		addFace(chunk_mesh, voxel, voxel_pos, voxel_colour, element_count, X_PLUS_FACE, X_PLUS_NORMAL_INDEX);
+              		addFace(block_mesh, voxel, voxel_pos, voxel_colour, element_count, X_PLUS_FACE, X_PLUS_NORMAL_INDEX);
                 if (!voxel.hasYMinusNeighbour())
-              		addFace(chunk_mesh, voxel, voxel_pos, voxel_colour, element_count, Y_MINUS_FACE, Y_MINUS_NORMAL_INDEX);
+              		addFace(block_mesh, voxel, voxel_pos, voxel_colour, element_count, Y_MINUS_FACE, Y_MINUS_NORMAL_INDEX);
                 if (!voxel.hasYPlusNeighbour())
-              		addFace(chunk_mesh, voxel, voxel_pos, voxel_colour, element_count, Y_PLUS_FACE, Y_PLUS_NORMAL_INDEX);
+              		addFace(block_mesh, voxel, voxel_pos, voxel_colour, element_count, Y_PLUS_FACE, Y_PLUS_NORMAL_INDEX);
                 if (!voxel.hasZMinusNeighbour())
-                	addFace(chunk_mesh, voxel, voxel_pos, voxel_colour, element_count, Z_MINUS_FACE, Z_MINUS_NORMAL_INDEX);
+                	addFace(block_mesh, voxel, voxel_pos, voxel_colour, element_count, Z_MINUS_FACE, Z_MINUS_NORMAL_INDEX);
                 if (!voxel.hasZPlusNeighbour())
-                	addFace(chunk_mesh, voxel, voxel_pos, voxel_colour, element_count, Z_PLUS_FACE, Z_PLUS_NORMAL_INDEX);
+                	addFace(block_mesh, voxel, voxel_pos, voxel_colour, element_count, Z_PLUS_FACE, Z_PLUS_NORMAL_INDEX);
             }
         }
     }
 
 }
 
-bool isFaceVisible(const unsigned& i, const unsigned& j, const unsigned& layer, const unsigned& normal_index, const Chunk& chunk)
+bool isFaceVisible(const unsigned& i, const unsigned& j, const unsigned& layer, const unsigned& normal_index, const Block& block)
 {
 
 
     if (normal_index == X_MINUS_NORMAL_INDEX) 
-        return !chunk.getVoxel({layer, j, i}).hasXMinusNeighbour();
+        return !block.getVoxel({layer, j, i}).hasXMinusNeighbour();
     else if (normal_index == X_PLUS_NORMAL_INDEX) 
-        return !chunk.getVoxel({layer, j, i}).hasXPlusNeighbour();    
+        return !block.getVoxel({layer, j, i}).hasXPlusNeighbour();    
     else if (normal_index == Y_MINUS_NORMAL_INDEX) 
-        return !chunk.getVoxel({i, layer, j}).hasYMinusNeighbour();
+        return !block.getVoxel({i, layer, j}).hasYMinusNeighbour();
     else if (normal_index == Y_PLUS_NORMAL_INDEX) 
-        return !chunk.getVoxel({i, layer, j}).hasYPlusNeighbour(); 
+        return !block.getVoxel({i, layer, j}).hasYPlusNeighbour(); 
     else if (normal_index == Z_MINUS_NORMAL_INDEX) 
-        return !chunk.getVoxel({i, j, layer}).hasZMinusNeighbour(); 
+        return !block.getVoxel({i, j, layer}).hasZMinusNeighbour(); 
     else if (normal_index == Z_PLUS_NORMAL_INDEX) 
-        return !chunk.getVoxel({i, j, layer}).hasZPlusNeighbour();
+        return !block.getVoxel({i, j, layer}).hasZPlusNeighbour();
     else {
         std::cout << "[ERROR] Greedy meshing isFaceVisible bad return";
         return true;
@@ -91,29 +91,29 @@ bool isFaceVisible(const unsigned& i, const unsigned& j, const unsigned& layer, 
 }
 
 
-ColourID getVoxelColour(const unsigned& i, const unsigned& j, const unsigned& layer, const unsigned& normal_index, const Chunk& chunk, const unsigned& chunk_size, const unsigned& direction)
+ColourID getVoxelColour(const unsigned& i, const unsigned& j, const unsigned& layer, const unsigned& normal_index, const Block& block, const unsigned& block_size, const unsigned& direction)
 {
-    if (isFaceVisible(i, j, layer, normal_index, chunk))
+    if (isFaceVisible(i, j, layer, normal_index, block))
     {
-        //return getVoxelColour(i, j, layer, chunk_size, direction, chunk);
+        //return getVoxelColour(i, j, layer, block_size, direction, block);
         if (direction == 0)
-            return chunk.getVoxelColourID({i, layer, j});
+            return block.getVoxelColourID({i, layer, j});
         else if (direction == 1)
-            return chunk.getVoxelColourID({layer, j, i});
+            return block.getVoxelColourID({layer, j, i});
         else
-            return chunk.getVoxelColourID({i, j, layer}); 
+            return block.getVoxelColourID({i, j, layer}); 
     }
     else
         return 0;
 }
 
 
-unsigned getLocalIndex(const unsigned& i, const unsigned& j, const unsigned& chunk_size)
+unsigned getLocalIndex(const unsigned& i, const unsigned& j, const unsigned& block_size)
 {
-    return (j * chunk_size) + i;
+    return (j * block_size) + i;
 }
 
-void meshRectangle(ChunkMesh& mesh, const ChunkMeshFace& rectangle, const Chunk& chunk, const unsigned& direction,const unsigned& layer,
+void meshRectangle(BlockMesh& mesh, const BlockMeshFace& rectangle, const Block& block, const unsigned& direction,const unsigned& layer,
                              const std::array<GLuint, 12>& face, unsigned& element_count, unsigned& normal_index)
 {
     if (rectangle.colour == 0)
@@ -254,7 +254,7 @@ void meshRectangle(ChunkMesh& mesh, const ChunkMeshFace& rectangle, const Chunk&
     }
 
 
-    Colour colour = chunk.getColour(rectangle.colour);
+    Colour colour = block.getColour(rectangle.colour);
 
     for (int k = 0; k < 4; k++)
     {
@@ -278,43 +278,43 @@ void meshRectangle(ChunkMesh& mesh, const ChunkMeshFace& rectangle, const Chunk&
 
 }
 
-void processFirstGreedyColumn(const unsigned& i, const unsigned& j, unsigned& run_length, std::vector<ChunkMeshFace>& mesh_faces, const ColourID& current_colour, 
-                                const ColourID& previous_colour, const unsigned& chunk_size)
+void processFirstGreedyColumn(const unsigned& i, const unsigned& j, unsigned& run_length, std::vector<BlockMeshFace>& mesh_faces, const ColourID& current_colour, 
+                                const ColourID& previous_colour, const unsigned& block_size)
 {
     run_length++;
                     
     if ( current_colour != previous_colour )
     {   
-        mesh_faces[getLocalIndex( (i-run_length), j, chunk_size )] = {previous_colour, run_length, 1, (i-run_length), j};
+        mesh_faces[getLocalIndex( (i-run_length), j, block_size )] = {previous_colour, run_length, 1, (i-run_length), j};
         run_length = 0;
     }
 }
 
-void processFirstGreedyRow(const unsigned& i, const unsigned& j, const unsigned& layer, unsigned& run_length, ChunkMeshFace& previous_rectangle, std::vector<ChunkMeshFace>& mesh_faces, const ColourID& current_colour, 
-                                const ColourID& previous_colour,  ChunkMesh& chunk_mesh, const unsigned& chunk_size, const std::array<GLuint, 12>& face,
-                                unsigned& element_count, const unsigned& direction, const Chunk& chunk, unsigned& normal_index)
+void processFirstGreedyRow(const unsigned& i, const unsigned& j, const unsigned& layer, unsigned& run_length, BlockMeshFace& previous_rectangle, std::vector<BlockMeshFace>& mesh_faces, const ColourID& current_colour, 
+                                const ColourID& previous_colour,  BlockMesh& block_mesh, const unsigned& block_size, const std::array<GLuint, 12>& face,
+                                unsigned& element_count, const unsigned& direction, const Block& block, unsigned& normal_index)
 {
 
     previous_rectangle = {0,0,0,0,0};
     run_length = 0;
             
-    if ( current_colour == getVoxelColour(i, j-1, layer, normal_index, chunk, chunk_size, direction) )
+    if ( current_colour == getVoxelColour(i, j-1, layer, normal_index, block, block_size, direction) )
     {
-        previous_rectangle = mesh_faces[getLocalIndex(i, j-1, chunk_size)];
+        previous_rectangle = mesh_faces[getLocalIndex(i, j-1, block_size)];
         previous_rectangle.run_width++; 
     }
     else
     {
-        meshRectangle(chunk_mesh, mesh_faces[getLocalIndex(i, j-1, chunk_size)], chunk, direction, layer, face, element_count, normal_index);
+        meshRectangle(block_mesh, mesh_faces[getLocalIndex(i, j-1, block_size)], block, direction, layer, face, element_count, normal_index);
     }
 
 
 
 }
 
-void processMainBody(const unsigned& i, const unsigned& j, const unsigned& layer, unsigned& run_length, ChunkMeshFace& previous_rectangle, std::vector<ChunkMeshFace>& mesh_faces, const ColourID& current_colour, 
-                                const ColourID& previous_colour,  ChunkMesh& chunk_mesh, const unsigned& chunk_size, const std::array<GLuint, 12>& face,
-                                unsigned& element_count, const unsigned& direction, const Chunk& chunk, unsigned& normal_index)
+void processMainBody(const unsigned& i, const unsigned& j, const unsigned& layer, unsigned& run_length, BlockMeshFace& previous_rectangle, std::vector<BlockMeshFace>& mesh_faces, const ColourID& current_colour, 
+                                const ColourID& previous_colour,  BlockMesh& block_mesh, const unsigned& block_size, const std::array<GLuint, 12>& face,
+                                unsigned& element_count, const unsigned& direction, const Block& block, unsigned& normal_index)
 {
 
     run_length++;
@@ -328,23 +328,23 @@ void processMainBody(const unsigned& i, const unsigned& j, const unsigned& layer
         if (run_length == previous_rectangle.run_length) 
         {
             //We have a group of voxels that match the previous column rectangle - place them in
-            mesh_faces[getLocalIndex( (i-run_length), j, chunk_size)] = previous_rectangle;
+            mesh_faces[getLocalIndex( (i-run_length), j, block_size)] = previous_rectangle;
 
             //mesh the rectangle
 
 
             // as the runlength of the rectangle from previous column has been reached, 
             // a new, different, rectangle must be at this row value in the previous column -
-            if (current_colour == getVoxelColour(i, j-1, layer, normal_index, chunk, chunk_size, direction))
+            if (current_colour == getVoxelColour(i, j-1, layer, normal_index, block, block_size, direction))
             {   // We fetch it if it is of the same voxel type
-                previous_rectangle = mesh_faces[getLocalIndex(i, j-1, chunk_size)];
+                previous_rectangle = mesh_faces[getLocalIndex(i, j-1, block_size)];
                 previous_rectangle.run_width++; 
                 
             }
             else 
             {   //else set rectangle to empty so we don't look to match to it
                 previous_rectangle = {0, 0, 0, 0, 0};
-                meshRectangle(chunk_mesh, mesh_faces[getLocalIndex(i, j-1, chunk_size)], chunk, direction, layer, face, element_count, normal_index);
+                meshRectangle(block_mesh, mesh_faces[getLocalIndex(i, j-1, block_size)], block, direction, layer, face, element_count, normal_index);
             }
 
             run_length = 0;
@@ -355,12 +355,12 @@ void processMainBody(const unsigned& i, const unsigned& j, const unsigned& layer
         // create a new rectangle for the runlength that was reached and set rectangle to empty so we don't look to match to it
         else if (current_colour != previous_colour)
         {
-            mesh_faces[getLocalIndex( (i-run_length), j, chunk_size)] =  {previous_colour, run_length, 1, (i-run_length), j};
+            mesh_faces[getLocalIndex( (i-run_length), j, block_size)] =  {previous_colour, run_length, 1, (i-run_length), j};
                                     
                                     
-            if (current_colour == getVoxelColour(i, j-1, layer, normal_index, chunk, chunk_size, direction))
+            if (current_colour == getVoxelColour(i, j-1, layer, normal_index, block, block_size, direction))
             {   // We fetch it if it is of the same voxel type
-                previous_rectangle = mesh_faces[getLocalIndex(i, j-1, chunk_size)];
+                previous_rectangle = mesh_faces[getLocalIndex(i, j-1, block_size)];
 
                 if (previous_rectangle.colour > 0)
                 {
@@ -376,9 +376,9 @@ void processMainBody(const unsigned& i, const unsigned& j, const unsigned& layer
             {   //else set rectangle to empty so we don't look to match to it
                 previous_rectangle.run_width--;
                 if (previous_rectangle.run_width > 0)
-                    meshRectangle(chunk_mesh, previous_rectangle, chunk, direction, layer, face, element_count, normal_index);
+                    meshRectangle(block_mesh, previous_rectangle, block, direction, layer, face, element_count, normal_index);
                 else 
-                    meshRectangle(chunk_mesh, mesh_faces[getLocalIndex(i, j-1, chunk_size)], chunk, direction, layer, face, element_count, normal_index);
+                    meshRectangle(block_mesh, mesh_faces[getLocalIndex(i, j-1, block_size)], block, direction, layer, face, element_count, normal_index);
                 
 
                 previous_rectangle = {0, 0, 0, 0, 0};
@@ -389,9 +389,9 @@ void processMainBody(const unsigned& i, const unsigned& j, const unsigned& layer
         }
         else
         {                       
-            if (current_colour != getVoxelColour(i, j-1, layer, normal_index, chunk, chunk_size, direction))
+            if (current_colour != getVoxelColour(i, j-1, layer, normal_index, block, block_size, direction))
             {
-                meshRectangle(chunk_mesh, mesh_faces[getLocalIndex(i, j-1, chunk_size)], chunk, direction, layer, face, element_count, normal_index);
+                meshRectangle(block_mesh, mesh_faces[getLocalIndex(i, j-1, block_size)], block, direction, layer, face, element_count, normal_index);
             }
         }
         
@@ -401,11 +401,11 @@ void processMainBody(const unsigned& i, const unsigned& j, const unsigned& layer
     // else if we are not trying to match to rectangle from previous column,
     // get the rectangle from the previous column and check if the voxels match with this voxel
                             
-    else if (current_colour == mesh_faces[getLocalIndex(i, j-1, chunk_size)].colour)
+    else if (current_colour == mesh_faces[getLocalIndex(i, j-1, block_size)].colour)
     {
-        mesh_faces[getLocalIndex( (i-run_length), j, chunk_size )] = {previous_colour, run_length, 1, (i-run_length), j};
+        mesh_faces[getLocalIndex( (i-run_length), j, block_size )] = {previous_colour, run_length, 1, (i-run_length), j};
 
-        previous_rectangle = mesh_faces[getLocalIndex(i, j-1, chunk_size)];
+        previous_rectangle = mesh_faces[getLocalIndex(i, j-1, block_size)];
         previous_rectangle.run_width++;
 
         run_length = 0;
@@ -413,28 +413,28 @@ void processMainBody(const unsigned& i, const unsigned& j, const unsigned& layer
     // else if there are no rectangles to match to, create a new one for the previous run length
     else if (current_colour != previous_colour)
     {
-        mesh_faces[getLocalIndex( (i-run_length), j, chunk_size )] = {previous_colour, run_length, 1, (i-run_length), j};
+        mesh_faces[getLocalIndex( (i-run_length), j, block_size )] = {previous_colour, run_length, 1, (i-run_length), j};
 
         run_length = 0;
                             
-        if (current_colour != getVoxelColour(i, j-1, layer, normal_index, chunk, chunk_size, direction))
+        if (current_colour != getVoxelColour(i, j-1, layer, normal_index, block, block_size, direction))
         {
-            meshRectangle(chunk_mesh, mesh_faces[getLocalIndex(i, j-1, chunk_size)], chunk, direction, layer, face, element_count, normal_index);
+            meshRectangle(block_mesh, mesh_faces[getLocalIndex(i, j-1, block_size)], block, direction, layer, face, element_count, normal_index);
         }
         
     }
     else
     {   
-        meshRectangle(chunk_mesh, mesh_faces[getLocalIndex(i, j-1, chunk_size)], chunk, direction, layer, face, element_count, normal_index);
+        meshRectangle(block_mesh, mesh_faces[getLocalIndex(i, j-1, block_size)], block, direction, layer, face, element_count, normal_index);
 
     }
         
 }
 
 
-void fillLastGreedyRow(const unsigned& i, const unsigned& j, const unsigned& layer, unsigned& run_length, ChunkMeshFace& previous_rectangle, std::vector<ChunkMeshFace>& mesh_faces, const ColourID& current_colour, 
-                                const ColourID& previous_colour, const unsigned& chunk_size, const std::array<GLuint, 12>& face,
-                                const unsigned& direction, const Chunk& chunk, unsigned& normal_index)
+void fillLastGreedyRow(const unsigned& i, const unsigned& j, const unsigned& layer, unsigned& run_length, BlockMeshFace& previous_rectangle, std::vector<BlockMeshFace>& mesh_faces, const ColourID& current_colour, 
+                                const ColourID& previous_colour, const unsigned& block_size, const std::array<GLuint, 12>& face,
+                                const unsigned& direction, const Block& block, unsigned& normal_index)
 {
     run_length++;
 
@@ -443,13 +443,13 @@ void fillLastGreedyRow(const unsigned& i, const unsigned& j, const unsigned& lay
         if (run_length == previous_rectangle.run_length)
         {
             //WE HAVE A SET THAT MATCHES A PREVIOUS ROW RECTANGLE - place it in
-            mesh_faces[getLocalIndex( (i-run_length), j, chunk_size )] = previous_rectangle;
+            mesh_faces[getLocalIndex( (i-run_length), j, block_size )] = previous_rectangle;
 
             // as runlength of previous row has been reached, a new rectanlge must be there
                             
-            if (current_colour == getVoxelColour(i, j-1, layer, normal_index, chunk, chunk_size, direction))
+            if (current_colour == getVoxelColour(i, j-1, layer, normal_index, block, block_size, direction))
             {                   
-                previous_rectangle = mesh_faces[getLocalIndex(i, j-1, chunk_size)];  
+                previous_rectangle = mesh_faces[getLocalIndex(i, j-1, block_size)];  
                 previous_rectangle.run_width++; 
             }
             else 
@@ -463,13 +463,13 @@ void fillLastGreedyRow(const unsigned& i, const unsigned& j, const unsigned& lay
     else 
     {
     
-        mesh_faces[getLocalIndex( (i-run_length), j, chunk_size )] = {previous_colour, run_length, 1, (i-run_length), j};
+        mesh_faces[getLocalIndex( (i-run_length), j, block_size )] = {previous_colour, run_length, 1, (i-run_length), j};
         run_length = 0;
     }
 }
 
 
-void makeChunkMesh_Greedy (const Chunk& chunk, const unsigned int& chunk_size, ChunkMesh& chunk_mesh)
+void makeBlockMesh_Greedy (const Block& block, const unsigned int& block_size, BlockMesh& block_mesh)
 {
 
     // TODO: this whole greedy meshing pipeline is disgustingly written and hard to follow through. needs major clean up
@@ -487,8 +487,8 @@ void makeChunkMesh_Greedy (const Chunk& chunk, const unsigned int& chunk_size, C
 
     for (direction = 0; direction < 3; direction++)
     {
-        GreedyProcessState plus_state(direction, chunk, chunk_size, true); // state for positive normal of direction
-        GreedyProcessState minus_state(direction, chunk, chunk_size, false); //state for negative normal of direction
+        GreedyProcessState plus_state(direction, block, block_size, true); // state for positive normal of direction
+        GreedyProcessState minus_state(direction, block, block_size, false); //state for negative normal of direction
 
         if (direction == 0) 
         {
@@ -512,15 +512,15 @@ void makeChunkMesh_Greedy (const Chunk& chunk, const unsigned int& chunk_size, C
             normal_index_minus = Z_MINUS_NORMAL_INDEX;
         }
 
-        for (unsigned layer = 0; layer < chunk_size; layer++ )
+        for (unsigned layer = 0; layer < block_size; layer++ )
         {
 
-            if (direction == 0 && layer == chunk_size-3)
+            if (direction == 0 && layer == block_size-3)
                 std::cout << "";
 
 
-            std::vector<ChunkMeshFace> mesh_faces_plus(chunk_size*chunk_size, {0,0,0,0,0});
-            std::vector<ChunkMeshFace> mesh_faces_minus(chunk_size*chunk_size, {0,0,0,0,0});
+            std::vector<BlockMeshFace> mesh_faces_plus(block_size*block_size, {0,0,0,0,0});
+            std::vector<BlockMeshFace> mesh_faces_minus(block_size*block_size, {0,0,0,0,0});
             //Voxel temp;
             //const Voxel& current_voxel = temp;
             ColourID current_colour_plus;
@@ -534,21 +534,21 @@ void makeChunkMesh_Greedy (const Chunk& chunk, const unsigned int& chunk_size, C
 
 
 
-            ColourID previous_colour_plus = getVoxelColour(i, j, layer, normal_index_plus, chunk, chunk_size, direction);
-            ColourID previous_colour_minus = getVoxelColour(i, j, layer, normal_index_minus, chunk, chunk_size, direction);
+            ColourID previous_colour_plus = getVoxelColour(i, j, layer, normal_index_plus, block, block_size, direction);
+            ColourID previous_colour_minus = getVoxelColour(i, j, layer, normal_index_minus, block, block_size, direction);
             
 
             /* ------------START FIRST i ROW----------- */
             //loop over first column only to initialise rectangle array
-            for (i = 1; i < chunk_size; i++)
+            for (i = 1; i < block_size; i++)
             {
-                current_colour_plus = getVoxelColour(i, j, layer, normal_index_plus, chunk, chunk_size, direction);
-                current_colour_minus = getVoxelColour(i, j, layer, normal_index_minus, chunk, chunk_size, direction);
+                current_colour_plus = getVoxelColour(i, j, layer, normal_index_plus, block, block_size, direction);
+                current_colour_minus = getVoxelColour(i, j, layer, normal_index_minus, block, block_size, direction);
 
 
-                processFirstGreedyColumn(i, j, run_length_plus, mesh_faces_plus, current_colour_plus, previous_colour_plus, chunk_size);
+                processFirstGreedyColumn(i, j, run_length_plus, mesh_faces_plus, current_colour_plus, previous_colour_plus, block_size);
 
-                processFirstGreedyColumn(i, j, run_length_minus, mesh_faces_minus, current_colour_minus, previous_colour_minus, chunk_size);
+                processFirstGreedyColumn(i, j, run_length_minus, mesh_faces_minus, current_colour_minus, previous_colour_minus, block_size);
 
                 
 
@@ -557,63 +557,63 @@ void makeChunkMesh_Greedy (const Chunk& chunk, const unsigned int& chunk_size, C
             }
 
             //Put last rectangle from first column in rectangle holder
-            mesh_faces_plus[getLocalIndex( ((i-1)-run_length_plus), j, chunk_size )] = {previous_colour_plus, (run_length_plus+1), 1, ((i-1)-run_length_plus), j};
-            mesh_faces_minus[getLocalIndex( ((i-1)-run_length_minus), j, chunk_size )] = {previous_colour_minus, (run_length_minus+1), 1, ((i-1)-run_length_minus), j};
+            mesh_faces_plus[getLocalIndex( ((i-1)-run_length_plus), j, block_size )] = {previous_colour_plus, (run_length_plus+1), 1, ((i-1)-run_length_plus), j};
+            mesh_faces_minus[getLocalIndex( ((i-1)-run_length_minus), j, block_size )] = {previous_colour_minus, (run_length_minus+1), 1, ((i-1)-run_length_minus), j};
             /* ------------END FIRST j COLUMN----------- */
 
 
-            ChunkMeshFace previous_rectangle_plus;
-            ChunkMeshFace previous_rectangle_minus;
+            BlockMeshFace previous_rectangle_plus;
+            BlockMeshFace previous_rectangle_minus;
             /* ------------START j = 1 onwards LOOP----------- */
-            for (unsigned j = 1; j < chunk_size; j++)
+            for (unsigned j = 1; j < block_size; j++)
             {   
 
                 i = 0;  
-                current_colour_plus = getVoxelColour(i, j, layer, normal_index_plus, chunk, chunk_size, direction);
-                current_colour_minus = getVoxelColour(i, j, layer, normal_index_minus, chunk, chunk_size, direction);
+                current_colour_plus = getVoxelColour(i, j, layer, normal_index_plus, block, block_size, direction);
+                current_colour_minus = getVoxelColour(i, j, layer, normal_index_minus, block, block_size, direction);
 
                 // run x=0 separately before loop so we don't have extra if checks for it in each loop
                 processFirstGreedyRow(i, j, layer, run_length_plus, previous_rectangle_plus, mesh_faces_plus, current_colour_plus, 
-                                                previous_colour_plus, chunk_mesh, chunk_size, face_plus, element_count, direction, chunk, normal_index_plus);
+                                                previous_colour_plus, block_mesh, block_size, face_plus, element_count, direction, block, normal_index_plus);
                 
                 processFirstGreedyRow(i, j, layer, run_length_minus, previous_rectangle_minus, mesh_faces_minus, current_colour_minus, 
-                                                previous_colour_minus, chunk_mesh, chunk_size, face_minus, element_count, direction, chunk, normal_index_minus);
+                                                previous_colour_minus, block_mesh, block_size, face_minus, element_count, direction, block, normal_index_minus);
     
 
 
-                previous_colour_plus = getVoxelColour(0, j, layer, normal_index_plus, chunk, chunk_size, direction);
-                previous_colour_minus = getVoxelColour(0, j, layer, normal_index_minus, chunk, chunk_size, direction);
+                previous_colour_plus = getVoxelColour(0, j, layer, normal_index_plus, block, block_size, direction);
+                previous_colour_minus = getVoxelColour(0, j, layer, normal_index_minus, block, block_size, direction);
 
 
-                for (unsigned i = 1; i < chunk_size; i++)
+                for (unsigned i = 1; i < block_size; i++)
                 {
-                    current_colour_plus = getVoxelColour(i, j, layer, normal_index_plus, chunk, chunk_size, direction);
-                    current_colour_minus = getVoxelColour(i, j, layer, normal_index_minus, chunk, chunk_size, direction);
+                    current_colour_plus = getVoxelColour(i, j, layer, normal_index_plus, block, block_size, direction);
+                    current_colour_minus = getVoxelColour(i, j, layer, normal_index_minus, block, block_size, direction);
                     
                     processMainBody(i, j, layer, run_length_plus, previous_rectangle_plus, mesh_faces_plus, current_colour_plus, 
-                                                previous_colour_plus, chunk_mesh, chunk_size, face_plus, element_count, direction, chunk, normal_index_plus);
+                                                previous_colour_plus, block_mesh, block_size, face_plus, element_count, direction, block, normal_index_plus);
                     
                     processMainBody(i, j, layer, run_length_minus, previous_rectangle_minus, mesh_faces_minus, current_colour_minus, 
-                                                previous_colour_minus, chunk_mesh, chunk_size, face_minus, element_count, direction, chunk, normal_index_minus);
+                                                previous_colour_minus, block_mesh, block_size, face_minus, element_count, direction, block, normal_index_minus);
                     
                     previous_colour_plus = current_colour_plus;
                     previous_colour_minus = current_colour_minus;
 
                 } 
 
-                i = chunk_size;
+                i = block_size;
                 fillLastGreedyRow(i, j, layer, run_length_plus, previous_rectangle_plus, mesh_faces_plus, current_colour_plus, 
-                                                previous_colour_plus, chunk_size, face_plus, direction, chunk, normal_index_plus);
+                                                previous_colour_plus, block_size, face_plus, direction, block, normal_index_plus);
                 fillLastGreedyRow(i, j, layer, run_length_minus, previous_rectangle_minus, mesh_faces_minus, current_colour_minus, 
-                                                previous_colour_minus, chunk_size, face_minus, direction, chunk, normal_index_minus);
+                                                previous_colour_minus, block_size, face_minus, direction, block, normal_index_minus);
 
             }
 
-            j = chunk_size;
-            for (unsigned i = 0; i < chunk_size; i++)
+            j = block_size;
+            for (unsigned i = 0; i < block_size; i++)
             {
-                meshRectangle(chunk_mesh, mesh_faces_plus[getLocalIndex( i, j-1, chunk_size )], chunk, direction, layer, face_plus, element_count, normal_index_plus);
-                meshRectangle(chunk_mesh, mesh_faces_minus[getLocalIndex( i, j-1, chunk_size )], chunk, direction, layer, face_minus, element_count, normal_index_minus);
+                meshRectangle(block_mesh, mesh_faces_plus[getLocalIndex( i, j-1, block_size )], block, direction, layer, face_plus, element_count, normal_index_plus);
+                meshRectangle(block_mesh, mesh_faces_minus[getLocalIndex( i, j-1, block_size )], block, direction, layer, face_minus, element_count, normal_index_minus);
             }
 
         }//end layer
@@ -623,14 +623,14 @@ void makeChunkMesh_Greedy (const Chunk& chunk, const unsigned int& chunk_size, C
 }
 
 
-void makeChunkMesh_Optimal(const Chunk& chunk, const unsigned int& chunk_size, ChunkMesh& chunk_mesh)
+void makeBlockMesh_Optimal(const Block& block, const unsigned int& block_size, BlockMesh& block_mesh)
 {
 
 }
 
 
 
-void addFace(ChunkMesh& mesh, const Voxel& voxel, const VoxelInChunkPos& voxel_pos, const Colour& voxel_colour,
+void addFace(BlockMesh& mesh, const Voxel& voxel, const VoxelInBlockPos& voxel_pos, const Colour& voxel_colour,
                                  int& element_count, const std::array<GLuint, 12>& face_verts, const GLuint& normal_index)
 {
 

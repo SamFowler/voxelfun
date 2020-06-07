@@ -1,6 +1,6 @@
-#include "ChunkMesh.hpp"
+#include "BlockMesh.hpp"
 
-VertexArrayObject ChunkMesh::createBuffer()
+VertexArrayObject BlockMesh::createBuffer()
 {
     VertexArrayObject vao;
     vao.create();
@@ -14,7 +14,7 @@ VertexArrayObject ChunkMesh::createBuffer()
 
 
 
-VertexArrayObject ChunkMesh::createChunkBuffer()
+VertexArrayObject BlockMesh::createBlockBuffer()
 {
     VertexArrayObject vao;
     vao.create();

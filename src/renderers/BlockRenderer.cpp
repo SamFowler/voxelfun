@@ -1,4 +1,4 @@
-#include "ChunkRenderer.h"
+#include "BlockRenderer.h"
 
 //#include <glm/glm.hpp>
 //#include <glm/gtc/matrix_transform.hpp>
@@ -8,14 +8,14 @@
 #include "../pch/pch_std.h"
 
 
-#include "ChunkMeshGenerator.h"
+#include "BlockMeshGenerator.h"
 
 #include "../helpers/Logging.h"
 
-void ChunkRenderer::init(const unsigned int& chunk_size)
+void BlockRenderer::init(const unsigned int& block_size)
 {
-    m_chunk_offset = (float)chunk_size;
-    m_chunk_size = chunk_size;
+    m_block_offset = (float)block_size;
+    m_block_size = block_size;
 
 
     m_shader.create("cube", "cube");
@@ -32,36 +32,36 @@ void ChunkRenderer::init(const unsigned int& chunk_size)
 
 }
 
-void ChunkRenderer::getNewChunkUpdates(const std::vector<const Chunk*> updated_chunks)
+void BlockRenderer::getNewBlockUpdates(const std::vector<const Block*> updated_blocks)
 {
 
-    //if (updated_chunks.size() != 0) 
+    //if (updated_blocks.size() != 0) 
     //{
-        for (auto chunk_ptr : updated_chunks)
+        for (auto block_ptr : updated_blocks)
         {
-            //TODO: check to see if chunk is already on remesh list? 
-            m_updated_chunk_list.push_back(chunk_ptr);
+            //TODO: check to see if block is already on remesh list? 
+            m_updated_block_list.push_back(block_ptr);
         }
     //}
 }
 
-void ChunkRenderer::updateVAOs()
+void BlockRenderer::updateVAOs()
 {
-    for (auto chunk_ptr : m_updated_chunk_list)
+    for (auto block_ptr : m_updated_block_list)
     {
-        if (chunk_ptr != nullptr)
+        if (block_ptr != nullptr)
         {
-            //m_chunk_vaos.push_back(ChunkMeshGenerator::makeChunkVAO(*chunk_ptr, chunk_size) );
-            m_chunk_renderables.push_back({chunk_ptr->getPosition(), ChunkMeshGenerator::makeChunkVAO(*chunk_ptr, m_chunk_size, ChunkMeshGenerator::GREEDY_MESH) });
+            //m_block_vaos.push_back(BlockMeshGenerator::makeBlockVAO(*block_ptr, block_size) );
+            m_block_renderables.push_back({block_ptr->getPosition(), BlockMeshGenerator::makeBlockVAO(*block_ptr, m_block_size, BlockMeshGenerator::GREEDY_MESH) });
         }
     }
 
     //TODO not all meshes may get updated per frame if there are many and it takes time, so don't always clear this list
-    m_updated_chunk_list.clear();
+    m_updated_block_list.clear();
 }
 
-//void ChunkRenderer::draw(const PerspectiveCamera& camera)
-void ChunkRenderer::draw(const Camera& camera)
+//void BlockRenderer::draw(const PerspectiveCamera& camera)
+void BlockRenderer::draw(const Camera& camera)
 {
     m_shader.use();
 
@@ -71,10 +71,10 @@ void ChunkRenderer::draw(const Camera& camera)
     glm::mat4 model(1.0f);
     glm::mat4 scale = glm::scale(model, glm::vec3(0.01, 0.01, 0.01));
     glm::mat4 normal(0.0f);
-    for (auto it = m_chunk_renderables.begin(); it != m_chunk_renderables.end(); ++it)
+    for (auto it = m_block_renderables.begin(); it != m_block_renderables.end(); ++it)
     {   
         it->vao.getDrawable().bind();
-        model = glm::translate(scale, glm::vec3(it->position.pos) * m_chunk_offset);
+        model = glm::translate(scale, glm::vec3(it->position.pos) * m_block_offset);
         glUniformMatrix4fv(uniform_vp, 1, GL_FALSE, glm::value_ptr(vp));
         glUniformMatrix4fv(uniform_model, 1, GL_FALSE, glm::value_ptr(model));
 
@@ -82,9 +82,9 @@ void ChunkRenderer::draw(const Camera& camera)
     }
 }
 
-void ChunkRenderer::destroy()
+void BlockRenderer::destroy()
 {
-    m_updated_chunk_list.clear();
-    m_chunk_vaos.clear();
+    m_updated_block_list.clear();
+    m_block_vaos.clear();
     m_shader.destroy();
 }

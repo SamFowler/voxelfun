@@ -3,8 +3,8 @@
 #include "../Input.hpp"
 
 //#include "../camera/PerspectiveCamera.hpp"
-#include "ChunkManager.h"
-#include "../renderers/ChunkRenderer.h"
+#include "BlockManager.h"
+#include "../renderers/BlockRenderer.h"
 #include "../camera/Camera.hpp"
 
 //#include <vector>
@@ -23,9 +23,9 @@ public:
     void destroy();
 
 private:
-    unsigned int m_chunk_size;
+    unsigned int m_block_size;
 
-    ChunkManager m_chunk_manager;
-    ChunkRenderer m_chunk_renderer;
+    BlockManager m_block_manager;
+    BlockRenderer m_block_renderer;
  
 };

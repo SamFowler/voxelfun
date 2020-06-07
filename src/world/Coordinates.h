@@ -24,17 +24,17 @@ struct VoxelWorldPos : public Position
     using Position::Position;
 };
 /*
-struct VoxelInChunkPos : public Position
+struct VoxelInBlockPos : public Position
 {
     using Position::Position;
 };*/
 
-struct VoxelInChunkPos
+struct VoxelInBlockPos
 {
-    VoxelInChunkPos() {};
-    VoxelInChunkPos(const unsigned int& x, const unsigned int& y , const unsigned int& z) : pos({x,y,z}) {};
-    VoxelInChunkPos(const glm::uvec3& position) : pos(position) {};
-    bool operator==(const VoxelInChunkPos& other) const 
+    VoxelInBlockPos() {};
+    VoxelInBlockPos(const unsigned int& x, const unsigned int& y , const unsigned int& z) : pos({x,y,z}) {};
+    VoxelInBlockPos(const glm::uvec3& position) : pos(position) {};
+    bool operator==(const VoxelInBlockPos& other) const 
     {
         return ( pos.x == other.pos.x && pos.y == other.pos.y && pos.z == other.pos.z );
     }
@@ -43,20 +43,20 @@ struct VoxelInChunkPos
 };
 
 
-struct ChunkPos : public Position 
+struct BlockPos : public Position 
 {
     using Position::Position;
 };
 
-struct ChunkPositionHash 
+struct BlockPositionHash 
 {
     //Taken from www.github.com/Hopson97/open-builder
     // from Teschner et al., Vision Modeling and Visualization (VMV), 2003
-    std::size_t operator()(const ChunkPos& position) const
+    std::size_t operator()(const BlockPos& position) const
     {
         return (position.pos.x * 88339) ^ (position.pos.y * 91967) ^ (position.pos.z * 126323);
     }
 };
 
-typedef std::pair<ChunkPos, VoxelInChunkPos> ChunkAndVoxelPos;
-typedef std::pair<ChunkPos, std::vector<VoxelInChunkPos> > ChunkAndManyVoxelPos;
+typedef std::pair<BlockPos, VoxelInBlockPos> BlockAndVoxelPos;
+typedef std::pair<BlockPos, std::vector<VoxelInBlockPos> > BlockAndManyVoxelPos;

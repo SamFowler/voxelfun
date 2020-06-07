@@ -6,8 +6,8 @@
 
 #include "../opengl_api/VertexArrayObject.hpp"
 
-struct ChunkRenderable final
+struct BlockRenderable final
 {
-    ChunkPos position;
+    BlockPos position;
     VertexArrayObject vao;
 };
