@@ -22,10 +22,10 @@ public:
     Block (BlockPos position, std::vector<Voxel> voxels, std::vector<Colour> colours, BlockManager& manager);
 
     // Helpers
-    unsigned int    indexFromInBlockPos   (const VoxelInBlockPos& voxel_coord) const;
-    VoxelInBlockPos inBlockPosFromIndex   (const unsigned int&    index      ) const;
+    unsigned int    indexFromInBlockPos   (const VoxelPos& voxel_coord) const;
+    VoxelPos inBlockPosFromIndex   (const unsigned int&    index      ) const;
 
-    bool isBlockEdge  (const VoxelInBlockPos& voxel_coord) const;
+    bool isBlockEdge  (const VoxelPos& voxel_coord) const;
     bool isBlockEdge  (const int&             voxel_index) const;
 
     ColourID addColour(const Colour& colour);
@@ -38,11 +38,11 @@ public:
     BlockPos    getPosition   () const  { return m_position;   }
 
     Colour     getColour       (const ColourID&        colour_id  ) const;
-    ColourID   getVoxelColourID(const VoxelInBlockPos& voxel_coord) const;
-    Colour     getVoxelColour  (const VoxelInBlockPos& voxel_coord) const;
-    VoxelType  getVoxelType    (const VoxelInBlockPos& voxel_coord) const;
-    const Voxel&    getVoxel        (const VoxelInBlockPos& voxel_coord) const;
-    VoxelInBlockPos getTopVoxelPos (const VoxelInBlockPos& voxel_coord)  const;
+    ColourID   getVoxelColourID(const VoxelPos& voxel_coord) const;
+    Colour     getVoxelColour  (const VoxelPos& voxel_coord) const;
+    VoxelType  getVoxelType    (const VoxelPos& voxel_coord) const;
+    const Voxel&    getVoxel        (const VoxelPos& voxel_coord) const;
+    VoxelPos getTopVoxelPos (const VoxelPos& voxel_coord)  const;
 
     const std::vector<Voxel>& getVoxelDataRef() const;
     const std::vector<Colour>& getColoursRef() const;
@@ -50,11 +50,11 @@ public:
     // Setters
     void setPosition(const BlockPos& position) { m_position = position; }
     
-    void setVoxels(const std::vector<VoxelInBlockPos>& voxel_coords, const Colour&    colour);
-    void setVoxels(const std::vector<VoxelInBlockPos>& voxel_coords, const VoxelType& type  );
-    void setVoxels(const std::vector<VoxelInBlockPos>& voxel_coords, const Voxel&     voxel );
+    void setVoxels(const std::vector<VoxelPos>& voxel_coords, const Colour&    colour);
+    void setVoxels(const std::vector<VoxelPos>& voxel_coords, const VoxelType& type  );
+    void setVoxels(const std::vector<VoxelPos>& voxel_coords, const Voxel&     voxel );
 
-    void updateNeighbours(const VoxelInBlockPos& voxel_coord);
+    void updateNeighbours(const VoxelPos& voxel_coord);
     void updateAllNeighbours();
 
     void changeAllVoxels(const Colour&    colour);

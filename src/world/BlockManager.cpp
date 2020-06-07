@@ -4,18 +4,6 @@
  
 bool BlockManager::init() 
 {
-    /*
-    //addBlock( {} )
-    //Block (BlockPos position, std::vector<Voxel> voxels, std::vector<Colour> colours, BlockManager& manager_ptr);
-    std::cout << "block manager init" << std::endl;
-    BlockPos pos = {0,0,0};
-    Voxel voxel = {1, VoxelType::Grass};
-    std::vector<Voxel> voxels(m_block_volume, voxel);
-    std::vector<Colour> colours = { {0,0,0,0}, {255, 0, 255, 255} };
-
-    addBlock(
-        pos, voxels, colours
-    );*/
 
     return true;
 }
@@ -105,7 +93,7 @@ const Block* BlockManager::getBlockPtr(const BlockPos& block_pos) const
     }
     else
     {
-        std::cout << "Could not find block: pos{" << block_pos.pos.x << "," << block_pos.pos.y << "," << block_pos.pos.z << "}" << std::endl;
+        std::cout << "Could not find block: pos{" << block_pos.x << "," << block_pos.y << "," << block_pos.z << "}" << std::endl;
     }
     
     return nullptr;

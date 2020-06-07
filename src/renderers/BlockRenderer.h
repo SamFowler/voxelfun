@@ -1,14 +1,14 @@
 #pragma once
 
+#include "../pch/pch_std.h"
+
 #include "../opengl_api/Shader.hpp"
-#include "../opengl_api/VertexArrayObject.hpp"
-//#include "../camera/PerspectiveCamera.hpp"
+//#include "../opengl_api/VertexArrayObject.hpp"
+
 #include "../camera/Camera.hpp"
 
 #include "../world/Block.h"
-//#include <vector>
 
-#include "../pch/pch_std.h"
 
 #include "Renderables.h"
 
@@ -18,7 +18,6 @@ public:
     void init(const unsigned int& block_size);
     void getNewBlockUpdates(const std::vector<const Block*> updated_blocks);
     void updateVAOs();
-    //void draw(const PerspectiveCamera& camera);
     void draw(const Camera& camera);
     void destroy();
 private:
@@ -27,7 +26,6 @@ private:
     unsigned int m_block_size;
 
     std::vector<const Block*> m_updated_block_list;
-    std::vector<VertexArrayObject> m_block_vaos;
     std::vector<BlockRenderable> m_block_renderables;
     GLint uniform_model;
     GLint uniform_vp;

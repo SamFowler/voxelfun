@@ -137,7 +137,7 @@ public:
 
     void makeBlockMesh_Optimal(const Block& block, const unsigned int& block_size, BlockMesh& block_mesh);
 
-    void addFace(BlockMesh& mesh, const Voxel& voxel, const VoxelInBlockPos& voxel_pos, const Colour& voxel_colour,
+    void addFace(BlockMesh& mesh, const Voxel& voxel, const VoxelPos& voxel_pos, const Colour& voxel_colour,
                     int& element_count, const std::array<GLuint, 12>& face_verts, const GLuint& normal_index);
 
 //private:

@@ -42,7 +42,7 @@ void makeBlockMesh_Culling(const Block& block, const unsigned int& block_size, B
         {
             for (unsigned int x = 0; x < block_size; x++)
             {
-                VoxelInBlockPos voxel_pos = {x,y,z};
+                VoxelPos voxel_pos = {x,y,z};
                 
                 unsigned int voxel_index = block.indexFromInBlockPos( voxel_pos );
 
@@ -630,7 +630,7 @@ void makeBlockMesh_Optimal(const Block& block, const unsigned int& block_size, B
 
 
 
-void addFace(BlockMesh& mesh, const Voxel& voxel, const VoxelInBlockPos& voxel_pos, const Colour& voxel_colour,
+void addFace(BlockMesh& mesh, const Voxel& voxel, const VoxelPos& voxel_pos, const Colour& voxel_colour,
                                  int& element_count, const std::array<GLuint, 12>& face_verts, const GLuint& normal_index)
 {
 
@@ -638,9 +638,9 @@ void addFace(BlockMesh& mesh, const Voxel& voxel, const VoxelInBlockPos& voxel_p
         int index = 0;
         for (int i = 0; i < 4; i++)
         {
-            mesh.vertices.push_back(face_verts[index++] + voxel_pos.pos.x);
-            mesh.vertices.push_back(face_verts[index++] + voxel_pos.pos.y);
-            mesh.vertices.push_back(face_verts[index++] + voxel_pos.pos.z);
+            mesh.vertices.push_back(face_verts[index++] + voxel_pos.x);
+            mesh.vertices.push_back(face_verts[index++] + voxel_pos.y);
+            mesh.vertices.push_back(face_verts[index++] + voxel_pos.z);
 
             mesh.colours.push_back(voxel_colour.r/255.0f);
             mesh.colours.push_back(voxel_colour.g/255.0f);

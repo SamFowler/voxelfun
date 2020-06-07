@@ -29,14 +29,14 @@ Block::Block (BlockPos position, std::vector<Voxel> voxels, std::vector<Colour> 
     }
 
 //Helpers
-unsigned int  Block::indexFromInBlockPos     (const VoxelInBlockPos& voxel_coord) const
+unsigned int  Block::indexFromInBlockPos     (const VoxelPos& voxel_coord) const
 {
-    return (voxel_coord.pos.y*mp_manager.m_block_size_sq) + (voxel_coord.pos.z * mp_manager.m_block_size) + voxel_coord.pos.x;
+    return (voxel_coord.y*mp_manager.m_block_size_sq) + (voxel_coord.z * mp_manager.m_block_size) + voxel_coord.x;
 }
 
-VoxelInBlockPos Block::inBlockPosFromIndex(const unsigned int& index) const
+VoxelPos Block::inBlockPosFromIndex(const unsigned int& index) const
 {  
-    return VoxelInBlockPos( {
+    return VoxelPos( {
         ( index      %  mp_manager.m_block_size),
         ( index      / (mp_manager.m_block_size_sq)),
         ((index/mp_manager.m_block_size)  %  mp_manager.m_block_size)
@@ -52,12 +52,12 @@ glm::ivec3 xyz(int ind, int sz)
     } );
 }
 
-bool Block::isBlockEdge  (const VoxelInBlockPos& voxel_coord) const
+bool Block::isBlockEdge  (const VoxelPos& voxel_coord) const
 {
     return (
-        voxel_coord.pos.x == 0 || (voxel_coord.pos.x + 1) == mp_manager.m_block_size ||
-        voxel_coord.pos.y == 0 || (voxel_coord.pos.y + 1) == mp_manager.m_block_size ||
-        voxel_coord.pos.z == 0 || (voxel_coord.pos.z + 1) == mp_manager.m_block_size
+        voxel_coord.x == 0 || (voxel_coord.x + 1) == mp_manager.m_block_size ||
+        voxel_coord.y == 0 || (voxel_coord.y + 1) == mp_manager.m_block_size ||
+        voxel_coord.z == 0 || (voxel_coord.z + 1) == mp_manager.m_block_size
     );
 } 
 
@@ -138,34 +138,34 @@ Colour Block::getColour(const ColourID& colour_id) const
     return m_block_colours[colour_id];
 }
 
-ColourID Block::getVoxelColourID(const VoxelInBlockPos& voxel_coord) const
+ColourID Block::getVoxelColourID(const VoxelPos& voxel_coord) const
 {
     return m_voxel_data[ indexFromInBlockPos(voxel_coord) ].getColourId();
 }
 
-Colour Block::getVoxelColour(const VoxelInBlockPos& voxel_coord) const
+Colour Block::getVoxelColour(const VoxelPos& voxel_coord) const
 {
     return m_block_colours[ m_voxel_data[ indexFromInBlockPos(voxel_coord) ].getColourId() ];
 }
 
-VoxelType Block::getVoxelType (const VoxelInBlockPos& voxel_coord) const
+VoxelType Block::getVoxelType (const VoxelPos& voxel_coord) const
 {
     return m_voxel_data[ indexFromInBlockPos(voxel_coord) ].getType();
 }
 
-const Voxel& Block::getVoxel(const VoxelInBlockPos& voxel_coord) const
+const Voxel& Block::getVoxel(const VoxelPos& voxel_coord) const
 {
     return m_voxel_data[ indexFromInBlockPos(voxel_coord) ];
 }
 
 // Returns the position of the first occupiable voxel at or directly above the input voxel position
-VoxelInBlockPos Block::getTopVoxelPos (const VoxelInBlockPos& voxel_coord) const
+VoxelPos Block::getTopVoxelPos (const VoxelPos& voxel_coord) const
 {
-    for (unsigned int y = voxel_coord.pos.y; y < mp_manager.m_block_size; y++)
+    for (unsigned int y = voxel_coord.y; y < mp_manager.m_block_size; y++)
     {
-        if( getVoxel( {voxel_coord.pos.x, y, voxel_coord.pos.z} ).isOccupiable() )
+        if( getVoxel( {voxel_coord.x, y, voxel_coord.z} ).isOccupiable() )
         {
-            return {voxel_coord.pos.x, y, voxel_coord.pos.z};
+            return {voxel_coord.x, y, voxel_coord.z};
         }
     }
     return voxel_coord; // TODO: check blocks above or return top of the block instead
@@ -185,7 +185,7 @@ const std::vector<Colour>& Block::getColoursRef() const
 
 // Setters
 
-void Block::setVoxels(const std::vector<VoxelInBlockPos>& voxel_coords, const Colour& colour)
+void Block::setVoxels(const std::vector<VoxelPos>& voxel_coords, const Colour& colour)
 {
     ColourID id = addColour(colour);
     for (auto it : voxel_coords)
@@ -195,7 +195,7 @@ void Block::setVoxels(const std::vector<VoxelInBlockPos>& voxel_coords, const Co
     m_remesh = true;
 }
 
-void Block::setVoxels(const std::vector<VoxelInBlockPos>& voxel_coords, const VoxelType& type)
+void Block::setVoxels(const std::vector<VoxelPos>& voxel_coords, const VoxelType& type)
 {
     for (auto it : voxel_coords)
     {
@@ -204,7 +204,7 @@ void Block::setVoxels(const std::vector<VoxelInBlockPos>& voxel_coords, const Vo
     m_remesh = true;
 }
 
-void Block::setVoxels(const std::vector<VoxelInBlockPos>& voxel_coords, const Voxel& voxel)
+void Block::setVoxels(const std::vector<VoxelPos>& voxel_coords, const Voxel& voxel)
 { 
     for (auto it : voxel_coords)
     {
@@ -214,7 +214,7 @@ void Block::setVoxels(const std::vector<VoxelInBlockPos>& voxel_coords, const Vo
 }
 
 
-void Block::updateNeighbours(const VoxelInBlockPos& voxel_coord)
+void Block::updateNeighbours(const VoxelPos& voxel_coord)
 {
 
     // TODO a lot can be done with this functionality. A list of voxel updates should be created and stored in block data.
@@ -226,12 +226,12 @@ void Block::updateNeighbours(const VoxelInBlockPos& voxel_coord)
 
     //if (isBlockEdge(voxel_coord))
      // set each of the 6 active bits of neighours to false if voxel is on that block edge or to the "isVisible" result of the neighbour in that direction
-    neighbours |= ( (voxel_coord.pos.x     == 0                      ) ? false : (getVoxel({voxel_coord.pos.x - 1, voxel_coord.pos.y    , voxel_coord.pos.z    }).isVisible()) ) << 0;
-    neighbours |= ( (voxel_coord.pos.x + 1 == mp_manager.m_block_size) ? false : (getVoxel({voxel_coord.pos.x + 1, voxel_coord.pos.y    , voxel_coord.pos.z    }).isVisible()) ) << 1;
-    neighbours |= ( (voxel_coord.pos.y     == 0                      ) ? false : (getVoxel({voxel_coord.pos.x    , voxel_coord.pos.y - 1, voxel_coord.pos.z    }).isVisible()) ) << 2;
-    neighbours |= ( (voxel_coord.pos.y + 1 == mp_manager.m_block_size) ? false : (getVoxel({voxel_coord.pos.x    , voxel_coord.pos.y + 1, voxel_coord.pos.z    }).isVisible()) ) << 3;
-    neighbours |= ( (voxel_coord.pos.z     == 0                      ) ? false : (getVoxel({voxel_coord.pos.x    , voxel_coord.pos.y    , voxel_coord.pos.z - 1}).isVisible()) ) << 4;
-    neighbours |= ( (voxel_coord.pos.z + 1 == mp_manager.m_block_size) ? false : (getVoxel({voxel_coord.pos.x    , voxel_coord.pos.y    , voxel_coord.pos.z + 1}).isVisible()) ) << 5;
+    neighbours |= ( (voxel_coord.x     == 0                      ) ? false : (getVoxel({voxel_coord.x - 1, voxel_coord.y    , voxel_coord.z    }).isVisible()) ) << 0;
+    neighbours |= ( (voxel_coord.x + 1 == mp_manager.m_block_size) ? false : (getVoxel({voxel_coord.x + 1, voxel_coord.y    , voxel_coord.z    }).isVisible()) ) << 1;
+    neighbours |= ( (voxel_coord.y     == 0                      ) ? false : (getVoxel({voxel_coord.x    , voxel_coord.y - 1, voxel_coord.z    }).isVisible()) ) << 2;
+    neighbours |= ( (voxel_coord.y + 1 == mp_manager.m_block_size) ? false : (getVoxel({voxel_coord.x    , voxel_coord.y + 1, voxel_coord.z    }).isVisible()) ) << 3;
+    neighbours |= ( (voxel_coord.z     == 0                      ) ? false : (getVoxel({voxel_coord.x    , voxel_coord.y    , voxel_coord.z - 1}).isVisible()) ) << 4;
+    neighbours |= ( (voxel_coord.z + 1 == mp_manager.m_block_size) ? false : (getVoxel({voxel_coord.x    , voxel_coord.y    , voxel_coord.z + 1}).isVisible()) ) << 5;
         //TODO replace the "false" with a check into neighbour blocks
 
   
@@ -321,7 +321,7 @@ void Block::changeVoxelsFromTo(const Voxel& from_voxel, const Voxel& to_voxel)
 
 void Block::printBlock(const bool printVoxels) const
 {
-    std::cout << "[Block] pos{" << m_position.pos.x << " " << m_position.pos.y << " " << m_position.pos.x << "}, num_voxels{" <<
+    std::cout << "[Block] pos{" << m_position.x << " " << m_position.y << " " << m_position.x << "}, num_voxels{" <<
             m_voxel_data.size() << "}, colours{";
     for (auto it : m_block_colours)
     {
