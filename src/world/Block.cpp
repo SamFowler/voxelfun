@@ -29,7 +29,7 @@ Block::Block (BlockPos position, std::vector<Voxel> voxels, std::vector<Colour> 
     }
 
 //Helpers
-unsigned int  Block::indexFromInBlockPos     (const VoxelPos& voxel_coord) const
+unsigned int  Block::indexFromVoxelPos     (const VoxelPos& voxel_coord) const
 {
     return (voxel_coord.y*mp_manager.m_block_size_sq) + (voxel_coord.z * mp_manager.m_block_size) + voxel_coord.x;
 }
@@ -140,22 +140,22 @@ Colour Block::getColour(const ColourID& colour_id) const
 
 ColourID Block::getVoxelColourID(const VoxelPos& voxel_coord) const
 {
-    return m_voxel_data[ indexFromInBlockPos(voxel_coord) ].getColourId();
+    return m_voxel_data[ indexFromVoxelPos(voxel_coord) ].getColourId();
 }
 
 Colour Block::getVoxelColour(const VoxelPos& voxel_coord) const
 {
-    return m_block_colours[ m_voxel_data[ indexFromInBlockPos(voxel_coord) ].getColourId() ];
+    return m_block_colours[ m_voxel_data[ indexFromVoxelPos(voxel_coord) ].getColourId() ];
 }
 
 VoxelType Block::getVoxelType (const VoxelPos& voxel_coord) const
 {
-    return m_voxel_data[ indexFromInBlockPos(voxel_coord) ].getType();
+    return m_voxel_data[ indexFromVoxelPos(voxel_coord) ].getType();
 }
 
 const Voxel& Block::getVoxel(const VoxelPos& voxel_coord) const
 {
-    return m_voxel_data[ indexFromInBlockPos(voxel_coord) ];
+    return m_voxel_data[ indexFromVoxelPos(voxel_coord) ];
 }
 
 // Returns the position of the first occupiable voxel at or directly above the input voxel position
@@ -190,7 +190,7 @@ void Block::setVoxels(const std::vector<VoxelPos>& voxel_coords, const Colour& c
     ColourID id = addColour(colour);
     for (auto it : voxel_coords)
     {
-        m_voxel_data[ indexFromInBlockPos(it) ].setColourId(id);
+        m_voxel_data[ indexFromVoxelPos(it) ].setColourId(id);
     }
     m_remesh = true;
 }
@@ -199,7 +199,7 @@ void Block::setVoxels(const std::vector<VoxelPos>& voxel_coords, const VoxelType
 {
     for (auto it : voxel_coords)
     {
-        m_voxel_data[ indexFromInBlockPos(it) ].setType(type);
+        m_voxel_data[ indexFromVoxelPos(it) ].setType(type);
     }
     m_remesh = true;
 }
@@ -208,7 +208,7 @@ void Block::setVoxels(const std::vector<VoxelPos>& voxel_coords, const Voxel& vo
 { 
     for (auto it : voxel_coords)
     {
-        m_voxel_data[ indexFromInBlockPos(it) ] = voxel;
+        m_voxel_data[ indexFromVoxelPos(it) ] = voxel;
     }
     m_remesh = true;
 }
@@ -236,7 +236,7 @@ void Block::updateNeighbours(const VoxelPos& voxel_coord)
 
   
     //std::cout << std::hex << (int)neighbours << std::endl;
-    m_voxel_data[ indexFromInBlockPos(voxel_coord) ].setNeighbours(neighbours);
+    m_voxel_data[ indexFromVoxelPos(voxel_coord) ].setNeighbours(neighbours);
 }
 
 void Block::updateAllNeighbours()

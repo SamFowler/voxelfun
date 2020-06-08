@@ -22,7 +22,7 @@ public:
     Block (BlockPos position, std::vector<Voxel> voxels, std::vector<Colour> colours, BlockManager& manager);
 
     // Helpers
-    unsigned int    indexFromInBlockPos   (const VoxelPos& voxel_coord) const;
+    unsigned int    indexFromVoxelPos   (const VoxelPos& voxel_coord) const;
     VoxelPos inBlockPosFromIndex   (const unsigned int&    index      ) const;
 
     bool isBlockEdge  (const VoxelPos& voxel_coord) const;

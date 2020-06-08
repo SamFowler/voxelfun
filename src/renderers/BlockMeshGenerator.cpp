@@ -44,7 +44,7 @@ void makeBlockMesh_Culling(const Block& block, const unsigned int& block_size, B
             {
                 VoxelPos voxel_pos = {x,y,z};
                 
-                unsigned int voxel_index = block.indexFromInBlockPos( voxel_pos );
+                unsigned int voxel_index = block.indexFromVoxelPos( voxel_pos );
 
                 Voxel voxel = block.getVoxel( voxel_pos );
 
