@@ -1,4 +1,4 @@
-#include "BlockManager.h"
+/* #include "BlockManager.h"
 
 //#include <iostream> //TODO: replace with log
  
@@ -98,3 +98,4 @@ const Block* BlockManager::getBlockPtr(const BlockPos& block_pos) const
     
     return nullptr;
 }
+ */

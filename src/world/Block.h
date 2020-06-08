@@ -19,8 +19,8 @@ public:
     //Constructors
     Block ();
     Block (Block block, unsigned int& block_size);//BlockManager& manager_ptr);
-    Block (const BlockPos& position, unsigned int& block_size); //BlockManager& manager);
-    Block (BlockPos position, std::vector<Voxel> voxels, std::vector<Colour> colours, unsigned int& block_size); //BlockManager& manager);
+    Block (unsigned int& block_size); //BlockManager& manager);
+    Block (std::vector<Voxel> voxels, std::vector<Colour> colours, unsigned int& block_size); //BlockManager& manager);
 
     // Helpers
     unsigned int    indexFromVoxelPos   (const VoxelPos& voxel_coord) const;
@@ -36,7 +36,7 @@ public:
     ColourID findColour (const Colour& colour) const;
 
     // Getters
-    BlockPos    getPosition   () const  { return m_position;   }
+    //BlockPos    getPosition   () const  { return m_position;   }
 
     Colour     getColour       (const ColourID&        colour_id  ) const;
     ColourID   getVoxelColourID(const VoxelPos& voxel_coord) const;
@@ -49,7 +49,7 @@ public:
     const std::vector<Colour>& getColoursRef() const;
 
     // Setters
-    void setPosition(const BlockPos& position) { m_position = position; }
+    //void setPosition(const BlockPos& position) { m_position = position; }
     
     void setVoxels(const std::vector<VoxelPos>& voxel_coords, const Colour&    colour);
     void setVoxels(const std::vector<VoxelPos>& voxel_coords, const VoxelType& type  );
@@ -81,7 +81,7 @@ private:
     //BlockManager& mp_manager;
     unsigned int m_block_size;
 
-    BlockPos   m_position;
+    //BlockPos   m_position;
     //glm::ivec3 m_dimensions;
     //size_t     m_volume;
 

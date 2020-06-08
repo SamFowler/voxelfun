@@ -22,16 +22,16 @@ void BlockRenderer::init(const unsigned int& block_size)
 
 }
  
-void BlockRenderer::getNewBlockUpdates(const std::vector<const Block*> updated_blocks)
+/* void BlockRenderer::getNewBlockUpdates(const std::vector<const Block*> updated_blocks)
 {
     for (auto block_ptr : updated_blocks)
     {
         //TODO: check to see if block is already on remesh list? 
         m_blocks_to_remesh.push_back(block_ptr);
     }
-}
+} */
 
-std::vector<const Block*>& BlockRenderer::getRefToRemeshList()
+std::vector<std::pair<const BlockPos, const Block*> >& BlockRenderer::getRefToRemeshList()
 {
     return m_blocks_to_remesh;
 }
@@ -40,9 +40,9 @@ void BlockRenderer::updateVAOs()
 {
     for (auto block_ptr : m_blocks_to_remesh)
     {
-        if (block_ptr != nullptr)
+        if (block_ptr.second != nullptr)
         {
-            m_block_renderables.push_back({block_ptr->getPosition(), BlockMeshGenerator::makeBlockVAO(*block_ptr, m_block_size, BlockMeshGenerator::GREEDY_MESH) });
+            m_block_renderables.push_back({block_ptr.first, BlockMeshGenerator::makeBlockVAO(*block_ptr.second, m_block_size, BlockMeshGenerator::GREEDY_MESH) });
         }
     }
 

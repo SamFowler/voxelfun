@@ -12,6 +12,7 @@
 class World
 {
 public:
+    World(unsigned int block_size) : m_sector(block_size) {};
     void init();
     void update(const float& timestep);
     void render(const Camera& camera);
@@ -21,7 +22,7 @@ public:
 private:
     unsigned int m_block_size;
 
-    BlockManager m_block_manager;
+    //BlockManager m_block_manager;
     BlockRenderer m_block_renderer;
 
     Sector m_sector;

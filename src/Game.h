@@ -12,6 +12,7 @@
 class Game 
 {
 public:
+    Game() : m_world(32) {};
     bool init();
     void shutdown();
 

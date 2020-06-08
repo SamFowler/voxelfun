@@ -1,6 +1,6 @@
 #include "Sector.h"
 
-const Block* Sector::addBlock(const BlockPos& position, const BlockMakeType& type)
+std::pair<const BlockPos, const Block*> Sector::addBlock(const BlockPos& position, const BlockMakeType& type)
 {
     std::vector<Voxel> voxels;
     voxels.reserve(sizeof(Voxel)*m_block_size*m_block_size*m_block_size);
@@ -11,49 +11,52 @@ const Block* Sector::addBlock(const BlockPos& position, const BlockMakeType& typ
     return addBlock(position, voxels, colours);
 }
 
-const Block* Sector::addBlock(const BlockPos& block_pos, const std::vector<Voxel>& voxels, const std::vector<Colour>& colours)
+std::pair<const BlockPos, const Block*> Sector::addBlock(const BlockPos& block_pos, const std::vector<Voxel>& voxels, const std::vector<Colour>& colours)
 {
     unsigned int column_index = getBlockColumnIndexFromBlockPos(block_pos);
     if (m_block_column_details[column_index].isBlockEmpty(block_pos.y))
     {
         unsigned int block_index = getBlockIndexFromBlockPos(block_pos);
-        m_blocks[block_index] = {block_pos, voxels, colours, m_block_size};
+        m_blocks[block_index] = {voxels, colours, m_block_size};
         m_blocks[block_index].updateAllNeighbours();
         m_blocks[block_index].printBlock();
 
         if (m_block_column_details[column_index].addBlock(block_pos.y))
-            return &(m_blocks[block_index]); // if add block is visible, return it to be meshed
+            return std::make_pair(block_pos, &(m_blocks[block_index])); // if add block is visible, return it to be meshed
     }
-    return nullptr;
+    return std::make_pair(BlockPos(255,255,255), nullptr);
 }
 
 void Sector::editBlock(const BlockPos& block_pos /*, voxels/colours/changes */)
 {
     //don't actually edit the block here, add it to list of blocks to update
     // this is done so updates are processed all at once in each frame
-    m_blocks_to_update.push_back(getBlockIndexFromBlockPos(block_pos)/*, <<<changes to make>>> */);
+    
+    //m_blocks_to_update.push_back(getBlockIndexFromBlockPos(block_pos)/*, <<<changes to make>>> */);
+    m_blocks_to_update.push_back(block_pos /*, <<<changes to make>>> */);
 }
 
-void Sector::updateBlocks(std::vector<const Block*> blocks_to_remesh)
+void Sector::updateBlocks(std::vector<std::pair<const BlockPos, const Block*>> blocks_to_remesh)
 {
     if (m_blocks_to_update.empty())
         return;
     
-    std::sort(m_blocks_to_update.begin(), m_blocks_to_update.end()); // sort indexes to be cache friendly
+    //std::sort(m_blocks_to_update.begin(), m_blocks_to_update.end()); // sort indexes to be cache friendly
 
-    for (auto it : m_blocks_to_update)
+    for (auto block_pos : m_blocks_to_update)
     {
+        unsigned int index = getBlockIndexFromBlockPos(block_pos);
         /* 
         //process block updates
-        m_blocks[it].update( --voxels/colours/etc);
+        m_blocks[index].update( --voxels/colours/etc);
         */
 
        //if (change actually happend)
-        blocks_to_remesh.push_back( &(m_blocks[it]) );
+        blocks_to_remesh.push_back( std::make_pair(block_pos, &(m_blocks[index]) ) );
     }
 
     m_blocks_to_update.clear();
-    m_blocks_to_update.reserve(16*sizeof(unsigned int));
+    m_blocks_to_update.reserve(8*sizeof(BlockPos));
     
 }
 

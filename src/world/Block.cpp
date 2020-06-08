@@ -11,23 +11,23 @@ Block::Block ()
 
 Block::Block (Block block, unsigned int& block_size) //BlockManager& manager_ptr)
     : m_voxel_data(std::move(block.getVoxelDataRef())),   m_block_colours(std::move(block.getColoursRef())),
-      m_block_size  (block_size),         m_position     (std::move(block.getPosition())),
+      m_block_size  (block_size),
       m_remesh    (true)
     {
         std::cout << "block created" << std::endl;
     }
 
-Block::Block (const BlockPos& position, unsigned int& block_size) //BlockManager& manager)
-    : m_block_size(block_size), m_position(position),
+Block::Block (unsigned int& block_size) //BlockManager& manager)
+    : m_block_size(block_size),
     m_remesh(true)
 {
     
 }
 
 
-Block::Block (BlockPos position, std::vector<Voxel> voxels, std::vector<Colour> colours, unsigned int& block_size) //BlockManager& manager)
+Block::Block (std::vector<Voxel> voxels, std::vector<Colour> colours, unsigned int& block_size) //BlockManager& manager)
     : m_voxel_data(std::move(voxels)),   m_block_colours(std::move(colours)),
-      m_block_size  (block_size),         m_position     (std::move(position)),
+      m_block_size  (block_size), 
       m_remesh    (true)
     {
         std::cout << "block created" << std::endl;
@@ -326,7 +326,8 @@ void Block::changeVoxelsFromTo(const Voxel& from_voxel, const Voxel& to_voxel)
 
 void Block::printBlock(const bool printVoxels) const
 {
-    std::cout << "[Block] pos{" << m_position.x << " " << m_position.y << " " << m_position.x << "}, num_voxels{" <<
+    //std::cout << "[Block] pos{" << m_position.x << " " << m_position.y << " " << m_position.x << "}, num_voxels{" <<
+    std::cout << "[Block] num_voxels{" <<
             m_voxel_data.size() << "}, colours{";
     for (auto it : m_block_colours)
     {
