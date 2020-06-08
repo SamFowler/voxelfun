@@ -52,7 +52,8 @@ void BlockRenderer::draw(const Camera& camera)
     glm::mat4 vp = camera.getProjectionViewMatrix();
     
     glm::mat4 model(1.0f);
-    glm::mat4 scale = glm::scale(model, glm::vec3(0.01, 0.01, 0.01));
+    //glm::mat4 scale = glm::scale(model, glm::vec3(1.0, 1.0, 1.0));
+    glm::mat4 scale = glm::scale(model, glm::vec3(0.2, 0.2, 0.2));
     glm::mat4 normal(0.0f);
     for (auto it = m_block_renderables.begin(); it != m_block_renderables.end(); ++it)
     {   

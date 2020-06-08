@@ -7,6 +7,8 @@ PerspectiveCameraController::PerspectiveCameraController(float fov, float aspect
     m_z_near = z_near;
     m_z_far = z_far;
 
+    m_camera_speed = 25.0f;
+
     m_fov = fov;
 
     m_camera.setPerspectiveProjection(m_fov, m_aspect_ratio, m_z_near, m_z_far);

@@ -4,14 +4,14 @@
 void World::init()
 {
 
-    m_block_size = 8;
+    m_block_size = 32;
 
     m_block_manager = BlockManager(m_block_size);
     m_block_manager.init();
     
-    for (int i = 0; i < 45; i++)
+    for (int i = 0; i < 8; i++)
     {
-        for (int j = 0; j < 45; j++)
+        for (int j = 0; j < 8; j++)
         {
             if((rand() % 6) == 0)
                 m_block_manager.addBlock({i,-1,j}, BlockMakeType::REVEAL_DIRT_CHUNK);
@@ -24,9 +24,9 @@ void World::init()
                 m_block_manager.addBlock({i,0,j}, BlockMakeType::TREE_CHUNK);
                 m_block_manager.addBlock({i,1,j}, BlockMakeType::TREE_CHUNK);
                 m_block_manager.addBlock({i,2,j}, BlockMakeType::TREE_CHUNK);
-                m_block_manager.addBlock({i,3,j}, BlockMakeType::TREE_CHUNK);
-                m_block_manager.addBlock({i,4,j}, BlockMakeType::TREE_CHUNK);
-                m_block_manager.addBlock({i,5,j}, BlockMakeType::TREE_CHUNK);
+                //m_block_manager.addBlock({i,3,j}, BlockMakeType::TREE_CHUNK);
+                //m_block_manager.addBlock({i,4,j}, BlockMakeType::TREE_CHUNK);
+                //m_block_manager.addBlock({i,5,j}, BlockMakeType::TREE_CHUNK);
             }
         }   
     }
@@ -38,7 +38,7 @@ void World::init()
     //m_block_manager.addBlock({1,0,0}, BlockMakeType::GRASS_CHUNK);
     //m_block_manager.addBlock({0,0,0}, BlockMakeType::RANDOM_CHUNK);
    
-    m_block_manager.addBlock({10, 15, 10}, BlockMakeType::LIGHT_CHUNK);
+    //m_block_manager.addBlock({10, 15, 10}, BlockMakeType::LIGHT_CHUNK);
   
     //m_block_manager.addBlock({-2, -1, -2}, BlockMakeType::RANDOM_CHUNK);
     //m_block_manager.addBlock({-2, -1, -3}, BlockMakeType::RANDOM_CHUNK);
