@@ -4,25 +4,30 @@
 
 #include "BlockManager.h"
 
-Block::Block (Block block, BlockManager& manager_ptr)
+Block::Block ()
+{
+
+}
+
+Block::Block (Block block, unsigned int& block_size) //BlockManager& manager_ptr)
     : m_voxel_data(std::move(block.getVoxelDataRef())),   m_block_colours(std::move(block.getColoursRef())),
-      mp_manager  (manager_ptr),         m_position     (std::move(block.getPosition())),
+      m_block_size  (block_size),         m_position     (std::move(block.getPosition())),
       m_remesh    (true)
     {
         std::cout << "block created" << std::endl;
     }
 
-Block::Block (const BlockPos& position, BlockManager& manager)
-    : mp_manager(manager), m_position(position),
+Block::Block (const BlockPos& position, unsigned int& block_size) //BlockManager& manager)
+    : m_block_size(block_size), m_position(position),
     m_remesh(true)
 {
     
 }
 
 
-Block::Block (BlockPos position, std::vector<Voxel> voxels, std::vector<Colour> colours, BlockManager& manager)
+Block::Block (BlockPos position, std::vector<Voxel> voxels, std::vector<Colour> colours, unsigned int& block_size) //BlockManager& manager)
     : m_voxel_data(std::move(voxels)),   m_block_colours(std::move(colours)),
-      mp_manager  (manager),         m_position     (std::move(position)),
+      m_block_size  (block_size),         m_position     (std::move(position)),
       m_remesh    (true)
     {
         std::cout << "block created" << std::endl;
@@ -31,15 +36,15 @@ Block::Block (BlockPos position, std::vector<Voxel> voxels, std::vector<Colour> 
 //Helpers
 unsigned int  Block::indexFromVoxelPos     (const VoxelPos& voxel_coord) const
 {
-    return (voxel_coord.y*mp_manager.m_block_size_sq) + (voxel_coord.z * mp_manager.m_block_size) + voxel_coord.x;
+    return (voxel_coord.y*m_block_size*m_block_size) + (voxel_coord.z * m_block_size) + voxel_coord.x;
 }
 
 VoxelPos Block::inBlockPosFromIndex(const unsigned int& index) const
 {  
     return VoxelPos( {
-        ( index      %  mp_manager.m_block_size),
-        ( index      / (mp_manager.m_block_size_sq)),
-        ((index/mp_manager.m_block_size)  %  mp_manager.m_block_size)
+        ( index      %  m_block_size),
+        ( index      / (m_block_size*m_block_size)),
+        ((index/m_block_size)  %  m_block_size)
     } );
 }
 
@@ -55,9 +60,9 @@ glm::ivec3 xyz(int ind, int sz)
 bool Block::isBlockEdge  (const VoxelPos& voxel_coord) const
 {
     return (
-        voxel_coord.x == 0 || (voxel_coord.x + 1) == mp_manager.m_block_size ||
-        voxel_coord.y == 0 || (voxel_coord.y + 1) == mp_manager.m_block_size ||
-        voxel_coord.z == 0 || (voxel_coord.z + 1) == mp_manager.m_block_size
+        voxel_coord.x == 0 || (voxel_coord.x + 1) == m_block_size ||
+        voxel_coord.y == 0 || (voxel_coord.y + 1) == m_block_size ||
+        voxel_coord.z == 0 || (voxel_coord.z + 1) == m_block_size
     );
 } 
 
@@ -161,7 +166,7 @@ const Voxel& Block::getVoxel(const VoxelPos& voxel_coord) const
 // Returns the position of the first occupiable voxel at or directly above the input voxel position
 VoxelPos Block::getTopVoxelPos (const VoxelPos& voxel_coord) const
 {
-    for (unsigned int y = voxel_coord.y; y < mp_manager.m_block_size; y++)
+    for (unsigned int y = voxel_coord.y; y < m_block_size; y++)
     {
         if( getVoxel( {voxel_coord.x, y, voxel_coord.z} ).isOccupiable() )
         {
@@ -227,11 +232,11 @@ void Block::updateNeighbours(const VoxelPos& voxel_coord)
     //if (isBlockEdge(voxel_coord))
      // set each of the 6 active bits of neighours to false if voxel is on that block edge or to the "isVisible" result of the neighbour in that direction
     neighbours |= ( (voxel_coord.x     == 0                      ) ? false : (getVoxel({voxel_coord.x - 1, voxel_coord.y    , voxel_coord.z    }).isVisible()) ) << 0;
-    neighbours |= ( (voxel_coord.x + 1 == mp_manager.m_block_size) ? false : (getVoxel({voxel_coord.x + 1, voxel_coord.y    , voxel_coord.z    }).isVisible()) ) << 1;
+    neighbours |= ( (voxel_coord.x + 1 == m_block_size) ? false : (getVoxel({voxel_coord.x + 1, voxel_coord.y    , voxel_coord.z    }).isVisible()) ) << 1;
     neighbours |= ( (voxel_coord.y     == 0                      ) ? false : (getVoxel({voxel_coord.x    , voxel_coord.y - 1, voxel_coord.z    }).isVisible()) ) << 2;
-    neighbours |= ( (voxel_coord.y + 1 == mp_manager.m_block_size) ? false : (getVoxel({voxel_coord.x    , voxel_coord.y + 1, voxel_coord.z    }).isVisible()) ) << 3;
+    neighbours |= ( (voxel_coord.y + 1 == m_block_size) ? false : (getVoxel({voxel_coord.x    , voxel_coord.y + 1, voxel_coord.z    }).isVisible()) ) << 3;
     neighbours |= ( (voxel_coord.z     == 0                      ) ? false : (getVoxel({voxel_coord.x    , voxel_coord.y    , voxel_coord.z - 1}).isVisible()) ) << 4;
-    neighbours |= ( (voxel_coord.z + 1 == mp_manager.m_block_size) ? false : (getVoxel({voxel_coord.x    , voxel_coord.y    , voxel_coord.z + 1}).isVisible()) ) << 5;
+    neighbours |= ( (voxel_coord.z + 1 == m_block_size) ? false : (getVoxel({voxel_coord.x    , voxel_coord.y    , voxel_coord.z + 1}).isVisible()) ) << 5;
         //TODO replace the "false" with a check into neighbour blocks
 
   
@@ -244,11 +249,11 @@ void Block::updateAllNeighbours()
     std::cout << "updating neighbours" << std::endl;
     //TODO test performance when looping 3 times like this or instead iterating through voxel vector
     //      make sure only doing one conversion between index and coords 
-    for (unsigned int y = 0; y < mp_manager.m_block_size; y++)
+    for (unsigned int y = 0; y < m_block_size; y++)
     {
-        for (unsigned int z = 0; z < mp_manager.m_block_size; z++)
+        for (unsigned int z = 0; z < m_block_size; z++)
         {
-            for (unsigned int x = 0; x < mp_manager.m_block_size; x++)
+            for (unsigned int x = 0; x < m_block_size; x++)
             {
                 updateNeighbours({x,y,z});
             }

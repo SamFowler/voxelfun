@@ -11,6 +11,8 @@ class BlockRenderer
 public:
     void init(const unsigned int& block_size);
     void getNewBlockUpdates(const std::vector<const Block*> updated_blocks);
+
+    std::vector<const Block*>& getRefToRemeshList();
     void updateVAOs();
     void draw(const Camera& camera);
     void destroy();
@@ -19,7 +21,7 @@ private:
     float m_block_offset;
     unsigned int m_block_size;
 
-    std::vector<const Block*> m_updated_block_list;
+    std::vector<const Block*> m_blocks_to_remesh;
     std::vector<BlockRenderable> m_block_renderables;
     GLint uniform_model;
     GLint uniform_vp;

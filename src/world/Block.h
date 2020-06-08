@@ -17,9 +17,10 @@ class Block
 {
 public:
     //Constructors
-    Block (Block block, BlockManager& manager_ptr);
-    Block (const BlockPos& position, BlockManager& manager);
-    Block (BlockPos position, std::vector<Voxel> voxels, std::vector<Colour> colours, BlockManager& manager);
+    Block ();
+    Block (Block block, unsigned int& block_size);//BlockManager& manager_ptr);
+    Block (const BlockPos& position, unsigned int& block_size); //BlockManager& manager);
+    Block (BlockPos position, std::vector<Voxel> voxels, std::vector<Colour> colours, unsigned int& block_size); //BlockManager& manager);
 
     // Helpers
     unsigned int    indexFromVoxelPos   (const VoxelPos& voxel_coord) const;
@@ -77,7 +78,8 @@ private:
     std::vector<Colour> m_block_colours;
     std::queue<ColourID> m_free_colour_ids;
 
-    BlockManager& mp_manager;
+    //BlockManager& mp_manager;
+    unsigned int m_block_size;
 
     BlockPos   m_position;
     //glm::ivec3 m_dimensions;

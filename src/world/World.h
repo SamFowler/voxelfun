@@ -7,6 +7,7 @@
 #include "../renderers/BlockRenderer.h"
 #include "../camera/Camera.h"
 
+#include "Sector.h"
 
 class World
 {
@@ -22,5 +23,6 @@ private:
 
     BlockManager m_block_manager;
     BlockRenderer m_block_renderer;
- 
+
+    Sector m_sector;
 };

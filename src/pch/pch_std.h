@@ -14,6 +14,7 @@
 #include <cmath>
 
 #include <vector>
+#include <algorithm>
 #include <array>
 #include <memory>
 #include <iostream>

@@ -27,13 +27,18 @@ void BlockRenderer::getNewBlockUpdates(const std::vector<const Block*> updated_b
     for (auto block_ptr : updated_blocks)
     {
         //TODO: check to see if block is already on remesh list? 
-        m_updated_block_list.push_back(block_ptr);
+        m_blocks_to_remesh.push_back(block_ptr);
     }
+}
+
+std::vector<const Block*>& BlockRenderer::getRefToRemeshList()
+{
+    return m_blocks_to_remesh;
 }
 
 void BlockRenderer::updateVAOs() 
 {
-    for (auto block_ptr : m_updated_block_list)
+    for (auto block_ptr : m_blocks_to_remesh)
     {
         if (block_ptr != nullptr)
         {
@@ -42,7 +47,7 @@ void BlockRenderer::updateVAOs()
     }
 
     //TODO not all meshes may get updated per frame if there are many and it takes time, so don't always clear this list
-    m_updated_block_list.clear();
+    m_blocks_to_remesh.clear();
 }
 
 void BlockRenderer::draw(const Camera& camera)
@@ -68,7 +73,7 @@ void BlockRenderer::draw(const Camera& camera)
 
 void BlockRenderer::destroy()
 {
-    m_updated_block_list.clear();
+    m_blocks_to_remesh.clear();
     m_block_renderables.clear();
     m_shader.destroy();
 }
