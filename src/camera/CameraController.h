@@ -16,6 +16,9 @@ public:
 
     void printCamera();
 
+    glm::vec3 getCamPos() const {return m_camera_position;}
+    glm::vec3 getCamRot() const {return m_camera_rotation;}
+
 protected:
 
     void updateYaw(const float& amount);

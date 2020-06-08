@@ -14,6 +14,23 @@ PerspectiveCameraController::PerspectiveCameraController(float fov, float aspect
     m_camera.setPerspectiveProjection(m_fov, m_aspect_ratio, m_z_near, m_z_far);
 }
 
+PerspectiveCameraController::PerspectiveCameraController(float fov, float aspect_ratio, float z_near, float z_far, const glm::vec3& camera_pos, const glm::vec3& camera_rot) 
+: m_fov(fov)
+{
+    m_aspect_ratio = aspect_ratio;
+    m_z_near = z_near;
+    m_z_far = z_far;
+
+    m_camera_position = camera_pos;
+    m_camera_rotation = camera_rot;
+
+    m_camera_speed = 25.0f;
+
+    m_fov = fov;
+
+    m_camera.setPerspectiveProjection(m_fov, m_aspect_ratio, m_z_near, m_z_far);
+}
+
 void PerspectiveCameraController::update(Input& input, const float timestep)
 {
 

@@ -12,6 +12,7 @@ bool Game::init()
     //m_entities.init();
 
     m_camera_controller = std::make_unique<PerspectiveCameraController>(45, (1280.0f/960.0f), 0.1f, 500.0f);
+    m_is_orthographic = false;
     //m_camera_controller = std::make_unique<OrthographicCameraController>(1280.0f/960.0f);
 
     m_is_running = true;
@@ -24,6 +25,23 @@ bool Game::handleInput(Input& input)
     if (input.wasKeyPressed(SDLK_ESCAPE) || input.isQuit())
     {
         m_is_running = false;
+    }
+
+    if (input.wasKeyReleased(SDLK_c))
+    {
+        glm::vec3 pos = m_camera_controller->getCamPos();
+        glm::vec3 rot = m_camera_controller->getCamRot();
+        if (m_is_orthographic == true) 
+        {
+            m_camera_controller = std::make_unique<PerspectiveCameraController>(45, (1280.0f/960.0f), 0.1f, 500.0f, pos, rot);
+            m_is_orthographic = false;
+        }
+        else
+        {
+            m_camera_controller = std::make_unique<OrthographicCameraController>(1280.0f/960.0f, 0.1f, 100.0f, pos, rot);
+            m_is_orthographic = true;
+        }
+
     }
     
     if (input.wasButtonPressed(SDL_BUTTON_LEFT))
