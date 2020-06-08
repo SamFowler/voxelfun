@@ -24,7 +24,7 @@ VertexArrayObject makeBlockVAO(const Block& block, const unsigned int& block_siz
     else 
         makeBlockMesh_Culling(block,block_size, block_mesh);
 
-    return block_mesh.createBlockBuffer();
+    return block_mesh.createBuffer();
 }
 
 void makeBlockMesh_Naive  (const Block& block, const unsigned int& block_size, BlockMesh& block_mesh)

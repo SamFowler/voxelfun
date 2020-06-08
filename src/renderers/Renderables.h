@@ -5,8 +5,8 @@
 
 #include "../opengl_api/VertexArrayObject.h"
 
-struct BlockRenderable final
+struct WorldRenderable final
 {
-    BlockPos position;
+    WorldPos position;
     VertexArrayObject vao;
 };

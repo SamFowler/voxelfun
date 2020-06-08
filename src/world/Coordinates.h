@@ -4,10 +4,12 @@
 
 //using ChunkPos = glm::ivec3;
 //using BlockPos = glm::uvec3;
-using BlockPos = glm::ivec3;
-using VoxelPos = glm::uvec3;
 
+using VoxelPos = glm::uvec3;
+using BlockPos = glm::uvec3;
 using SectorPos = glm::ivec3;
+
+using WorldPos = glm::ivec3;
 
 struct PositionHash 
 {

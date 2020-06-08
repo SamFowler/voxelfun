@@ -1,7 +1,8 @@
 #include "BlockRenderer.h"
 
 #include "BlockMeshGenerator.h"
- 
+#include "WireframeMeshGenerator.h"
+
 void BlockRenderer::init(const unsigned int& block_size)
 {
     m_block_offset = (float)block_size;
@@ -20,6 +21,13 @@ void BlockRenderer::init(const unsigned int& block_size)
     glUniform3fv(uniform_lightpos, 1, glm::value_ptr(light_position));
     //glUniformMatrixfv(uniform_mvp, 1, GL_FALSE, glm::value_ptr(vp * model));
 
+
+    m_wire_shader.create("wire_cube", "wire_cube");
+    m_wire_shader.use();
+    wire_uniform_vp = m_wire_shader.getUniformLocation("vp");
+    wire_uniform_model = m_wire_shader.getUniformLocation("model");
+
+
 }
  
 /* void BlockRenderer::getNewBlockUpdates(const std::vector<const Block*> updated_blocks)
@@ -36,13 +44,26 @@ std::vector<std::pair<const BlockPos, const Block*> >& BlockRenderer::getRefToRe
     return m_blocks_to_remesh;
 }
 
+void BlockRenderer::addSelectorVAO(WorldPos renderable_pos)
+{
+    mp_wire_selector_renderable = std::make_unique<WorldRenderable>();
+    mp_wire_selector_renderable->position = renderable_pos;
+    mp_wire_selector_renderable->vao = WireframeMeshGenerator::makeBlockVAO({255, 0, 255, 0});
+}
+
+void BlockRenderer::updateSelectorPosition(const WorldPos& selector_pos)
+{
+    mp_wire_selector_renderable->position = selector_pos;
+}
+
+
 void BlockRenderer::updateVAOs() 
 {
     for (auto block_ptr : m_blocks_to_remesh)
     {
         if (block_ptr.second != nullptr)
         {
-            m_block_renderables.push_back({block_ptr.first, BlockMeshGenerator::makeBlockVAO(*block_ptr.second, m_block_size, BlockMeshGenerator::GREEDY_MESH) });
+            m_world_renderables.push_back({block_ptr.first, BlockMeshGenerator::makeBlockVAO(*block_ptr.second, m_block_size, BlockMeshGenerator::GREEDY_MESH) });
         }
     }
 
@@ -60,7 +81,7 @@ void BlockRenderer::draw(const Camera& camera)
     //glm::mat4 scale = glm::scale(model, glm::vec3(1.0, 1.0, 1.0));
     glm::mat4 scale = glm::scale(model, glm::vec3(0.4, 0.4, 0.4));
     glm::mat4 normal(0.0f);
-    for (auto it = m_block_renderables.begin(); it != m_block_renderables.end(); ++it)
+    for (auto it = m_world_renderables.begin(); it != m_world_renderables.end(); ++it)
     {   
         it->vao.getDrawable().bind();
         model = glm::translate(scale, glm::vec3(it->position) * m_block_offset);
@@ -69,11 +90,21 @@ void BlockRenderer::draw(const Camera& camera)
 
         it->vao.getDrawable().draw();
     }
+
+
+    m_wire_shader.use();
+    mp_wire_selector_renderable->vao.getDrawable().bind();
+    model = glm::translate(scale, glm::vec3(mp_wire_selector_renderable->position));
+    glUniformMatrix4fv(wire_uniform_vp, 1, GL_FALSE, glm::value_ptr(vp));
+    glUniformMatrix4fv(wire_uniform_model, 1, GL_FALSE, glm::value_ptr(model));
+
+    mp_wire_selector_renderable->vao.getDrawable().drawWire();
+
 }
 
 void BlockRenderer::destroy()
 {
     m_blocks_to_remesh.clear();
-    m_block_renderables.clear();
+    m_world_renderables.clear();
     m_shader.destroy();
 }

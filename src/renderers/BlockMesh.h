@@ -8,12 +8,9 @@ class VertexArrayObject;
 
 class BlockMesh
 {
-
 public:
-
     VertexArrayObject createBuffer();
-    VertexArrayObject createBlockBuffer();
-
+    VertexArrayObject createWireBuffer();
 
     std::vector<GLuint> vertices;
     std::vector<GLfloat> colours;

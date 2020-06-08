@@ -11,7 +11,7 @@ public:
     void bindAndDraw(GLenum draw_mode = GL_TRIANGLES) const;
     void bind() const;
     void draw(GLenum draw_mode = GL_TRIANGLES) const;
-
+    void drawWire() const;
 private:
     const GLuint m_id = 0;
     const GLsizei m_num_elements = 0;

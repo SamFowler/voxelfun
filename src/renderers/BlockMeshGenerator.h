@@ -63,10 +63,4 @@ namespace BlockMeshGenerator
     void addFace(BlockMesh& mesh, const Voxel& voxel, const VoxelPos& voxel_pos, const Colour& voxel_colour,
                     int& element_count, const std::array<GLuint, 12>& face_verts, const GLuint& normal_index);
 
-//private:
-    //unsigned int m_block_size;
-    //unsigned int m_block_size_sq;
-    //unsigned int m_block_volume;
-
-
 };

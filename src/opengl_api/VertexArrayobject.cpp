@@ -29,6 +29,11 @@ void DrawableVAO::draw(GLenum drawMode) const
     glDrawElements(drawMode, m_num_elements, GL_UNSIGNED_INT, nullptr);
 }
 
+void DrawableVAO::drawWire() const
+{
+    glDrawArrays(GL_LINES, 0, 24);
+}
+
 
 
 /* 

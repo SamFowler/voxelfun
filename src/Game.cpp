@@ -43,7 +43,7 @@ void Game::update(Input& input, const float& timestep)
 
     m_camera_controller->update(input, timestep);
 
-    m_world.update(timestep);
+    m_world.update(input, timestep);
 
     //m_camera.update(timestep);
     //m_player.update(timestep);
