@@ -81,11 +81,5 @@ private:
     //BlockManager& mp_manager;
     unsigned int m_block_size;
 
-    //BlockPos   m_position;
-    //glm::ivec3 m_dimensions;
-    //size_t     m_volume;
-
-    bool m_remesh;
-    //bool m_is_empty;
 
 };

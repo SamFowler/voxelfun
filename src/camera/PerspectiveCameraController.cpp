@@ -61,7 +61,7 @@ void PerspectiveCameraController::update(Input& input, const float timestep)
     
     m_camera.setDirection(m_camera_rotation);
 
-    printCamera();
+    //printCamera();
 }
 
 void PerspectiveCameraController::changeZoom(const float& amount)

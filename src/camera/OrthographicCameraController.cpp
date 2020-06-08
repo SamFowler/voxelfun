@@ -86,7 +86,7 @@ void OrthographicCameraController::update(Input& input, const float timestep)
     
     m_camera.setDirection(m_camera_rotation);
  
-    printCamera();
+    //printCamera();
 } 
 
 void OrthographicCameraController::moveForwards(const float& amount) 

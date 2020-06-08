@@ -21,7 +21,7 @@ public:
     unsigned int getBlockIndexFromBlockPos(const BlockPos& block_pos);
     unsigned int getBlockColumnIndexFromBlockPos(const BlockPos& block_pos);
 private:
-    std::array<Block, 2048> m_blocks; //16*8*16 [x,y,z]
+    std::array<std::unique_ptr<Block>, 2048> m_blocks; //16*8*16 [x,y,z]
     std::array<BlockColumnInfo, 256> m_block_column_details; //16*16 - each entry represents 1 column of voxels
 
     std::vector<BlockPos> m_blocks_to_update;

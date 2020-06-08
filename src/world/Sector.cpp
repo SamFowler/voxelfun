@@ -17,12 +17,12 @@ std::pair<const BlockPos, const Block*> Sector::addBlock(const BlockPos& block_p
     if (m_block_column_details[column_index].isBlockEmpty(block_pos.y))
     {
         unsigned int block_index = getBlockIndexFromBlockPos(block_pos);
-        m_blocks[block_index] = {voxels, colours, m_block_size};
-        m_blocks[block_index].updateAllNeighbours();
-        m_blocks[block_index].printBlock();
+        m_blocks[block_index] = std::make_unique<Block>(voxels, colours, m_block_size);
+        m_blocks[block_index]->updateAllNeighbours();
+        m_blocks[block_index]->printBlock();
 
         if (m_block_column_details[column_index].addBlock(block_pos.y))
-            return std::make_pair(block_pos, &(m_blocks[block_index])); // if add block is visible, return it to be meshed
+            return std::make_pair(block_pos, m_blocks[block_index].get() ); // if add block is visible, return it to be meshed
     }
     return std::make_pair(BlockPos(255,255,255), nullptr);
 }
@@ -52,7 +52,7 @@ void Sector::updateBlocks(std::vector<std::pair<const BlockPos, const Block*>> b
         */
 
        //if (change actually happend)
-        blocks_to_remesh.push_back( std::make_pair(block_pos, &(m_blocks[index]) ) );
+        blocks_to_remesh.push_back( std::make_pair(block_pos, m_blocks[index].get() ) );
     }
 
     m_blocks_to_update.clear();

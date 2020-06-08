@@ -8,11 +8,12 @@
 #include "../camera/Camera.h"
 
 #include "Sector.h"
+#include "SectorManager.h"
 
 class World
 {
 public:
-    World(unsigned int block_size) : m_sector(block_size) {};
+    World(unsigned int block_size) : m_block_size(block_size), m_sector(block_size), m_sector_manager(block_size) {};
     void init();
     void update(const float& timestep);
     void render(const Camera& camera);
@@ -22,8 +23,11 @@ public:
 private:
     unsigned int m_block_size;
 
+     Sector m_sector;
+
     //BlockManager m_block_manager;
     BlockRenderer m_block_renderer;
 
-    Sector m_sector;
+    SectorManager m_sector_manager;
+
 };

@@ -11,15 +11,13 @@ Block::Block ()
 
 Block::Block (Block block, unsigned int& block_size) //BlockManager& manager_ptr)
     : m_voxel_data(std::move(block.getVoxelDataRef())),   m_block_colours(std::move(block.getColoursRef())),
-      m_block_size  (block_size),
-      m_remesh    (true)
+      m_block_size  (block_size)
     {
         std::cout << "block created" << std::endl;
     }
 
 Block::Block (unsigned int& block_size) //BlockManager& manager)
-    : m_block_size(block_size),
-    m_remesh(true)
+    : m_block_size(block_size)
 {
     
 }
@@ -27,8 +25,7 @@ Block::Block (unsigned int& block_size) //BlockManager& manager)
 
 Block::Block (std::vector<Voxel> voxels, std::vector<Colour> colours, unsigned int& block_size) //BlockManager& manager)
     : m_voxel_data(std::move(voxels)),   m_block_colours(std::move(colours)),
-      m_block_size  (block_size), 
-      m_remesh    (true)
+      m_block_size  (block_size)
     {
         std::cout << "block created" << std::endl;
     }
@@ -117,7 +114,6 @@ void Block::removeColour (const ColourID& colour_id)
         m_free_colour_ids.push(colour_id);
 
         //TODO: set the removes colour voxels to something
-        m_remesh = true;
     }
     
 }
@@ -197,7 +193,6 @@ void Block::setVoxels(const std::vector<VoxelPos>& voxel_coords, const Colour& c
     {
         m_voxel_data[ indexFromVoxelPos(it) ].setColourId(id);
     }
-    m_remesh = true;
 }
 
 void Block::setVoxels(const std::vector<VoxelPos>& voxel_coords, const VoxelType& type)
@@ -206,7 +201,6 @@ void Block::setVoxels(const std::vector<VoxelPos>& voxel_coords, const VoxelType
     {
         m_voxel_data[ indexFromVoxelPos(it) ].setType(type);
     }
-    m_remesh = true;
 }
 
 void Block::setVoxels(const std::vector<VoxelPos>& voxel_coords, const Voxel& voxel)
@@ -215,7 +209,6 @@ void Block::setVoxels(const std::vector<VoxelPos>& voxel_coords, const Voxel& vo
     {
         m_voxel_data[ indexFromVoxelPos(it) ] = voxel;
     }
-    m_remesh = true;
 }
 
 
@@ -271,7 +264,6 @@ void Block::changeAllVoxels(const Colour& colour)
     {
         it.setColourId(id);
     }
-    m_remesh = true;
 }
 
 void Block::changeAllVoxels(const VoxelType& type)
@@ -280,7 +272,6 @@ void Block::changeAllVoxels(const VoxelType& type)
     {
         it.setType(type);
     }
-    m_remesh = true;
 }
 
 void Block::changeAllVoxels(const Voxel& voxel)
@@ -289,7 +280,6 @@ void Block::changeAllVoxels(const Voxel& voxel)
     {
         it = voxel;
     }
-    m_remesh = true;
 }
 
 void Block::changeVoxelsFromTo(const Colour& from_colour, const Colour& to_colour)
@@ -301,7 +291,6 @@ void Block::changeVoxelsFromTo(const Colour& from_colour, const Colour& to_colou
         if (it.getColourId() == from_id)
             it.setColourId(to_id);
     }
-    m_remesh = true;
 }
 
 void Block::changeVoxelsFromTo(const VoxelType& from_type, const VoxelType& to_type)
@@ -311,7 +300,6 @@ void Block::changeVoxelsFromTo(const VoxelType& from_type, const VoxelType& to_t
         if (it.getType() == from_type)
             it.setType(to_type);
     }
-    m_remesh = true;
 }
 
 void Block::changeVoxelsFromTo(const Voxel& from_voxel, const Voxel& to_voxel)
@@ -321,7 +309,6 @@ void Block::changeVoxelsFromTo(const Voxel& from_voxel, const Voxel& to_voxel)
         if (it == from_voxel)
             it = to_voxel;
     }
-    m_remesh = true;
 }
 
 void Block::printBlock(const bool printVoxels) const

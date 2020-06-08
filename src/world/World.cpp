@@ -54,7 +54,15 @@ void World::init()
     m_sector = Sector(m_block_size);
 
     m_block_renderer.getRefToRemeshList().push_back(m_sector.addBlock({1, 1, 1}, BlockMakeType::REVEAL_DIRT_CHUNK));
-
+    m_block_renderer.getRefToRemeshList().push_back(m_sector.addBlock({1, 1, 4}, BlockMakeType::GRASS_CHUNK));
+     for (int i = 0; i < 16; i++)
+    {
+        for (int j = 0; j < 16; j++)
+        {
+            m_block_renderer.getRefToRemeshList().push_back(m_sector.addBlock({i, 0, j}, BlockMakeType::GRASS_CHUNK));
+      
+        }    
+    } 
     
 
 //m_block_manager.addBlock({i,-1,j}, BlockMakeType::REVEAL_DIRT_CHUNK);
@@ -78,7 +86,6 @@ void World::update(const float& timestep)
 }
 
 
-//void World::render(const PerspectiveCamera& camera)
 void World::render(const Camera& camera)
 {
     m_block_renderer.draw(camera);
