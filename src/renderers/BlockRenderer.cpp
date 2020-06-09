@@ -39,7 +39,7 @@ void BlockRenderer::init(const unsigned int& block_size)
     }
 } */
 
-std::vector<std::pair<const BlockPos, const Block*> >& BlockRenderer::getRefToRemeshList()
+std::vector<std::pair<const BlockPos, Block&> >& BlockRenderer::getRefToRemeshList()
 {
     return m_blocks_to_remesh;
 }
@@ -59,12 +59,9 @@ void BlockRenderer::updateSelectorPosition(const WorldPos& selector_pos)
 
 void BlockRenderer::updateVAOs() 
 {
-    for (auto block_ptr : m_blocks_to_remesh)
+    for (auto block : m_blocks_to_remesh)
     {
-        if (block_ptr.second != nullptr)
-        {
-            m_world_renderables.push_back({block_ptr.first, BlockMeshGenerator::makeBlockVAO(*block_ptr.second, m_block_size, BlockMeshGenerator::GREEDY_MESH) });
-        }
+        m_world_renderables.push_back({block.first, BlockMeshGenerator::makeBlockVAO(block.second, m_block_size, BlockMeshGenerator::GREEDY_MESH) });
     }
 
     //TODO not all meshes may get updated per frame if there are many and it takes time, so don't always clear this list

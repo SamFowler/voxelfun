@@ -1,6 +1,6 @@
 #include "Sector.h"
 
-std::pair<const BlockPos, const Block*> Sector::addBlock(const BlockPos& position, const BlockMakeType& type)
+std::pair<const BlockPos, Block&> Sector::addBlock(const BlockPos& position, const BlockMakeType& type)
 {
     std::vector<Voxel> voxels;
     voxels.reserve(sizeof(Voxel)*m_block_size*m_block_size*m_block_size);
@@ -11,20 +11,24 @@ std::pair<const BlockPos, const Block*> Sector::addBlock(const BlockPos& positio
     return addBlock(position, voxels, colours);
 }
 
-std::pair<const BlockPos, const Block*> Sector::addBlock(const BlockPos& block_pos, const std::vector<Voxel>& voxels, const std::vector<Colour>& colours)
+std::pair<const BlockPos, Block&> Sector::addBlock(const BlockPos& block_pos, const std::vector<Voxel>& voxels, const std::vector<Colour>& colours)
 {
+
+    unsigned int block_index = getBlockIndexFromBlockPos(block_pos);
     unsigned int column_index = getBlockColumnIndexFromBlockPos(block_pos);
     if (m_block_column_details[column_index].isBlockEmpty(block_pos.y))
     {
-        unsigned int block_index = getBlockIndexFromBlockPos(block_pos);
+        
         m_blocks[block_index] = std::make_unique<Block>(voxels, colours, m_block_size);
         m_blocks[block_index]->updateAllNeighbours();
         m_blocks[block_index]->printBlock();
 
-        if (m_block_column_details[column_index].addBlock(block_pos.y))
-            return std::make_pair(block_pos, m_blocks[block_index].get() ); // if add block is visible, return it to be meshed
+        m_block_column_details[column_index].addBlock(block_pos.y);
+       // if (m_block_column_details[column_index].addBlock(block_pos.y))
+       //     return {block_pos, *(m_blocks[block_index].get())}; // if add block is visible, return it to be meshed
     }
-    return std::make_pair(BlockPos(255,255,255), nullptr);
+    return {block_pos, *(m_blocks[block_index].get())};
+    //return std::make_pair(block_pos, nullptr);
 }
 
 void Sector::editBlock(const BlockPos& block_pos /*, voxels/colours/changes */)
@@ -58,6 +62,31 @@ void Sector::updateBlocks(std::vector<std::pair<const BlockPos, const Block*>> b
     m_blocks_to_update.clear();
     m_blocks_to_update.reserve(8*sizeof(BlockPos));
     
+}
+
+Block& Sector::getBlock(const BlockPos& block_pos)
+{
+    unsigned int column_index = getBlockColumnIndexFromBlockPos(block_pos);
+    if (m_block_column_details[column_index].isBlockEmpty(block_pos.y))
+    {
+        return addBlock(block_pos, BlockMakeType::EMPTY_CHUNK).second;
+    }
+    else
+    {
+        return *(m_blocks[getBlockIndexFromBlockPos(block_pos)].get());
+    }
+
+   /*  Block* block_ptr = m_blocks[getBlockIndexFromBlockPos(block_pos)].get();
+    if (block_ptr != nullptr)
+    {
+        return *block_ptr;
+    }
+    else
+    {
+        //TODO load from file if exists
+        return *(addBlock(block_pos, BlockMakeType::EMPTY_CHUNK).second);
+        
+    } */
 }
 
 

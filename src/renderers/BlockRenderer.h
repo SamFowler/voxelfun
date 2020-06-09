@@ -12,7 +12,7 @@ public:
     void init(const unsigned int& block_size);
     //void getNewBlockUpdates(const std::vector<const Block*> updated_blocks);
 
-    std::vector<std::pair<const BlockPos, const Block*> >& getRefToRemeshList();
+    std::vector<std::pair<const BlockPos, Block&> >& getRefToRemeshList();
 
 
     void addSelectorVAO(WorldPos renderable_pos);
@@ -27,7 +27,7 @@ private:
     float m_block_offset;
     unsigned int m_block_size;
 
-    std::vector<std::pair<const BlockPos, const Block*> > m_blocks_to_remesh;
+    std::vector<std::pair<const BlockPos, Block&> > m_blocks_to_remesh;
     
     std::vector<WorldRenderable> m_world_renderables;
     std::unique_ptr<WorldRenderable> mp_wire_selector_renderable;

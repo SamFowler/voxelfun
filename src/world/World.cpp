@@ -34,24 +34,19 @@ void World::init()
 
     //m_block_manager.addBlock({1,2,1}, BlockMakeType::GRASS_CHUNK);
     //m_block_manager.addBlock({0,0,1}, BlockMakeType::GRASS_CHUNK);
-
     //m_block_manager.addBlock({1,0,0}, BlockMakeType::GRASS_CHUNK);
     //m_block_manager.addBlock({0,0,0}, BlockMakeType::RANDOM_CHUNK);
-   
     //m_block_manager.addBlock({10, 15, 10}, BlockMakeType::LIGHT_CHUNK);
-  
     //m_block_manager.addBlock({-2, -1, -2}, BlockMakeType::RANDOM_CHUNK);
     //m_block_manager.addBlock({-2, -1, -3}, BlockMakeType::RANDOM_CHUNK);
     //m_block_manager.addBlock({-3, -1, -2}, BlockMakeType::RANDOM_CHUNK);
     //m_block_manager.addBlock({-3, -1, -3}, BlockMakeType::RANDOM_CHUNK);
-//
     //m_block_manager.addBlock({-1, -1, -5}, BlockMakeType::DEBUG_CHUNK);
-
     //m_block_manager.addBlock({-3, -1, -3}, BlockMakeType::REVEAL_DIRT_CHUNK);
         
     m_block_renderer.init(m_block_size);
 
-    std::vector<std::pair<const BlockPos, const Block *>>& initial_mesh_list = m_block_renderer.getRefToRemeshList();
+    std::vector<std::pair<const BlockPos, Block&>>& initial_mesh_list = m_block_renderer.getRefToRemeshList();
 
     Sector* p_sector = m_sector_manager.addSector({0,0,0});
 
@@ -68,8 +63,6 @@ void World::init()
 
 
 
-
-
     /* m_sector = Sector(m_block_size);
 
     m_block_renderer.getRefToRemeshList().push_back(m_sector.addBlock({1, 1, 1}, BlockMakeType::REVEAL_DIRT_CHUNK));
@@ -82,10 +75,8 @@ void World::init()
       
         }    
     }  */
-    
 
-//m_block_manager.addBlock({i,-1,j}, BlockMakeType::REVEAL_DIRT_CHUNK);
-
+    //m_block_manager.addBlock({i,-1,j}, BlockMakeType::REVEAL_DIRT_CHUNK);
 
 
 }
@@ -95,9 +86,15 @@ void World::update(Input& input, const float& timestep)
     //m_block_manager.updateBlocks();
     //m_block_manager.updateVoxelNeighbours();
 
+
+    // handle the voxel selector
     m_selected_region.moveRegion(input);
+    m_block_renderer.updateSelectorPosition(m_selected_region.getWorldPos());
 
-
+    if (input.wasKeyPressed(SDLK_RETURN))
+    {
+        //m_sector_manager.
+    }
 
     //m_sector.updateBlocks(m_block_renderer.getRefToRemeshList()) ;
 
@@ -107,7 +104,6 @@ void World::update(Input& input, const float& timestep)
     //m_block_manager.clearUpdatedBlockList();
     
     
-    m_block_renderer.updateSelectorPosition(m_selected_region.getWorldPos());
     m_block_renderer.updateVAOs();
 }
 

@@ -15,6 +15,10 @@ public:
 
     void editSectors(Input& input);
 
+    Sector& getSector(const SectorPos& sector_pos);
+    Block&  getBlock (const SectorPos& sector_pos, const BlockPos& block_pos);
+    Voxel& getVoxel(const SectorPos& sector_pos, const BlockPos& block_pos, const VoxelPos& voxel_pos);
+
     void updateSectors(std::vector<std::pair<const BlockPos, const Block*>> blocks_to_remesh);
     Sector* addSector(const SectorPos& sector_pos);
 
