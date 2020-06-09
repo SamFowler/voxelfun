@@ -43,6 +43,7 @@ public:
     Colour     getVoxelColour  (const VoxelPos& voxel_coord) const;
     VoxelType  getVoxelType    (const VoxelPos& voxel_coord) const;
     const Voxel&    getVoxel        (const VoxelPos& voxel_coord) const;
+    Voxel&    getVoxel        (const VoxelPos& voxel_coord);
     VoxelPos getTopVoxelPos (const VoxelPos& voxel_coord)  const;
 
     const std::vector<Voxel>& getVoxelDataRef() const;

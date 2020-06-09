@@ -36,11 +36,14 @@ void Sector::editBlock(const BlockPos& block_pos /*, voxels/colours/changes */)
     //don't actually edit the block here, add it to list of blocks to update
     // this is done so updates are processed all at once in each frame
     
+    Block& block = getBlock(block_pos);
+    block.changeAllVoxels({255,0,255,255});
+
     //m_blocks_to_update.push_back(getBlockIndexFromBlockPos(block_pos)/*, <<<changes to make>>> */);
     m_blocks_to_update.push_back(block_pos /*, <<<changes to make>>> */);
 }
 
-void Sector::updateBlocks(std::vector<std::pair<const BlockPos, const Block*>> blocks_to_remesh)
+void Sector::updateBlocks(std::vector<std::pair<const BlockPos, Block&>>& blocks_to_remesh)
 {
     if (m_blocks_to_update.empty())
         return;
@@ -56,7 +59,7 @@ void Sector::updateBlocks(std::vector<std::pair<const BlockPos, const Block*>> b
         */
 
        //if (change actually happend)
-        blocks_to_remesh.push_back( std::make_pair(block_pos, m_blocks[index].get() ) );
+        blocks_to_remesh.push_back( {block_pos, *(m_blocks[index].get()) } );
     }
 
     m_blocks_to_update.clear();

@@ -159,6 +159,12 @@ const Voxel& Block::getVoxel(const VoxelPos& voxel_coord) const
     return m_voxel_data[ indexFromVoxelPos(voxel_coord) ];
 }
 
+Voxel&    Block::getVoxel        (const VoxelPos& voxel_coord)
+{
+    return m_voxel_data[ indexFromVoxelPos(voxel_coord) ];
+}
+
+
 // Returns the position of the first occupiable voxel at or directly above the input voxel position
 VoxelPos Block::getTopVoxelPos (const VoxelPos& voxel_coord) const
 {
@@ -262,7 +268,8 @@ void Block::changeAllVoxels(const Colour& colour)
     ColourID id = addColour(colour);
     for (auto& it : m_voxel_data)
     {
-        it.setColourId(id);
+        if (it.isVisible())
+            it.setColourId(id);
     }
 }
 

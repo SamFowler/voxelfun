@@ -93,7 +93,10 @@ void World::update(Input& input, const float& timestep)
 
     if (input.wasKeyPressed(SDLK_RETURN))
     {
-        //m_sector_manager.
+        //Voxel& voxel = m_sector_manager.getVoxel(m_selected_region.getSectorPos(), m_selected_region.getBlockPos(), m_selected_region.getVoxelPos());
+        m_sector_manager.getSector(m_selected_region.getSectorPos()).editBlock(m_selected_region.getBlockPos());
+        m_sector_manager.getSector(m_selected_region.getSectorPos()).updateBlocks(m_block_renderer.getRefToRemeshList());
+        ///Block& block = m_sector_manager.getBlock(m_selected_region.getSectorPos(), m_selected_region.getBlockPos()).
     }
 
     //m_sector.updateBlocks(m_block_renderer.getRefToRemeshList()) ;
@@ -103,7 +106,7 @@ void World::update(Input& input, const float& timestep)
     ); */
     //m_block_manager.clearUpdatedBlockList();
     
-    
+    m_block_renderer.updateSettings(input);
     m_block_renderer.updateVAOs();
 }
 

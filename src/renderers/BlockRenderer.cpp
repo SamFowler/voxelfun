@@ -56,12 +56,39 @@ void BlockRenderer::updateSelectorPosition(const WorldPos& selector_pos)
     mp_wire_selector_renderable->position = selector_pos;
 }
 
+void BlockRenderer::updateSettings(Input& input)
+{
+    if (input.wasKeyReleased(SDLK_SLASH))
+    {
+        if (m_line_mode == false)
+        {
+            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+            m_line_mode = true;
+        } 
+        else
+        {
+            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+            m_line_mode = false;
+        }
+    }
+}
+
 
 void BlockRenderer::updateVAOs() 
 {
     for (auto block : m_blocks_to_remesh)
     {
-        m_world_renderables.push_back({block.first, BlockMeshGenerator::makeBlockVAO(block.second, m_block_size, BlockMeshGenerator::GREEDY_MESH) });
+        auto it = m_world_renderable_indexes.find(block.first);
+        if (it != m_world_renderable_indexes.cend())
+        {   
+            m_world_renderables[it->second] = {block.first, BlockMeshGenerator::makeBlockVAO(block.second, m_block_size, BlockMeshGenerator::GREEDY_MESH) };
+        }
+        else
+        {
+            m_world_renderables.push_back({block.first, BlockMeshGenerator::makeBlockVAO(block.second, m_block_size, BlockMeshGenerator::GREEDY_MESH) });
+            m_world_renderable_indexes.emplace(block.first, (m_world_renderables.size() - 1) );
+        }
+        
     }
 
     //TODO not all meshes may get updated per frame if there are many and it takes time, so don't always clear this list

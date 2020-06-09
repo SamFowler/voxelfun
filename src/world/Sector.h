@@ -16,7 +16,7 @@ public:
     //void addBlock(const BlockPos& block_pos, const BlockMakeType&);
 
     void editBlock(const BlockPos& block_pos /*, voxels/colours/changes */); //adds voxel edits to m_blocks_to_update to be changed once per frame
-    void updateBlocks(std::vector<std::pair<const BlockPos, const Block*>> blocks_to_remesh); //updates blocks batched in m_blocks_to_update and add ptrs to them to remesh vector
+    void updateBlocks(std::vector<std::pair<const BlockPos, Block&>>& blocks_to_remesh); //updates blocks batched in m_blocks_to_update and add ptrs to them to remesh vector
 
     Block& getBlock(const BlockPos& block_pos);
 

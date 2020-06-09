@@ -33,7 +33,7 @@ Block&  SectorManager::getBlock (const SectorPos& sector_pos, const BlockPos& bl
 
 Voxel& SectorManager::getVoxel(const SectorPos& sector_pos, const BlockPos& block_pos, const VoxelPos& voxel_pos)
 {
-    //return getBlock(sector_pos, block_pos).getVoxel(voxel_pos);
+    return getBlock(sector_pos, block_pos).getVoxel(voxel_pos);
 }
 
 

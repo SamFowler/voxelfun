@@ -5,6 +5,7 @@
 #include "../camera/Camera.h"
 #include "../world/Block.h"
 #include "Renderables.h"
+#include "../Input.h"
 
 class BlockRenderer
 {
@@ -18,6 +19,8 @@ public:
     void addSelectorVAO(WorldPos renderable_pos);
     void updateSelectorPosition(const WorldPos& selector_pos);
 
+    void updateSettings(Input& input);
+
     void updateVAOs();
     void draw(const Camera& camera);
     void destroy();
@@ -27,8 +30,11 @@ private:
     float m_block_offset;
     unsigned int m_block_size;
 
+    bool m_line_mode = false;
+
     std::vector<std::pair<const BlockPos, Block&> > m_blocks_to_remesh;
     
+    std::unordered_map<BlockPos, unsigned int, PositionHash> m_world_renderable_indexes;
     std::vector<WorldRenderable> m_world_renderables;
     std::unique_ptr<WorldRenderable> mp_wire_selector_renderable;
 
