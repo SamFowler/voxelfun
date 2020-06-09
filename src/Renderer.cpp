@@ -18,7 +18,7 @@ bool Renderer::init(int win_width = 640, int win_height = 480)
  
     m_window = sdl_shared(SDL_CreateWindow(
             "hello_sdl2",
-            SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+            0,0, //SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
             win_width, win_height,
             SDL_WINDOW_SHOWN |
             SDL_WINDOW_OPENGL
