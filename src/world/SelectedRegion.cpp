@@ -14,70 +14,46 @@ SelectedRegion::SelectedRegion(const SectorPos sector_pos, const BlockPos block_
 void SelectedRegion::moveRegion(Input& input)
 {
     bool hasMoved = false;
+    unsigned move_speed = 1;
+    if (input.isKeyHeld(SDLK_LALT))
+        move_speed = 4;
+
+
     if (input.wasKeyPressed(SDLK_j))
     {
-        m_world_pos.x--;
-        hasMoved = true;
-    }
-    else if (input.isKeyHeld(SDLK_j))
-    {
-        m_world_pos.x -= 4;
+        m_world_pos.x -= move_speed;
         hasMoved = true;
     }
 
     if (input.wasKeyPressed(SDLK_l))
     {
-        m_world_pos.x++;
-        hasMoved = true;
-    }
-    else if (input.isKeyHeld(SDLK_l))
-    {
-        m_world_pos.x += 4;
+        m_world_pos.x += move_speed;
         hasMoved = true;
     }
 
 
     if (input.wasKeyPressed(SDLK_k))
     {
-        m_world_pos.y--;
-        hasMoved = true;
-    }
-    else if (input.isKeyHeld(SDLK_k))
-    {
-        m_world_pos.y -= 4;
+        m_world_pos.y -= move_speed;
         hasMoved = true;
     }
 
     if (input.wasKeyPressed(SDLK_i))
     {
-        m_world_pos.y++;
-        hasMoved = true;
-    }
-    else if (input.isKeyHeld(SDLK_i))
-    {
-        m_world_pos.y += 4;
+        m_world_pos.y += move_speed;
         hasMoved = true;
     }
 
+
     if (input.wasKeyPressed(SDLK_u))
     {
-        m_world_pos.z--;
-        hasMoved = true;
-    }
-    else if (input.isKeyHeld(SDLK_u))
-    {
-        m_world_pos.z -= 4;
+        m_world_pos.z -= move_speed;
         hasMoved = true;
     }
 
     if (input.wasKeyPressed(SDLK_o))
     {
-        m_world_pos.z++;
-        hasMoved = true;
-    }
-    else if (input.isKeyHeld(SDLK_o))
-    {
-        m_world_pos.z += 4;
+        m_world_pos.z += move_speed;
         hasMoved = true;
     }
 
@@ -85,56 +61,8 @@ void SelectedRegion::moveRegion(Input& input)
         printSelected();
 }
 
-void SelectedRegion::moveLeftRight(int amount)
-{
-    int x = m_voxel_pos.x;
-    x += amount;
-
-    if (x >= m_block_size)
-    {
-        
-        m_voxel_pos.x = 0;
-        m_block_pos.x++;
-        if (m_block_pos.x >= m_sector_size)
-        {
-            m_block_pos.x = 0;
-            m_sector_pos.x++;
-        } 
-    }
-    else if (x < 0)
-    {
-        m_voxel_pos.x = m_block_size - 1;
-        int bx = m_block_pos.x;
-        bx--;
-        //m_block_pos.x--;
-        if (bx < 0)
-        {
-            m_block_pos.x = m_sector_size -1;
-            m_sector_pos.x--;
-        } else
-        {
-            m_block_pos.x = bx;
-        }
-        
-    }
-    else 
-    {
-        m_voxel_pos.x += amount;
-    }
-}
-
 WorldPos SelectedRegion::getWorldPos()
 {
-    /* WorldPos world_pos;
-    m_sector_pos.x = ((world_pos.x - (world_pos.x % (m_sector_size   * m_block_size))) / (m_sector_size   * m_block_size));
-    m_block_pos.x = ((int)((world_pos.x % (m_sector_size   * m_block_size)) / m_block_size));
-    m_voxel_pos.x = ((world_pos.x % (m_sector_size   * m_block_size)) % m_block_size);
-    
-    return {
-        (m_sector_pos.x * m_sector_size   * m_block_size) + (m_block_pos.x * m_block_size) + m_voxel_pos.x,
-        (m_sector_pos.y * m_sector_height * m_block_size) + (m_block_pos.y * m_block_size) + m_voxel_pos.y,
-        (m_sector_pos.z * m_sector_size   * m_block_size) + (m_block_pos.z * m_block_size) + m_voxel_pos.z,
-    }; */
     return m_world_pos;
 }
 

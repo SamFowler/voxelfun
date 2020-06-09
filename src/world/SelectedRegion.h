@@ -15,12 +15,12 @@ public:
     );
 
     void moveRegion(Input& input);
-    void moveLeftRight(int amount);
 
-    WorldPos getWorldPos();
+    WorldPos  getWorldPos();
+    
     SectorPos getSectorPos();
-    BlockPos getBlockPos();
-    VoxelPos getVoxelPos();
+    BlockPos  getBlockPos();
+    VoxelPos  getVoxelPos();
 
     void printSelected();
 
