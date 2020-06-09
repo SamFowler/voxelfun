@@ -50,11 +50,19 @@ void World::init()
 
     Sector* p_sector = m_sector_manager.addSector({0,0,0});
 
-    initial_mesh_list.push_back(p_sector->addBlock({0,0,0}, BlockMakeType::REVEAL_DIRT_CHUNK));
-    initial_mesh_list.push_back(p_sector->addBlock({0,0,1}, BlockMakeType::REVEAL_DIRT_CHUNK));
-    initial_mesh_list.push_back(p_sector->addBlock({0,0,2}, BlockMakeType::REVEAL_DIRT_CHUNK));
-    initial_mesh_list.push_back(p_sector->addBlock({0,0,3}, BlockMakeType::REVEAL_DIRT_CHUNK));
-
+    for (int i = 0; i < 8; i++)
+    {
+        for (int j = 0; j < 8; j++)
+        {    
+            if((rand() % 6) == 0)
+                initial_mesh_list.push_back(p_sector->addBlock({i,0,j}, BlockMakeType::REVEAL_DIRT_CHUNK));
+            else
+                initial_mesh_list.push_back(p_sector->addBlock({i,0,j}, BlockMakeType::GRASS_CHUNK));
+            //initial_mesh_list.push_back(p_sector->addBlock({0,0,1}, BlockMakeType::REVEAL_DIRT_CHUNK));
+            //initial_mesh_list.push_back(p_sector->addBlock({0,0,2}, BlockMakeType::REVEAL_DIRT_CHUNK));
+            //initial_mesh_list.push_back(p_sector->addBlock({0,0,3}, BlockMakeType::REVEAL_DIRT_CHUNK));
+        }
+    }
 
     m_selected_region = SelectedRegion({0,0,0}, {0,0,1}, {0,0,1}, m_block_size, 8, 16);
 
@@ -83,9 +91,6 @@ void World::init()
 
 void World::update(Input& input, const float& timestep)
 {
-    //m_block_manager.updateBlocks();
-    //m_block_manager.updateVoxelNeighbours();
-
 
     // handle the voxel selector
     m_selected_region.moveRegion(input);
@@ -93,18 +98,13 @@ void World::update(Input& input, const float& timestep)
 
     if (input.wasKeyPressed(SDLK_RETURN))
     {
+        //TODO create some form of WorldEditor class to handle input for map editing
         //Voxel& voxel = m_sector_manager.getVoxel(m_selected_region.getSectorPos(), m_selected_region.getBlockPos(), m_selected_region.getVoxelPos());
         m_sector_manager.getSector(m_selected_region.getSectorPos()).editBlock(m_selected_region.getBlockPos());
         m_sector_manager.getSector(m_selected_region.getSectorPos()).updateBlocks(m_block_renderer.getRefToRemeshList());
         ///Block& block = m_sector_manager.getBlock(m_selected_region.getSectorPos(), m_selected_region.getBlockPos()).
     }
 
-    //m_sector.updateBlocks(m_block_renderer.getRefToRemeshList()) ;
-
-    /* m_block_renderer.getNewBlockUpdates(
-        m_block_manager.getUpdatedBlockList()
-    ); */
-    //m_block_manager.clearUpdatedBlockList();
     
     m_block_renderer.updateSettings(input);
     m_block_renderer.updateVAOs();
