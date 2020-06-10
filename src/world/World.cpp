@@ -53,14 +53,14 @@ void World::init()
     SectorPos sector_pos = {0,0,0};
     Sector* p_sector = m_sector_manager.addSector(sector_pos);
 
-    for (int i = 0; i < 12; i++)
+    /* for (int i = 0; i < 12; i++)
     {
         for (int j = 0; j < 12; j++)
         {    
-            /* if((rand() % 6) == 0)
-                initial_mesh_list.push_back(p_sector->addBlock({i,0,j}, BlockMakeType::REVEAL_DIRT_CHUNK));
-            else
-                initial_mesh_list.push_back(p_sector->addBlock({i,0,j}, BlockMakeType::GRASS_CHUNK)); */
+            // if((rand() % 6) == 0)
+            //     initial_mesh_list.push_back(p_sector->addBlock({i,0,j}, BlockMakeType::REVEAL_DIRT_CHUNK));
+            // else
+            //     initial_mesh_list.push_back(p_sector->addBlock({i,0,j}, BlockMakeType::GRASS_CHUNK));
             //initial_mesh_list.push_back(p_sector->addBlock({0,0,1}, BlockMakeType::REVEAL_DIRT_CHUNK));
             //initial_mesh_list.push_back(p_sector->addBlock({0,0,2}, BlockMakeType::REVEAL_DIRT_CHUNK));
             //initial_mesh_list.push_back(p_sector->addBlock({0,0,3}, BlockMakeType::REVEAL_DIRT_CHUNK));
@@ -70,11 +70,16 @@ void World::init()
             p_sector->updateBlockNeighbours(block_pos);
             initial_mesh_list.push_back(block_pair);
         }
+    } */
+
+
+
+    std::vector<std::pair<const BlockPos, Block &>> blocks_to_mesh = m_terrain_generator.generateSector(p_sector, sector_pos);
+    for (auto it : blocks_to_mesh)
+    {
+        initial_mesh_list.push_back(it);
     }
 
-
-
-    //m_terrain_generator.generateSector(p_sector, sector_pos);
 
     //std::pair<const BlockPos, Block &> block_pair = p_sector->addBlock({0,0,0}, BlockMakeType::EMPTY_CHUNK);
     //m_terrain_generator.generateBlock(block_pair.second, CoordinateConversion::getWorldPos({0,0,0}, {0,0,0}, {0,0,0}));

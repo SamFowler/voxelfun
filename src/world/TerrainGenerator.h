@@ -13,7 +13,7 @@ public:
     TerrainGenerator(int seed);
 
     void generateBlock(Block& block, const WorldPos& block_origin);
-    void generateSector(Sector* sector, const SectorPos& sector_pos);
+    std::vector<std::pair<const BlockPos, Block &>> generateSector(Sector* sector, const SectorPos& sector_pos);
 private:
 
     int m_seed;
