@@ -105,7 +105,7 @@ std::vector<std::pair<const BlockPos, Block &>> TerrainGenerator::generateSector
 
                     double noise_val = noise_generator.Evaluate(voxel_column_world_pos.x, voxel_column_world_pos.z);
                     noise_val = (noise_val+1)/2; // set noise between 0 and 1
-                    //noise_val = std::round(noise_val * 16) / 16;
+                    noise_val = std::round(noise_val * 16) / 16;
                     rounded_noise = (unsigned int)(noise_val * sector_voxel_height);
                     height_map_coord = (column_pos*block_size) + glm::uvec3(voxel_x,0,voxel_z);
                     height_map[height_map_coord.z][height_map_coord.x] = rounded_noise;
