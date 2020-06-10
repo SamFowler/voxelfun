@@ -217,6 +217,11 @@ void Block::setVoxels(const std::vector<VoxelPos>& voxel_coords, const Voxel& vo
     }
 }
 
+void Block::setVoxel(const VoxelPos& voxel_coord, const Voxel& voxel)
+{ 
+    m_voxel_data[ indexFromVoxelPos(voxel_coord) ] = voxel;
+}
+
 
 void Block::updateNeighbours(const VoxelPos& voxel_coord)
 {

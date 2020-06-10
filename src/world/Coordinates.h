@@ -25,3 +25,17 @@ struct PositionHash
         return (position.x * 88339) ^ (position.y * 91967) ^ (position.z * 126323);
     }
 };
+
+
+namespace CoordinateConversion
+{
+    //TODO make these into a singleton?
+
+SectorPos getSectorPos(const WorldPos& world_pos);
+BlockPos getBlockPos(const WorldPos& world_pos);
+VoxelPos getVoxelPos(const WorldPos& world_pos);
+
+WorldPos getWorldPos(const SectorPos& sector_pos, const BlockPos& block_pos, const VoxelPos& voxel_pos);
+WorldPos getWorldPos(const SectorPos& sector_pos, const BlockPos& block_pos);
+
+}

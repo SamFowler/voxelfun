@@ -13,6 +13,8 @@ public:
 
     std::pair<const BlockPos, Block&>  addBlock(const BlockPos& position, const BlockMakeType&);
     std::pair<const BlockPos, Block&>  addBlock(const BlockPos& block_pos, const std::vector<Voxel>& voxels, const std::vector<Colour>& colours);
+    void updateBlockNeighbours(const BlockPos& block_pos);
+
     //void addBlock(const BlockPos& block_pos, const BlockMakeType&);
 
     void editBlock(const BlockPos& block_pos /*, voxels/colours/changes */); //adds voxel edits to m_blocks_to_update to be changed once per frame

@@ -31,6 +31,12 @@ std::pair<const BlockPos, Block&> Sector::addBlock(const BlockPos& block_pos, co
     //return std::make_pair(block_pos, nullptr);
 }
 
+void Sector::updateBlockNeighbours(const BlockPos& block_pos)
+{
+    unsigned int block_index = getBlockIndexFromBlockPos(block_pos);
+    m_blocks[block_index]->updateAllNeighbours();
+}
+
 void Sector::editBlock(const BlockPos& block_pos /*, voxels/colours/changes */)
 {
     //don't actually edit the block here, add it to list of blocks to update

@@ -12,6 +12,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include <cmath>
+#include <ctime>
 
 #include <vector>
 #include <algorithm>
@@ -36,6 +37,8 @@
 #include <cstdarg>
 
 //#include "../sdl2_shared.cpp"
+
+//#include "../helpers/OpenSimplexNoise.h"
 
 //#endif
 

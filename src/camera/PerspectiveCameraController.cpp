@@ -24,7 +24,7 @@ PerspectiveCameraController::PerspectiveCameraController(float fov, float aspect
     m_camera_position = camera_pos;
     m_camera_rotation = camera_rot;
 
-    m_camera_speed = 25.0f;
+    m_camera_speed = 15.0f;
 
     m_fov = fov;
 

@@ -33,12 +33,12 @@ bool Game::handleInput(Input& input)
         glm::vec3 rot = m_camera_controller->getCamRot();
         if (m_is_orthographic == true) 
         {
-            m_camera_controller = std::make_unique<PerspectiveCameraController>(45, (1280.0f/960.0f), 0.1f, 500.0f, pos, rot);
+            m_camera_controller = std::make_unique<PerspectiveCameraController>(45, (1280.0f/960.0f), 0.1f, 1000.0f, pos, rot);
             m_is_orthographic = false;
         }
         else
         {
-            m_camera_controller = std::make_unique<OrthographicCameraController>(1280.0f/960.0f, 0.1f, 100.0f, pos, rot);
+            m_camera_controller = std::make_unique<OrthographicCameraController>(1280.0f/960.0f, 0.1f, 1000.0f, pos, rot);
             m_is_orthographic = true;
         }
 

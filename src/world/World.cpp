@@ -44,25 +44,43 @@ void World::init()
     //m_block_manager.addBlock({-1, -1, -5}, BlockMakeType::DEBUG_CHUNK);
     //m_block_manager.addBlock({-3, -1, -3}, BlockMakeType::REVEAL_DIRT_CHUNK);
         
+    
+
     m_block_renderer.init(m_block_size);
 
     std::vector<std::pair<const BlockPos, Block&>>& initial_mesh_list = m_block_renderer.getRefToRemeshList();
 
-    Sector* p_sector = m_sector_manager.addSector({0,0,0});
+    SectorPos sector_pos = {0,0,0};
+    Sector* p_sector = m_sector_manager.addSector(sector_pos);
 
-    for (int i = 0; i < 8; i++)
+    for (int i = 0; i < 12; i++)
     {
-        for (int j = 0; j < 8; j++)
+        for (int j = 0; j < 12; j++)
         {    
-            if((rand() % 6) == 0)
+            /* if((rand() % 6) == 0)
                 initial_mesh_list.push_back(p_sector->addBlock({i,0,j}, BlockMakeType::REVEAL_DIRT_CHUNK));
             else
-                initial_mesh_list.push_back(p_sector->addBlock({i,0,j}, BlockMakeType::GRASS_CHUNK));
+                initial_mesh_list.push_back(p_sector->addBlock({i,0,j}, BlockMakeType::GRASS_CHUNK)); */
             //initial_mesh_list.push_back(p_sector->addBlock({0,0,1}, BlockMakeType::REVEAL_DIRT_CHUNK));
             //initial_mesh_list.push_back(p_sector->addBlock({0,0,2}, BlockMakeType::REVEAL_DIRT_CHUNK));
             //initial_mesh_list.push_back(p_sector->addBlock({0,0,3}, BlockMakeType::REVEAL_DIRT_CHUNK));
+            BlockPos block_pos = {i,0,j};
+            std::pair<const BlockPos, Block &> block_pair = p_sector->addBlock(block_pos, BlockMakeType::EMPTY_CHUNK);
+            m_terrain_generator.generateBlock(block_pair.second, CoordinateConversion::getWorldPos(sector_pos, block_pos, {0,0,0}));
+            p_sector->updateBlockNeighbours(block_pos);
+            initial_mesh_list.push_back(block_pair);
         }
     }
+
+
+
+    //m_terrain_generator.generateSector(p_sector, sector_pos);
+
+    //std::pair<const BlockPos, Block &> block_pair = p_sector->addBlock({0,0,0}, BlockMakeType::EMPTY_CHUNK);
+    //m_terrain_generator.generateBlock(block_pair.second, CoordinateConversion::getWorldPos({0,0,0}, {0,0,0}, {0,0,0}));
+    //initial_mesh_list.push_back(block_pair);
+   
+
 
     m_selected_region = SelectedRegion({0,0,0}, {0,0,1}, {0,0,1}, m_block_size, 8, 16);
 

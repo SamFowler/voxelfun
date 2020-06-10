@@ -111,7 +111,7 @@ void VertexArrayObject::addVertexBuffer(int num_elements_per_vertex, const std::
 
     glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(GLfloat), vertices.data(), GL_STATIC_DRAW); //put vertex data in active VBO
 
-    std::cout << "Adding float vertex VBO with id " << vbo_id << ", size " << vertices.size() << std::endl;
+    //std::cout << "Adding float vertex VBO with id " << vbo_id << ", size " << vertices.size() << std::endl;
 
     //tell the buffer what our VBO data is
     glVertexAttribPointer(
@@ -140,7 +140,7 @@ void VertexArrayObject::addVertexBuffer(int num_elements_per_vertex, const std::
 
     glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(GLuint), vertices.data(), GL_STATIC_DRAW); //put vertex data in active VBO
 
-    std::cout << "Adding int vertex VBO with id " << vbo_id << ", size " << vertices.size() << std::endl;
+    //std::cout << "Adding int vertex VBO with id " << vbo_id << ", size " << vertices.size() << std::endl;
 
     //tell the buffer what our VBO data is
     glVertexAttribIPointer(

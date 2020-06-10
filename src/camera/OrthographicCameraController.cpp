@@ -4,11 +4,13 @@ OrthographicCameraController::OrthographicCameraController(float aspect_ratio, f
 {
     m_camera_speed = 5.0f;
     m_camera_rotation_speed = 2.0f;
-    m_camera_zoom_speed = 0.5f;
+    m_camera_zoom_speed = 5.0f;
 
     m_aspect_ratio = aspect_ratio;
     m_z_near = z_near; 
     m_z_far = z_far;
+
+
 
     m_camera.setOrthographicProjection(-m_aspect_ratio * m_zoom, m_aspect_ratio * m_zoom, -m_zoom, m_zoom, m_z_near, m_z_far); 
 
@@ -16,9 +18,9 @@ OrthographicCameraController::OrthographicCameraController(float aspect_ratio, f
 
 OrthographicCameraController::OrthographicCameraController(float aspect_ratio, float z_near, float z_far, const glm::vec3& camera_pos, const glm::vec3& camera_rot) 
 {
-    m_camera_speed = 5.0f;
+    m_camera_speed = 25.0f;
     m_camera_rotation_speed = 2.0f;
-    m_camera_zoom_speed = 0.5f;
+    m_camera_zoom_speed = 10.0f;
 
     m_camera_position = camera_pos;
     m_camera_rotation = camera_rot;
@@ -128,7 +130,7 @@ void OrthographicCameraController::changeZoom(const float& amount)
 {        
         m_zoom -= amount; 
 		m_zoom = std::max(m_zoom, 0.05f);
-        m_zoom = std::min(m_zoom, 25.0f);
+        m_zoom = std::min(m_zoom, 50.0f);
 
         m_camera.setOrthographicProjection(-m_aspect_ratio * m_zoom, m_aspect_ratio * m_zoom, -m_zoom, m_zoom, m_z_near, m_z_far);
         std::cout << "zoom set to " << m_zoom << std::endl;

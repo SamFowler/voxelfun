@@ -55,6 +55,8 @@ public:
     void setVoxels(const std::vector<VoxelPos>& voxel_coords, const Colour&    colour);
     void setVoxels(const std::vector<VoxelPos>& voxel_coords, const VoxelType& type  );
     void setVoxels(const std::vector<VoxelPos>& voxel_coords, const Voxel&     voxel );
+    void setVoxel(const VoxelPos& voxel_coord, const Voxel& voxel);
+
 
     void updateNeighbours(const VoxelPos& voxel_coord);
     void updateAllNeighbours();

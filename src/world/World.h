@@ -9,11 +9,12 @@
 
 #include "SectorManager.h"
 #include "SelectedRegion.h"
+#include "TerrainGenerator.h"
 
 class World
 {
 public:
-    World(unsigned int block_size) : m_block_size(block_size), m_sector_manager(block_size) {};
+    World(unsigned int block_size) : m_block_size(block_size), m_terrain_generator(1), m_sector_manager(block_size) {};
     void init();
     
     void update(Input& input, const float& timestep);
@@ -23,6 +24,8 @@ public:
 
 private:
     unsigned int m_block_size;
+
+    TerrainGenerator m_terrain_generator;
 
     BlockRenderer m_block_renderer;
 
