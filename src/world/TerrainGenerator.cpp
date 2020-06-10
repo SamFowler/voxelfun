@@ -61,6 +61,16 @@ void TerrainGenerator::generateBlock(Block& block, const WorldPos& block_origin)
     }
 }
 
+double TerrainGenerator::getNoise(OpenSimplexNoise& simplex_gen, const glm::vec2& pos)
+{
+    return (simplex_gen.Evaluate(pos.x, pos.y) + 1) / 2;
+}
+
+double TerrainGenerator::getNoise(OpenSimplexNoise& simplex_gen, const glm::vec3& pos)
+{
+    return getNoise(simplex_gen, {pos.x, pos.z});
+}
+
 std::vector<std::pair<const BlockPos, Block &>> TerrainGenerator::generateSector(Sector* sector, const SectorPos& sector_pos)
 {
     std::vector<std::pair<const BlockPos, Block &>> blocks_to_mesh;
@@ -82,14 +92,14 @@ std::vector<std::pair<const BlockPos, Block &>> TerrainGenerator::generateSector
     // {
     //     for (unsigned block_x = 0; block_x < sector_size; block_x++)
     //     {
-    for (unsigned block_z = 0; block_z < 4; block_z++)
+    for (unsigned block_z = 0; block_z < 12; block_z++)
     {
-        for (unsigned block_x = 0; block_x < 4; block_x++)
+        for (unsigned block_x = 0; block_x < 12; block_x++)
         {
             BlockPos column_pos(block_x, 0, block_z);
             WorldPos column_world_pos = CoordinateConversion::getWorldPos(sector_pos, column_pos);
 
-            glm::vec3 voxel_column_world_pos;
+            glm::vec3 noise_pos;
             unsigned rounded_noise;
             int local_height_map[32][32];
 
@@ -100,12 +110,24 @@ std::vector<std::pair<const BlockPos, Block &>> TerrainGenerator::generateSector
             {
                 for (unsigned voxel_x = 0; voxel_x < block_size; voxel_x++)
                 {
-                    voxel_column_world_pos = (column_world_pos + WorldPos(voxel_x, 0, voxel_z));
-                    voxel_column_world_pos *= glm::vec3(0.01);
+                    noise_pos = (column_world_pos + WorldPos(voxel_x, 0, voxel_z));
+                    //noise_pos *= 0.01; //spreads the noise -> lower value = less frequent changes
+                    noise_pos /= (block_size * sector_height);
+                                                                             //freq   //amplitude
+                    double noise_val = getNoise(noise_generator, noise_pos * 0.75f) * 0.25
+                                     + getNoise(noise_generator, noise_pos * 2.0f)  * 0.1
+                                     + getNoise(noise_generator, noise_pos * 16.0f)  * 0.01;
+                    
+                    //noise_val /= (1 + 0.5);
+                    noise_val /= (0.25 + 0.1 + 0.01 ); //adjust for amplitude
+                    
 
-                    double noise_val = noise_generator.Evaluate(voxel_column_world_pos.x, voxel_column_world_pos.z);
-                    noise_val = (noise_val+1)/2; // set noise between 0 and 1
-                    noise_val = std::round(noise_val * 16) / 16;
+                    noise_val = std::pow(noise_val, 2);
+                    // * 0.15; // change max amplitude of the noise
+                    //noise_val = std::pow(noise_val, 0.5); // make valleys flatter
+
+
+                    //noise_val = std::round(noise_val * 16) / 16; //terracing
                     rounded_noise = (unsigned int)(noise_val * sector_voxel_height);
                     height_map_coord = (column_pos*block_size) + glm::uvec3(voxel_x,0,voxel_z);
                     height_map[height_map_coord.z][height_map_coord.x] = rounded_noise;

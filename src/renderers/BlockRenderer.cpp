@@ -17,7 +17,7 @@ void BlockRenderer::init(const unsigned int& block_size)
     //uniform_normalMat = m_shader.getUniformLocation("normal_matrix");
 
     uniform_lightpos = m_shader.getUniformLocation("lightPos");
-    glm::vec3 light_position = {200.0f, 50.0f, 200.0f};
+    glm::vec3 light_position = {200.0f, 250.0f, 200.0f};
     glUniform3fv(uniform_lightpos, 1, glm::value_ptr(light_position));
     //glUniformMatrixfv(uniform_mvp, 1, GL_FALSE, glm::value_ptr(vp * model));
 
