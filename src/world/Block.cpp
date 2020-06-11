@@ -235,11 +235,11 @@ void Block::updateNeighbours(const VoxelPos& voxel_coord)
 
     //if (isBlockEdge(voxel_coord))
      // set each of the 6 active bits of neighours to false if voxel is on that block edge or to the "isVisible" result of the neighbour in that direction
-    neighbours |= ( (voxel_coord.x     == 0                      ) ? false : (getVoxel({voxel_coord.x - 1, voxel_coord.y    , voxel_coord.z    }).isVisible()) ) << 0;
+    neighbours |= ( (voxel_coord.x     == 0           ) ? false : (getVoxel({voxel_coord.x - 1, voxel_coord.y    , voxel_coord.z    }).isVisible()) ) << 0;
     neighbours |= ( (voxel_coord.x + 1 == m_block_size) ? false : (getVoxel({voxel_coord.x + 1, voxel_coord.y    , voxel_coord.z    }).isVisible()) ) << 1;
-    neighbours |= ( (voxel_coord.y     == 0                      ) ? false : (getVoxel({voxel_coord.x    , voxel_coord.y - 1, voxel_coord.z    }).isVisible()) ) << 2;
+    neighbours |= ( (voxel_coord.y     == 0           ) ? false : (getVoxel({voxel_coord.x    , voxel_coord.y - 1, voxel_coord.z    }).isVisible()) ) << 2;
     neighbours |= ( (voxel_coord.y + 1 == m_block_size) ? false : (getVoxel({voxel_coord.x    , voxel_coord.y + 1, voxel_coord.z    }).isVisible()) ) << 3;
-    neighbours |= ( (voxel_coord.z     == 0                      ) ? false : (getVoxel({voxel_coord.x    , voxel_coord.y    , voxel_coord.z - 1}).isVisible()) ) << 4;
+    neighbours |= ( (voxel_coord.z     == 0           ) ? false : (getVoxel({voxel_coord.x    , voxel_coord.y    , voxel_coord.z - 1}).isVisible()) ) << 4;
     neighbours |= ( (voxel_coord.z + 1 == m_block_size) ? false : (getVoxel({voxel_coord.x    , voxel_coord.y    , voxel_coord.z + 1}).isVisible()) ) << 5;
         //TODO replace the "false" with a check into neighbour blocks
 
