@@ -37,7 +37,7 @@ protected:
     float m_z_far = 100.0f;
     float m_zoom = 2.0f;
 
-    glm::vec3 m_camera_position = {0.5f, 3.0f, 0.0f};
+    glm::vec3 m_camera_position = {0.5f, 15.0f, 0.0f};
     glm::vec3 m_camera_rotation = {-20.0f, 45.0f, 0.0f}; //pitch,yaw,roll (degrees)
 
     float m_camera_speed = 5.0f;

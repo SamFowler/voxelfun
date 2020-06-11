@@ -80,6 +80,7 @@ std::vector<std::pair<const BlockPos, Block &>> TerrainGenerator::generateSector
     const unsigned sector_height = 8;
     const unsigned block_size = 32;
 
+
     const unsigned sector_voxel_height = sector_height * block_size;
 
     glm::uvec3 height_map_coord;
@@ -92,9 +93,9 @@ std::vector<std::pair<const BlockPos, Block &>> TerrainGenerator::generateSector
     // {
     //     for (unsigned block_x = 0; block_x < sector_size; block_x++)
     //     {
-    for (unsigned block_z = 0; block_z < 12; block_z++)
+    for (unsigned block_z = 0; block_z < sector_size; block_z++)
     {
-        for (unsigned block_x = 0; block_x < 12; block_x++)
+        for (unsigned block_x = 0; block_x < sector_size; block_x++)
         {
             BlockPos column_pos(block_x, 0, block_z);
             WorldPos column_world_pos = CoordinateConversion::getWorldPos(sector_pos, column_pos);
@@ -150,7 +151,8 @@ std::vector<std::pair<const BlockPos, Block &>> TerrainGenerator::generateSector
             for (unsigned block_y = min_val; block_y <= max_val; block_y++)
             {
                 BlockPos block_pos = {block_x, block_y, block_z};
-                std::pair<const BlockPos, Block &> block_pair = sector->addBlock(block_pos, BlockMakeType::EMPTY_CHUNK);
+                std::pair<BlockPos, Block &> block_pair = sector->addBlock(SectorPos(block_pos), BlockMakeType::EMPTY_CHUNK);
+                block_pair.first = SectorPos(block_pos) + (sector_pos * 16);
                 Voxel grass(block_pair.second.addColour({10, 170, 10, 255}), VoxelType::Grass);
                 for (unsigned int z = 0; z < block_size; z++)
                 {

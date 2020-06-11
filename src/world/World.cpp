@@ -81,6 +81,14 @@ void World::init()
     }
 
 
+    sector_pos = {1,0,0};
+    p_sector = m_sector_manager.addSector(sector_pos);
+    blocks_to_mesh = m_terrain_generator.generateSector(p_sector, sector_pos);
+    for (auto it : blocks_to_mesh)
+    {
+        initial_mesh_list.push_back(it);
+    }
+
     //std::pair<const BlockPos, Block &> block_pair = p_sector->addBlock({0,0,0}, BlockMakeType::EMPTY_CHUNK);
     //m_terrain_generator.generateBlock(block_pair.second, CoordinateConversion::getWorldPos({0,0,0}, {0,0,0}, {0,0,0}));
     //initial_mesh_list.push_back(block_pair);
@@ -88,7 +96,7 @@ void World::init()
 
 
     m_selected_region = SelectedRegion({0,0,0}, {0,0,1}, {0,0,1}, m_block_size, 8, 16);
-
+    
     m_block_renderer.addSelectorVAO(m_selected_region.getWorldPos());
 
 
