@@ -4,6 +4,7 @@
 
 #include "Sector.h"
 
+#include "../helpers/OpenSimplexNoise.h"
 
 class OpenSimplexNoise;
 
@@ -20,6 +21,7 @@ public:
     std::vector<std::pair<const BlockPos, Block &>> generateSector(Sector* sector, const SectorPos& sector_pos);
 private:
 
+    OpenSimplexNoise m_simplex_generator;
     int m_seed;
 };
 

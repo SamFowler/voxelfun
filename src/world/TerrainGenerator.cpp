@@ -7,11 +7,12 @@
 TerrainGenerator::TerrainGenerator(int seed) 
     : m_seed(seed)
 {
+    m_simplex_generator = OpenSimplexNoise(seed);
 };
 
 void TerrainGenerator::generateBlock(Block& block, const WorldPos& block_origin)
 {
-    OpenSimplexNoise noise_generator(m_seed);
+    //OpenSimplexNoise noise_generator(m_seed);
 
     //WorldPos column_pos = block_origin;
     glm::vec2 origin_pos = {block_origin.x, block_origin.z};
@@ -35,7 +36,7 @@ void TerrainGenerator::generateBlock(Block& block, const WorldPos& block_origin)
         {
             column_pos = (origin_pos + glm::vec2(x, z)) / block_sizes;
 
-            double noise_val = noise_generator.Evaluate(column_pos.x, column_pos.y);
+            double noise_val = m_simplex_generator.Evaluate(column_pos.x, column_pos.y);
             noise_val = (noise_val+1)/2;
             rounded_noise = (unsigned int)(noise_val*BLOCK_SIZE);
 
@@ -74,7 +75,7 @@ double TerrainGenerator::getNoise(OpenSimplexNoise& simplex_gen, const glm::vec3
 std::vector<std::pair<const BlockPos, Block &>> TerrainGenerator::generateSector(Sector* sector, const SectorPos& sector_pos)
 {
     std::vector<std::pair<const BlockPos, Block &>> blocks_to_mesh;
-    OpenSimplexNoise noise_generator(m_seed);
+    //OpenSimplexNoise noise_generator(m_seed);
 
     glm::uvec3 height_map_coord;
 
@@ -103,9 +104,9 @@ std::vector<std::pair<const BlockPos, Block &>> TerrainGenerator::generateSector
                     //noise_pos *= 0.01; //spreads the noise -> lower value = less frequent changes
                     noise_pos /= (SECTOR_TIMES_BLOCK_HEIGHT);
                                                                              //freq   //amplitude
-                    double noise_val = getNoise(noise_generator, noise_pos * 0.75f) * 0.25
-                                     + getNoise(noise_generator, noise_pos * 2.0f)  * 0.1
-                                     + getNoise(noise_generator, noise_pos * 16.0f)  * 0.01;
+                    double noise_val = getNoise(m_simplex_generator, noise_pos * 0.75f) * 0.25
+                                     + getNoise(m_simplex_generator, noise_pos * 2.0f)  * 0.1
+                                     + getNoise(m_simplex_generator, noise_pos * 16.0f)  * 0.01;
                     
                     //noise_val /= (1 + 0.5);
                     noise_val /= (0.25 + 0.1 + 0.01 ); //adjust for amplitude
