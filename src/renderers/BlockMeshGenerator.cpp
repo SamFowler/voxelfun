@@ -50,18 +50,22 @@ void makeBlockMesh_Culling(const Block& block, BlockMesh& block_mesh)
 
                 Colour voxel_colour = block.getColour(voxel.getColourId());
 
-                if (!voxel.hasXMinusNeighbour())
+                const Neighbours neighbours = block.getNeighbours(voxel_index);
+                
+                if ( !neighbours.xMinusExists() )
               		addFace(block_mesh, voxel, voxel_pos, voxel_colour, element_count, X_MINUS_FACE, X_MINUS_NORMAL_INDEX);
-                if (!voxel.hasXPlusNeighbour())
+                if ( !neighbours.xPlusExists () )
               		addFace(block_mesh, voxel, voxel_pos, voxel_colour, element_count, X_PLUS_FACE, X_PLUS_NORMAL_INDEX);
-                if (!voxel.hasYMinusNeighbour())
+                if ( !neighbours.yMinusExists() )
               		addFace(block_mesh, voxel, voxel_pos, voxel_colour, element_count, Y_MINUS_FACE, Y_MINUS_NORMAL_INDEX);
-                if (!voxel.hasYPlusNeighbour())
+                if ( !neighbours.yPlusExists () )
               		addFace(block_mesh, voxel, voxel_pos, voxel_colour, element_count, Y_PLUS_FACE, Y_PLUS_NORMAL_INDEX);
-                if (!voxel.hasZMinusNeighbour())
+                if ( !neighbours.zMinusExists() )
                 	addFace(block_mesh, voxel, voxel_pos, voxel_colour, element_count, Z_MINUS_FACE, Z_MINUS_NORMAL_INDEX);
-                if (!voxel.hasZPlusNeighbour())
+                if ( !neighbours.zPlusExists () )
                 	addFace(block_mesh, voxel, voxel_pos, voxel_colour, element_count, Z_PLUS_FACE, Z_PLUS_NORMAL_INDEX);
+
+                
             }
         }
     }
@@ -71,8 +75,27 @@ void makeBlockMesh_Culling(const Block& block, BlockMesh& block_mesh)
 bool isFaceVisible(const unsigned& i, const unsigned& j, const unsigned& layer, const unsigned& normal_index, const Block& block)
 {
 
-
+    
     if (normal_index == X_MINUS_NORMAL_INDEX) 
+        return !block.getNeighbours({layer, j, i}).xMinusExists();
+    else if (normal_index == X_PLUS_NORMAL_INDEX) 
+        return !block.getNeighbours({layer, j, i}).xPlusExists();    
+    else if (normal_index == Y_MINUS_NORMAL_INDEX) 
+        return !block.getNeighbours({i, layer, j}).yMinusExists();
+    else if (normal_index == Y_PLUS_NORMAL_INDEX) 
+        return !block.getNeighbours({i, layer, j}).yPlusExists(); 
+    else if (normal_index == Z_MINUS_NORMAL_INDEX) 
+        return !block.getNeighbours({i, j, layer}).zMinusExists(); 
+    else if (normal_index == Z_PLUS_NORMAL_INDEX) 
+        return !block.getNeighbours({i, j, layer}).zPlusExists();
+    else {
+        std::cout << "[ERROR] Greedy meshing isFaceVisible bad return";
+        return true;
+    }
+    
+
+
+   /*  if (normal_index == X_MINUS_NORMAL_INDEX) 
         return !block.getVoxel({layer, j, i}).hasXMinusNeighbour();
     else if (normal_index == X_PLUS_NORMAL_INDEX) 
         return !block.getVoxel({layer, j, i}).hasXPlusNeighbour();    
@@ -87,7 +110,7 @@ bool isFaceVisible(const unsigned& i, const unsigned& j, const unsigned& layer, 
     else {
         std::cout << "[ERROR] Greedy meshing isFaceVisible bad return";
         return true;
-    }
+    } */
 }
 
 

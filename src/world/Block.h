@@ -7,6 +7,8 @@
 #include "Colour.h"
 #include "WorldConstants.h"
 
+#include "Neighbours.h"
+
 class Block
 {
 public:
@@ -60,11 +62,18 @@ public:
     //Debug
     void printBlock(const bool printVoxels = false) const;
 
+    Neighbours getNeighbours(const VoxelPos& voxel_pos  ) {return m_voxel_neighbours[indexFromVoxelPos(voxel_pos)];}
+    Neighbours getNeighbours(const uint32_t& voxel_index) {return m_voxel_neighbours[voxel_index];}
+    const Neighbours getNeighbours(const VoxelPos& voxel_pos  ) const {return m_voxel_neighbours[indexFromVoxelPos(voxel_pos)];}
+    const Neighbours getNeighbours(const uint32_t& voxel_index) const {return m_voxel_neighbours[voxel_index];}
 
 private:
 
     // Data
     std::vector<Voxel>  m_voxel_data;
+
+    std::array<Neighbours, BLOCK_VOLUME> m_voxel_neighbours;
+
 
     std::vector<Colour> m_block_colours;
     std::queue<ColourID> m_free_colour_ids;

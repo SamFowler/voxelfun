@@ -29,6 +29,4 @@ private:
 
     std::vector<BlockPos> m_blocks_to_update;
 
-    unsigned int m_block_size = 32;
-
 };
