@@ -1,14 +1,11 @@
 #include "SelectedRegion.h"
 
 #include "../Input.h"
+#include "WorldConstants.h"
 
-SelectedRegion::SelectedRegion(const SectorPos sector_pos, const BlockPos block_pos, const VoxelPos voxel_pos,
-                                unsigned int block_size, unsigned int sector_height, unsigned int sector_size) 
-    : m_sector_pos(sector_pos), m_block_pos(block_pos), m_voxel_pos(voxel_pos),
-    m_block_size(block_size), m_sector_height(sector_height), m_sector_size(sector_size)
+SelectedRegion::SelectedRegion(const SectorPos sector_pos, const BlockPos block_pos, const VoxelPos voxel_pos)
+    : m_sector_pos(sector_pos), m_block_pos(block_pos), m_voxel_pos(voxel_pos)
 {
-    m_sect_times_block_sizes = m_sector_size * m_block_size;
-    m_sect_height_times_block_size = sector_height * m_block_size;
 }
 
 void SelectedRegion::moveRegion(Input& input)
@@ -69,25 +66,25 @@ WorldPos SelectedRegion::getWorldPos()
 SectorPos SelectedRegion::getSectorPos()
 {
     return {
-        ((m_world_pos.x - ((int)(m_world_pos.x % (m_sector_size   * m_block_size)))) / ((int)(m_sector_size   * m_block_size))),
-        ((m_world_pos.y - ((int)(m_world_pos.y % (m_sector_height * m_block_size)))) / ((int)(m_sector_height * m_block_size))),
-        ((m_world_pos.z - ((int)(m_world_pos.z % (m_sector_size   * m_block_size)))) / ((int)(m_sector_size   * m_block_size))),
+        ((m_world_pos.x - ((int)(m_world_pos.x % (SECTOR_TIMES_BLOCK_SIZE)))) / ((int)(SECTOR_TIMES_BLOCK_SIZE))),
+        ((m_world_pos.y - ((int)(m_world_pos.y % (SECTOR_TIMES_BLOCK_HEIGHT)))) / ((int)(SECTOR_TIMES_BLOCK_HEIGHT))),
+        ((m_world_pos.z - ((int)(m_world_pos.z % (SECTOR_TIMES_BLOCK_SIZE)))) / ((int)(SECTOR_TIMES_BLOCK_SIZE))),
     };
 }
 BlockPos SelectedRegion::getBlockPos()
 {
     return {
-        ((int)((m_world_pos.x % (m_sector_size   * m_block_size)) / m_block_size)),
-        ((int)((m_world_pos.y % (m_sector_height * m_block_size)) / m_block_size)),
-        ((int)((m_world_pos.z % (m_sector_size   * m_block_size)) / m_block_size))
+        ((int)((m_world_pos.x % (SECTOR_TIMES_BLOCK_SIZE)) / BLOCK_SIZE)),
+        ((int)((m_world_pos.y % (SECTOR_TIMES_BLOCK_HEIGHT)) / BLOCK_SIZE)),
+        ((int)((m_world_pos.z % (SECTOR_TIMES_BLOCK_SIZE)) / BLOCK_SIZE))
     };
 }
 VoxelPos SelectedRegion::getVoxelPos()
 {
     return {
-        ((m_world_pos.x % (m_sector_size   * m_block_size)) % m_block_size),
-        ((m_world_pos.y % (m_sector_height * m_block_size)) % m_block_size),
-        ((m_world_pos.z % (m_sector_size   * m_block_size)) % m_block_size)
+        ((m_world_pos.x % (SECTOR_TIMES_BLOCK_SIZE)) % BLOCK_SIZE),
+        ((m_world_pos.y % (SECTOR_TIMES_BLOCK_HEIGHT)) % BLOCK_SIZE),
+        ((m_world_pos.z % (SECTOR_TIMES_BLOCK_SIZE)) % BLOCK_SIZE)
     };
 }
 

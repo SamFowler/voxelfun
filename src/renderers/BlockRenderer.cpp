@@ -3,10 +3,8 @@
 #include "BlockMeshGenerator.h"
 #include "WireframeMeshGenerator.h"
 
-void BlockRenderer::init(const unsigned int& block_size)
+void BlockRenderer::init()
 {
-    m_block_offset = (float)block_size;
-    m_block_size = block_size;
 
 
     m_shader.create("cube", "cube");
@@ -81,11 +79,11 @@ void BlockRenderer::updateVAOs()
         auto it = m_world_renderable_indexes.find(block.first);
         if (it != m_world_renderable_indexes.cend())
         {   
-            m_world_renderables[it->second] = {block.first, BlockMeshGenerator::makeBlockVAO(block.second, m_block_size, BlockMeshGenerator::GREEDY_MESH) };
+            m_world_renderables[it->second] = {block.first, BlockMeshGenerator::makeBlockVAO(block.second, BlockMeshGenerator::GREEDY_MESH) };
         }
         else
         {
-            m_world_renderables.push_back({block.first, BlockMeshGenerator::makeBlockVAO(block.second, m_block_size, BlockMeshGenerator::GREEDY_MESH) });
+            m_world_renderables.push_back({block.first, BlockMeshGenerator::makeBlockVAO(block.second, BlockMeshGenerator::GREEDY_MESH) });
             m_world_renderable_indexes.emplace(block.first, (m_world_renderables.size() - 1) );
         }
         
@@ -108,7 +106,7 @@ void BlockRenderer::draw(const Camera& camera)
     for (auto it = m_world_renderables.begin(); it != m_world_renderables.end(); ++it)
     {   
         it->vao.getDrawable().bind();
-        model = glm::translate(scale, glm::vec3(it->position) * m_block_offset);
+        model = glm::translate(scale, glm::vec3(it->position) * (float)BLOCK_SIZE);
         glUniformMatrix4fv(uniform_vp, 1, GL_FALSE, glm::value_ptr(vp));
         glUniformMatrix4fv(uniform_model, 1, GL_FALSE, glm::value_ptr(model));
 

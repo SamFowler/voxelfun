@@ -10,9 +10,7 @@ class SelectedRegion
 {
 public:
     SelectedRegion() {};
-    SelectedRegion(const SectorPos sector_pos, const BlockPos block_pos, const VoxelPos voxel_pos,
-                    unsigned int m_block_size, unsigned int m_sector_height, unsigned int m_sector_size
-    );
+    SelectedRegion(const SectorPos sector_pos, const BlockPos block_pos, const VoxelPos voxel_pos);
 
     void moveRegion(Input& input);
 
@@ -32,10 +30,4 @@ private:
 
     WorldPos m_world_pos = {0,0,0};
 
-    int m_block_size;
-    unsigned int m_sector_height;
-    unsigned int m_sector_size;
-
-    int m_sect_times_block_sizes;
-    int m_sect_height_times_block_size;
 };

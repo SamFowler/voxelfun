@@ -9,7 +9,6 @@
 class Sector
 {
 public:
-    Sector(unsigned int block_size) : m_block_size(block_size) {};
 
     std::pair<const BlockPos, Block&>  addBlock(const BlockPos& position, const BlockMakeType&);
     std::pair<const BlockPos, Block&>  addBlock(const BlockPos& block_pos, const std::vector<Voxel>& voxels, const std::vector<Colour>& colours);

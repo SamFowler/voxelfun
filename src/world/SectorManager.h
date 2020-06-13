@@ -9,7 +9,6 @@ class Input;
 class SectorManager
 {
 public:
-    SectorManager(unsigned int block_size);
     void loadWorld(/* std::string file_name */);
     void loadSector(const SectorPos& sector_pos);
 
@@ -28,5 +27,4 @@ private:
 
     std::vector<SectorPos> m_sectors_to_update;
 
-    unsigned int m_block_size;
 };

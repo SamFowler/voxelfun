@@ -3,10 +3,10 @@
 std::pair<const BlockPos, Block&> Sector::addBlock(const BlockPos& position, const BlockMakeType& type)
 {
     std::vector<Voxel> voxels;
-    voxels.reserve(sizeof(Voxel)*m_block_size*m_block_size*m_block_size);
+    voxels.reserve(sizeof(Voxel) * BLOCK_VOLUME);
     std::vector<Colour> colours;
 
-    DefaultBlockMaker::makeBlock(type, voxels, colours, m_block_size);
+    DefaultBlockMaker::makeBlock(type, voxels, colours);
 
     return addBlock(position, voxels, colours);
 }
@@ -19,7 +19,7 @@ std::pair<const BlockPos, Block&> Sector::addBlock(const BlockPos& block_pos, co
     if (m_block_column_details[column_index].isBlockEmpty(block_pos.y))
     {
         
-        m_blocks[block_index] = std::make_unique<Block>(voxels, colours, m_block_size);
+        m_blocks[block_index] = std::make_unique<Block>(voxels, colours);
         m_blocks[block_index]->updateAllNeighbours();
         m_blocks[block_index]->printBlock();
 

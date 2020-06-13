@@ -3,66 +3,67 @@
 #include "Block.h"
 #include "Voxel.h"
 #include "Colour.h"
-#include "Block.h"
+
+#include "WorldConstants.h"
 
 namespace DefaultBlockMaker
 {
-    int indexFromXYZ(const unsigned& x, const unsigned& y, const unsigned& z, const unsigned& block_size)
+    int indexFromXYZ(const unsigned& x, const unsigned& y, const unsigned& z)
     {
-        return (y*block_size*block_size) + (z * block_size) + x;
+        return (y*BLOCK_SIZE_SQ) + (z * BLOCK_SIZE) + x;
 
     }
 
-    void makeBlock(const BlockMakeType& type, std::vector<Voxel>& voxels, std::vector<Colour>& colours, const unsigned int& block_size)
+    void makeBlock(const BlockMakeType& type, std::vector<Voxel>& voxels, std::vector<Colour>& colours)
     {
         if (type == GRASS_CHUNK)
-            makeGrassBlock(voxels, colours, block_size);
+            makeGrassBlock(voxels, colours);
         else if (type == EMPTY_CHUNK)
-            makeEmptyBlock(voxels, colours,block_size);
+            makeEmptyBlock(voxels, colours);
         else if (type == REVEAL_DIRT_CHUNK)
-            makeRevealEarthBlock(voxels, colours, block_size);
+            makeRevealEarthBlock(voxels, colours);
         else if (type == DIRT_CHUNK)
-            makeDirtBlock(voxels, colours,block_size);
+            makeDirtBlock(voxels, colours);
         else if (type == TREE_CHUNK)
-            makeTreeBlock(voxels, colours,block_size);
+            makeTreeBlock(voxels, colours);
         else if (type == RANDOM_CHUNK)
-            makeRandomBlock(voxels, colours,block_size);
+            makeRandomBlock(voxels, colours);
         else if (type == LIGHT_CHUNK)
-            makeLightBlock(voxels, colours, block_size);
+            makeLightBlock(voxels, colours);
         else
-            makeDebugBlock(voxels, colours,block_size);
+            makeDebugBlock(voxels, colours);
         
 
     }
 
-    void makeEmptyBlock (std::vector<Voxel>& voxels, std::vector<Colour>& colours, const unsigned int& block_size)
+    void makeEmptyBlock (std::vector<Voxel>& voxels, std::vector<Colour>& colours)
     {
 
         Voxel voxel = {0, VoxelType::Empty};
-        voxels = std::move(std::vector<Voxel>(block_size*block_size*block_size, voxel));
+        voxels = std::move(std::vector<Voxel>(BLOCK_VOLUME, voxel));
         colours = { {0,0,0,0}};
 
     }
 
-    void makeGrassBlock (std::vector<Voxel>& voxels, std::vector<Colour>& colours, const unsigned int& block_size)
+    void makeGrassBlock (std::vector<Voxel>& voxels, std::vector<Colour>& colours)
     {
         Voxel voxel_dirt = {1, VoxelType::Dirt};
         Voxel voxel_grass = {2, VoxelType::Grass};
         Voxel voxel_grass2 = {3, VoxelType::Grass};
-        std::vector<Voxel> these_voxels(block_size*block_size*block_size, voxel_dirt);
+        std::vector<Voxel> these_voxels(BLOCK_VOLUME, voxel_dirt);
 
 
 
-        //int y = block_size-1;
-        for (unsigned y = 0; y < block_size; y++)
+        //int y = BLOCK_SIZE-1;
+        for (unsigned y = 0; y < BLOCK_SIZE; y++)
         {
-            for (unsigned z = 0; z < block_size; z++) 
+            for (unsigned z = 0; z < BLOCK_SIZE; z++) 
             {
-                for (unsigned x = 0; x < block_size; x++)
+                for (unsigned x = 0; x < BLOCK_SIZE; x++)
                 {
-                    if (y > block_size-3)
+                    if (y > BLOCK_SIZE-3)
                     {
-                        int index = indexFromXYZ(x,y,z, block_size);
+                        int index = indexFromXYZ(x,y,z);
                         these_voxels[index] = voxel_grass;
                         if ( (rand() % 10) == 0)
                         {
@@ -77,19 +78,19 @@ namespace DefaultBlockMaker
         colours = { {0,0,0,0}, {150, 100, 100, 255}, {0, 200, 0, 255}, {0, 170, 0, 255}};
     }
  
-    void makeRevealEarthBlock  (std::vector<Voxel>& voxels, std::vector<Colour>& colours, const unsigned int& block_size)
+    void makeRevealEarthBlock  (std::vector<Voxel>& voxels, std::vector<Colour>& colours)
     {
         Voxel voxel = {1, VoxelType::Dirt};
         Voxel voxel2 = {2, VoxelType::Dirt};
         Voxel empty_vox = {0, VoxelType::Empty};
-        std::vector<Voxel> these_voxels(block_size*block_size*block_size, voxel);
-        /* int y = block_size-1;
+        std::vector<Voxel> these_voxels(BLOCK_VOLUME, voxel);
+        /* int y = BLOCK_SIZE-1;
 
-        for (unsigned z = 0; z < block_size; z++) 
+        for (unsigned z = 0; z < BLOCK_SIZE; z++) 
         {
-            for (unsigned x = 0; x < block_size; x++)
+            for (unsigned x = 0; x < BLOCK_SIZE; x++)
             {
-                int index = indexFromXYZ(x,y,z, block_size);
+                int index = indexFromXYZ(x,y,z, BLOCK_SIZE);
                 
                     these_voxels[index] = empty_vox;
                 
@@ -97,13 +98,13 @@ namespace DefaultBlockMaker
             }
         } */
 
-        int y = block_size-1;
+        int y = BLOCK_SIZE-1;
 
-        for (unsigned z = 0; z < block_size; z++) 
+        for (unsigned z = 0; z < BLOCK_SIZE; z++) 
         {
-            for (unsigned x = 0; x < block_size; x++)
+            for (unsigned x = 0; x < BLOCK_SIZE; x++)
             {
-                int index = indexFromXYZ(x,y,z, block_size);
+                int index = indexFromXYZ(x,y,z);
                 if ( (rand() % 15) == 0)
                 {
                     these_voxels[index] = voxel2;
@@ -120,20 +121,20 @@ namespace DefaultBlockMaker
         colours = { {0,0,0,0}, {150, 100, 100, 255}, {120, 80, 80, 255}};
     }
 
-    void makeDirtBlock  (std::vector<Voxel>& voxels, std::vector<Colour>& colours, const unsigned int& block_size)
+    void makeDirtBlock  (std::vector<Voxel>& voxels, std::vector<Colour>& colours)
     {
         Voxel voxel = {1, VoxelType::Dirt};
         Voxel voxel2 = {2, VoxelType::Dirt};
-        std::vector<Voxel> these_voxels(block_size*block_size*block_size, voxel);
-        int y = block_size-1;
+        std::vector<Voxel> these_voxels(BLOCK_VOLUME, voxel);
+        int y = BLOCK_SIZE-1;
 
-        for (unsigned z = 0; z < block_size; z++) 
+        for (unsigned z = 0; z < BLOCK_SIZE; z++) 
         {
-            for (unsigned x = 0; x < block_size; x++)
+            for (unsigned x = 0; x < BLOCK_SIZE; x++)
             {
                 if ( (rand() % 15) == 0)
                 {
-                    int index = indexFromXYZ(x,y,z, block_size);
+                    int index = indexFromXYZ(x,y,z);
                     these_voxels[index] = voxel2;
                 }
                 
@@ -144,20 +145,20 @@ namespace DefaultBlockMaker
         colours = { {0,0,0,0}, {150, 100, 100, 255}, {120, 80, 80, 255}};
     }
 
-    void makeTreeBlock  (std::vector<Voxel>& voxels, std::vector<Colour>& colours, const unsigned int& block_size)
+    void makeTreeBlock  (std::vector<Voxel>& voxels, std::vector<Colour>& colours)
     {
         Voxel tree_bark = {1, VoxelType::Tree};
         Voxel tree_inside = {2, VoxelType::Tree};
-        std::vector<Voxel> block_voxels(block_size*block_size*block_size, tree_bark);
-        unsigned offset = block_size/8;
-        unsigned sz_minus_off = (block_size - 1) - offset;
-        unsigned mid_lower_bound = sz_minus_off - (block_size/2);
-        unsigned mid_upper_bound = offset + (block_size/2);
-        for (unsigned y = 0; y < block_size; y++)
+        std::vector<Voxel> block_voxels(BLOCK_VOLUME, tree_bark);
+        unsigned offset = BLOCK_SIZE/8;
+        unsigned sz_minus_off = (BLOCK_SIZE - 1) - offset;
+        unsigned mid_lower_bound = sz_minus_off - (BLOCK_SIZE/2);
+        unsigned mid_upper_bound = offset + (BLOCK_SIZE/2);
+        for (unsigned y = 0; y < BLOCK_SIZE; y++)
         {
-            for (unsigned z = 0; z < block_size; z++) 
+            for (unsigned z = 0; z < BLOCK_SIZE; z++) 
             {
-                for (unsigned x = 0; x < block_size; x++)
+                for (unsigned x = 0; x < BLOCK_SIZE; x++)
                 {
                     if (
                         ( (x == offset || x == sz_minus_off) && (z >= offset && z <= sz_minus_off ) ) ||
@@ -165,7 +166,7 @@ namespace DefaultBlockMaker
                         ( x > mid_lower_bound && z > mid_lower_bound && x < mid_upper_bound && z < mid_upper_bound )
                        )
                     {
-                        int index = indexFromXYZ(x,y,z, block_size);
+                        int index = indexFromXYZ(x,y,z);
                         block_voxels[index] = tree_inside;
                     }
                 }
@@ -177,7 +178,7 @@ namespace DefaultBlockMaker
 
     }
 
-    void makeRandomBlock(std::vector<Voxel>& voxels, std::vector<Colour>& colours, const unsigned int& block_size)
+    void makeRandomBlock(std::vector<Voxel>& voxels, std::vector<Colour>& colours)
     {
         int num_colours = rand()%7+1;
 
@@ -190,9 +191,9 @@ namespace DefaultBlockMaker
             colours.push_back({rand()%256, rand()%256, rand()%256, 255});
         }
 
-        std::vector<Voxel> these_voxels(block_size*block_size*block_size);
+        std::vector<Voxel> these_voxels(BLOCK_VOLUME);
 
-        for (unsigned j = 0; j < block_size*block_size*block_size; j++)
+        for (unsigned j = 0; j < BLOCK_VOLUME; j++)
         {
             these_voxels[j] = potential_voxels[rand() % num_colours];
 
@@ -204,17 +205,17 @@ namespace DefaultBlockMaker
 
     }
 
-    void makeDebugBlock (std::vector<Voxel>& voxels, std::vector<Colour>& colours, const unsigned int& block_size)
+    void makeDebugBlock (std::vector<Voxel>& voxels, std::vector<Colour>& colours)
     {
-        std::vector<Voxel> these_voxels(block_size*block_size*block_size, {1, VoxelType::Debug});
+        std::vector<Voxel> these_voxels(BLOCK_VOLUME, {1, VoxelType::Debug});
         voxels = std::move(these_voxels);
         colours = { {0,0,0,0}, {255, 0, 255, 255} };
     }
 
-    void makeLightBlock (std::vector<Voxel>& voxels, std::vector<Colour>& colours, const unsigned int& block_size)
+    void makeLightBlock (std::vector<Voxel>& voxels, std::vector<Colour>& colours)
     {
 
-        std::vector<Voxel> these_voxels(block_size*block_size*block_size, {1, VoxelType::LightSrc});
+        std::vector<Voxel> these_voxels(BLOCK_VOLUME, {1, VoxelType::LightSrc});
         voxels = std::move(these_voxels);
         colours = { {0,0,0,0}, {255, 236, 178, 255} };
     }

@@ -45,20 +45,20 @@ namespace BlockMeshGenerator
         COUNT
     };
 
-    VertexArrayObject makeBlockVAO(const Block& block, const unsigned int& block_size, const MeshMethod& mesh_method = CULL_MESH_FAST);
-    void makeBlockMesh_Naive  (const Block& block, const unsigned int& block_size, BlockMesh& block_mesh);
-    void makeBlockMesh_Culling(const Block& block, const unsigned int& block_size, BlockMesh& block_mesh);
+    VertexArrayObject makeBlockVAO(const Block& block, const MeshMethod& mesh_method = CULL_MESH_FAST);
+    void makeBlockMesh_Naive  (const Block& block, BlockMesh& block_mesh);
+    void makeBlockMesh_Culling(const Block& block, BlockMesh& block_mesh);
 
     void meshRectangle(BlockMesh& mesh, const BlockMeshFace& rectangle, const Block& block, const unsigned& direction, const unsigned& layer, const std::array<GLuint, 12>& face, unsigned& element_count);
     //const Voxel& getBlockVoxel(const unsigned& i, const unsigned& j, const unsigned& layer, const unsigned& direction, const Block& block);
-    ColourID getVoxelColour(const unsigned& i, const unsigned& j, const unsigned& layer, const unsigned& block_size, const unsigned& direction, const Block& block);
-    ColourID getVoxelColour(const unsigned& i, const unsigned& j, const unsigned& layer, const unsigned& normal_index, const Block& block, const unsigned& block_size, const unsigned& direction);
+    ColourID getVoxelColour(const unsigned& i, const unsigned& j, const unsigned& layer, const unsigned& direction, const Block& block);
+    ColourID getVoxelColour(const unsigned& i, const unsigned& j, const unsigned& layer, const unsigned& normal_index, const Block& block, const unsigned& direction);
 
     bool isFaceVisible(const unsigned& i, const unsigned& j, const unsigned& layer, const unsigned& normal_index, const Block& block);
-    unsigned getLocalIndex(const unsigned& i, const unsigned& j, const unsigned& block_size);
-    void makeBlockMesh_Greedy (const Block& block, const unsigned int& block_size, BlockMesh& block_mesh);
+    unsigned getLocalIndex(const unsigned& i, const unsigned& j);
+    void makeBlockMesh_Greedy (const Block& block, BlockMesh& block_mesh);
 
-    void makeBlockMesh_Optimal(const Block& block, const unsigned int& block_size, BlockMesh& block_mesh);
+    void makeBlockMesh_Optimal(const Block& block, BlockMesh& block_mesh);
 
     void addFace(BlockMesh& mesh, const Voxel& voxel, const VoxelPos& voxel_pos, const Colour& voxel_colour,
                     int& element_count, const std::array<GLuint, 12>& face_verts, const GLuint& normal_index);

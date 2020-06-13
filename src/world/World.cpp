@@ -4,9 +4,8 @@
 void World::init()
 {
 
-    m_block_size = 32;
 
-    /* m_block_manager = BlockManager(m_block_size);
+    /* 
     m_block_manager.init();
     
     for (int i = 0; i < 8; i++)
@@ -46,7 +45,7 @@ void World::init()
         
     
 
-    m_block_renderer.init(m_block_size);
+    m_block_renderer.init();
 
     std::vector<std::pair<const BlockPos, Block&>>& initial_mesh_list = m_block_renderer.getRefToRemeshList();
 
@@ -95,14 +94,14 @@ void World::init()
    
 
 
-    m_selected_region = SelectedRegion({0,0,0}, {0,0,1}, {0,0,1}, m_block_size, 8, 16);
+    m_selected_region = SelectedRegion({0,0,0}, {0,0,1}, {0,0,1});
     
     m_block_renderer.addSelectorVAO(m_selected_region.getWorldPos());
 
 
 
 
-    /* m_sector = Sector(m_block_size);
+    /* m_sector = Sector();
 
     m_block_renderer.getRefToRemeshList().push_back(m_sector.addBlock({1, 1, 1}, BlockMakeType::REVEAL_DIRT_CHUNK));
     m_block_renderer.getRefToRemeshList().push_back(m_sector.addBlock({1, 1, 4}, BlockMakeType::GRASS_CHUNK));

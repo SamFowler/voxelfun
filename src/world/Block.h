@@ -1,26 +1,17 @@
 #pragma once
 
-//#include <vector>
-//#include <queue>
-//#include <glm/vec3.h>
-
 #include "../pch/pch_std.h"
 
 #include "Voxel.h"
 #include "Coordinates.h"
 #include "Colour.h"
-
-
-class BlockManager;
+#include "WorldConstants.h"
 
 class Block
 {
 public:
     //Constructors
-    Block ();
-    Block (Block block, unsigned int& block_size);//BlockManager& manager_ptr);
-    Block (unsigned int& block_size); //BlockManager& manager);
-    Block (std::vector<Voxel> voxels, std::vector<Colour> colours, unsigned int& block_size); //BlockManager& manager);
+    Block (std::vector<Voxel> voxels, std::vector<Colour> colours); //BlockManager& manager);
 
     // Helpers
     unsigned int    indexFromVoxelPos   (const VoxelPos& voxel_coord) const;
@@ -36,8 +27,6 @@ public:
     ColourID findColour (const Colour& colour) const;
 
     // Getters
-    //BlockPos    getPosition   () const  { return m_position;   }
-
     Colour     getColour       (const ColourID&        colour_id  ) const;
     ColourID   getVoxelColourID(const VoxelPos& voxel_coord) const;
     Colour     getVoxelColour  (const VoxelPos& voxel_coord) const;
@@ -50,8 +39,7 @@ public:
     const std::vector<Colour>& getColoursRef() const;
 
     // Setters
-    //void setPosition(const BlockPos& position) { m_position = position; }
-    
+   
     void setVoxels(const std::vector<VoxelPos>& voxel_coords, const Colour&    colour);
     void setVoxels(const std::vector<VoxelPos>& voxel_coords, const VoxelType& type  );
     void setVoxels(const std::vector<VoxelPos>& voxel_coords, const Voxel&     voxel );
@@ -80,9 +68,5 @@ private:
 
     std::vector<Colour> m_block_colours;
     std::queue<ColourID> m_free_colour_ids;
-
-    //BlockManager& mp_manager;
-    unsigned int m_block_size;
-
 
 };

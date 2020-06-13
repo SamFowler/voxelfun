@@ -20,15 +20,15 @@ enum BlockMakeType
 namespace DefaultBlockMaker
 {
 
-    int indexFromXYZ(const unsigned& x, const unsigned& y, const unsigned& z, const unsigned& block_size);
+    int indexFromXYZ(const unsigned& x, const unsigned& y, const unsigned& z);
 
-    void makeBlock(const BlockMakeType& type, std::vector<Voxel>& voxels, std::vector<Colour>& colours, const unsigned int& block_size);
-    void makeEmptyBlock (std::vector<Voxel>& voxels, std::vector<Colour>& colours, const unsigned int& block_size);
-    void makeGrassBlock (std::vector<Voxel>& voxels, std::vector<Colour>& colours, const unsigned int& block_size);
-    void makeRevealEarthBlock  (std::vector<Voxel>& voxels, std::vector<Colour>& colours, const unsigned int& block_size);
-    void makeDirtBlock  (std::vector<Voxel>& voxels, std::vector<Colour>& colours, const unsigned int& block_size);
-    void makeTreeBlock  (std::vector<Voxel>& voxels, std::vector<Colour>& colours, const unsigned int& block_size);
-    void makeRandomBlock(std::vector<Voxel>& voxels, std::vector<Colour>& colours, const unsigned int& block_size);
-    void makeDebugBlock (std::vector<Voxel>& voxels, std::vector<Colour>& colours, const unsigned int& block_size);
-    void makeLightBlock (std::vector<Voxel>& voxels, std::vector<Colour>& colours, const unsigned int& block_size);
+    void makeBlock(const BlockMakeType& type, std::vector<Voxel>& voxels, std::vector<Colour>& colours);
+    void makeEmptyBlock (std::vector<Voxel>& voxels, std::vector<Colour>& colours);
+    void makeGrassBlock (std::vector<Voxel>& voxels, std::vector<Colour>& colours);
+    void makeRevealEarthBlock  (std::vector<Voxel>& voxels, std::vector<Colour>& colours);
+    void makeDirtBlock  (std::vector<Voxel>& voxels, std::vector<Colour>& colours);
+    void makeTreeBlock  (std::vector<Voxel>& voxels, std::vector<Colour>& colours);
+    void makeRandomBlock(std::vector<Voxel>& voxels, std::vector<Colour>& colours);
+    void makeDebugBlock (std::vector<Voxel>& voxels, std::vector<Colour>& colours);
+    void makeLightBlock (std::vector<Voxel>& voxels, std::vector<Colour>& colours);
 }

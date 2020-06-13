@@ -10,7 +10,7 @@
 class BlockRenderer
 {
 public:
-    void init(const unsigned int& block_size);
+    void init();
     //void getNewBlockUpdates(const std::vector<const Block*> updated_blocks);
 
     std::vector<std::pair<const BlockPos, Block&> >& getRefToRemeshList();
@@ -26,9 +26,6 @@ public:
     void destroy();
 
 private:
-
-    float m_block_offset;
-    unsigned int m_block_size;
 
     bool m_line_mode = false;
 

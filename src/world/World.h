@@ -14,7 +14,7 @@
 class World
 {
 public:
-    World(unsigned int block_size) : m_block_size(block_size), m_terrain_generator(1), m_sector_manager(block_size) {};
+    World() : m_terrain_generator(1){};
     void init();
     
     void update(Input& input, const float& timestep);
@@ -23,7 +23,6 @@ public:
     void destroy();
 
 private:
-    unsigned int m_block_size;
 
     TerrainGenerator m_terrain_generator;
 
