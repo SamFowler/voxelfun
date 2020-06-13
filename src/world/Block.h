@@ -11,7 +11,7 @@ class Block
 {
 public:
     //Constructors
-    Block (std::vector<Voxel> voxels, std::vector<Colour> colours); //BlockManager& manager);
+    Block (std::vector<Voxel> voxels, std::vector<Colour> colours);
 
     // Helpers
     unsigned int    indexFromVoxelPos   (const VoxelPos& voxel_coord) const;

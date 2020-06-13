@@ -1,8 +1,6 @@
 #include "Block.h"
 
-#include "BlockManager.h"
-
-Block::Block (std::vector<Voxel> voxels, std::vector<Colour> colours) //BlockManager& manager)
+Block::Block (std::vector<Voxel> voxels, std::vector<Colour> colours)
     : m_voxel_data(std::move(voxels)),   m_block_colours(std::move(colours))
     {
         std::cout << "block created" << std::endl;
