@@ -6,6 +6,7 @@
 #include "BlockMesh.h"
 
 class SectorColours;
+class Colour;
 
 namespace BlockMeshGenerator
 {

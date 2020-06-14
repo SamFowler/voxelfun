@@ -21,7 +21,6 @@ std::pair<const BlockPos, Block&> Sector::addBlock(const BlockPos& block_pos, co
         
         m_blocks[block_index] = std::make_unique<Block>(voxels);
         m_blocks[block_index]->updateAllNeighbours();
-        m_blocks[block_index]->printBlock();
 
         m_block_column_details[column_index].addBlock(block_pos.y);
        // if (m_block_column_details[column_index].addBlock(block_pos.y))

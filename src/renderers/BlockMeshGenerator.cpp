@@ -1,7 +1,6 @@
 #include "BlockMeshGenerator.h"
 
 #include "../pch/pch_std.h"
-//#include <iostream>
 
 #include "../world/SectorColours.h"
 
@@ -9,7 +8,6 @@ namespace BlockMeshGenerator
 {
 
  
-
 VertexArrayObject makeBlockVAO(const Block& block, const SectorColours& sector_colours, const MeshMethod& mesh_method)
 {
     BlockMesh block_mesh;
@@ -46,14 +44,14 @@ void makeBlockMesh_Culling(const Block& block, BlockMesh& block_mesh, const Sect
             {
                 VoxelPos voxel_pos = {x,y,z};
                 
-                unsigned int voxel_index = block.indexFromVoxelPos( voxel_pos );
-
                 Voxel voxel = block.getVoxel( voxel_pos );
+                const Neighbours neighbours = block.getNeighbours(voxel_pos);
 
+                
                 Colour voxel_colour = sector_colours.getColour(voxel);
                 //Colour voxel_colour = block.getColour(voxel.getColourId());
 
-                const Neighbours neighbours = block.getNeighbours(voxel_index);
+                
 
                 if ( !neighbours.xMinusExists() )
               		addFace(block_mesh, voxel, voxel_pos, voxel_colour, element_count, X_MINUS_FACE, X_MINUS_NORMAL_INDEX);
