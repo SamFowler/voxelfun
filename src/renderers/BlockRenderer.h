@@ -7,6 +7,8 @@
 #include "Renderables.h"
 #include "../Input.h"
 
+class SectorColours;
+
 class BlockRenderer
 {
 public:
@@ -21,7 +23,7 @@ public:
 
     void updateSettings(Input& input);
 
-    void updateVAOs();
+    void updateVAOs(const SectorColours& sector_colours /* this is temp here before this renderer gets moved */);
     void draw(const Camera& camera);
     void destroy();
 

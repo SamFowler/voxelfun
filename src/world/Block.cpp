@@ -1,7 +1,7 @@
 #include "Block.h"
 
-Block::Block (std::vector<Voxel> voxels, std::vector<Colour> colours)
-    : m_voxel_data(std::move(voxels)),   m_block_colours(std::move(colours))
+Block::Block (std::vector<Voxel> voxels)
+    : m_voxel_data(std::move(voxels))
     {
         std::cout << "block created" << std::endl;
     }
@@ -34,7 +34,7 @@ bool Block::isBlockEdge(const int& voxel_index) const
 {
     return isBlockEdge( inBlockPosFromIndex(voxel_index) );
 }
-
+/* 
 ColourID Block::addColour(const Colour& colour)
 {
     ColourID id = findColour(colour);
@@ -42,12 +42,12 @@ ColourID Block::addColour(const Colour& colour)
     {
         return id;
     }
-    else
+    else 
     {
         if ( m_free_colour_ids.empty() )
         {
             m_block_colours.push_back(colour);
-            return m_block_colours.size() - 1;
+            return m_block_colours.size() - 1; 
         }
         else
         {
@@ -104,17 +104,17 @@ ColourID Block::findColour (const Colour& colour) const
 Colour Block::getColour(const ColourID& colour_id) const
 {
     return m_block_colours[colour_id];
-}
+} */
 
-ColourID Block::getVoxelColourID(const VoxelPos& voxel_coord) const
+/* ColourID Block::getVoxelColourID(const VoxelPos& voxel_coord) const
 {
     return m_voxel_data[ indexFromVoxelPos(voxel_coord) ].getColourId();
 }
-
-Colour Block::getVoxelColour(const VoxelPos& voxel_coord) const
+ */
+/* Colour Block::getVoxelColour(const VoxelPos& voxel_coord) const
 {
     return m_block_colours[ m_voxel_data[ indexFromVoxelPos(voxel_coord) ].getColourId() ];
-}
+} */
 
 VoxelType Block::getVoxelType (const VoxelPos& voxel_coord) const
 {
@@ -150,23 +150,23 @@ const std::vector<Voxel>& Block::getVoxelDataRef() const
     return m_voxel_data;
 }
 
-const std::vector<Colour>& Block::getColoursRef() const
+/* const std::vector<Colour>& Block::getColoursRef() const
 {
     return m_block_colours;
 }
-
+ */
 
 
 // Setters
 
-void Block::setVoxels(const std::vector<VoxelPos>& voxel_coords, const Colour& colour)
+/* void Block::setVoxels(const std::vector<VoxelPos>& voxel_coords, const Colour& colour)
 {
-    ColourID id = addColour(colour);
+    //ColourID id = addColour(colour);
     for (auto it : voxel_coords)
     {
         m_voxel_data[ indexFromVoxelPos(it) ].setColourId(id);
     }
-}
+} */
 
 void Block::setVoxels(const std::vector<VoxelPos>& voxel_coords, const VoxelType& type)
 {
@@ -224,7 +224,7 @@ void Block::updateAllNeighbours()
 }
 
 
-void Block::changeAllVoxels(const Colour& colour)
+/* void Block::changeAllVoxels(const Colour& colour)
 {
     removeAllColours();
     ColourID id = addColour(colour);
@@ -233,7 +233,7 @@ void Block::changeAllVoxels(const Colour& colour)
         if (it.isVisible())
             it.setColourId(id);
     }
-}
+} */
 
 void Block::changeAllVoxels(const VoxelType& type)
 {
@@ -251,7 +251,7 @@ void Block::changeAllVoxels(const Voxel& voxel)
     }
 }
 
-void Block::changeVoxelsFromTo(const Colour& from_colour, const Colour& to_colour)
+/* void Block::changeVoxelsFromTo(const Colour& from_colour, const Colour& to_colour)
 {
     ColourID from_id = findColour(from_colour);
     ColourID to_id = addColour(to_colour);
@@ -260,7 +260,7 @@ void Block::changeVoxelsFromTo(const Colour& from_colour, const Colour& to_colou
         if (it.getColourId() == from_id)
             it.setColourId(to_id);
     }
-}
+} */
 
 void Block::changeVoxelsFromTo(const VoxelType& from_type, const VoxelType& to_type)
 {
@@ -284,13 +284,13 @@ void Block::printBlock(const bool printVoxels) const
 {
     //std::cout << "[Block] pos{" << m_position.x << " " << m_position.y << " " << m_position.x << "}, num_voxels{" <<
     std::cout << "[Block] num_voxels{" <<
-            m_voxel_data.size() << "}, colours{";
+            m_voxel_data.size() << "}, ";/* colours{";
     for (auto it : m_block_colours)
     {
         it.logColour(); std::cout << ", ";
 
     }
-    std::cout << "} " << std::endl;
+    std::cout << "} " << std::endl; */
     if (printVoxels)
     {
         std::cout << "    voxels {";

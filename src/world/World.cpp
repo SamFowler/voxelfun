@@ -137,7 +137,7 @@ void World::update(Input& input, const float& timestep)
 
     
     m_block_renderer.updateSettings(input);
-    m_block_renderer.updateVAOs();
+    m_block_renderer.updateVAOs(m_sector_manager.getSector({0,0,0}).colours /* this is temp here before renderer gets moved */);
 }
 
 

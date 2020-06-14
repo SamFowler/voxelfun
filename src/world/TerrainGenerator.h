@@ -13,7 +13,7 @@ class TerrainGenerator
 public:
     TerrainGenerator(int seed);
 
-    void generateBlock(Block& block, const WorldPos& block_origin);
+    //void generateBlock(Block& block, const WorldPos& block_origin);
 
     double getNoise(OpenSimplexNoise& simplex_gen, const glm::vec2& pos);
     double getNoise(OpenSimplexNoise& simplex_gen, const glm::vec3& pos);

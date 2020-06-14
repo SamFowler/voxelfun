@@ -2,17 +2,20 @@
 
 #include "../pch/pch_std.h"
 
-enum class VoxelType : uint8_t 
+enum VoxelTypes
 {
     Empty = 0,
     Grass = 1,
     Dirt  = 2,
     Tree  = 3,
     LightSrc = 4,
-    Debug
+    Debug = 5,
+    Size
 };
 
 using ColourID = uint8_t;
+using MaterialID = uint16_t;
+using VoxelType = uint8_t;
 
 class Voxel
 {
@@ -25,9 +28,9 @@ private:
 public:
     // Constructors
     Voxel ()                                                         
-        : m_colour_id(0), m_voxel_type(VoxelType::Empty), m_light(0) {};
+        : m_colour_id(0), m_voxel_type(VoxelTypes::Empty), m_light(0) {};
 
-    Voxel ( const ColourID& colour_id, const VoxelType& voxel_type ) 
+    Voxel ( const ColourID& colour_id, const VoxelTypes& voxel_type ) 
         : m_colour_id(colour_id), m_voxel_type(voxel_type), m_light(0) {};
 
     bool operator==(const Voxel& other) const 
@@ -48,8 +51,8 @@ public:
     void setType      (const VoxelType& voxel_type) { m_voxel_type = voxel_type; }
 
     // Utility
-    bool isVisible()      const  { return ( m_voxel_type != VoxelType::Empty ); }
-    bool isOccupiable()   const  { return ( m_voxel_type == VoxelType::Empty ); }
+    bool isVisible()      const  { return ( m_voxel_type != VoxelTypes::Empty ); }
+    bool isOccupiable()   const  { return ( m_voxel_type == VoxelTypes::Empty ); }
     bool isDestructable() const  { return isVisible(); }
 
     // Debug

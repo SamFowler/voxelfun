@@ -39,7 +39,7 @@ namespace DefaultBlockMaker
     void makeEmptyBlock (std::vector<Voxel>& voxels, std::vector<Colour>& colours)
     {
 
-        Voxel voxel = {0, VoxelType::Empty};
+        Voxel voxel = {0, VoxelTypes::Empty};
         voxels = std::move(std::vector<Voxel>(BLOCK_VOLUME, voxel));
         colours = { {0,0,0,0}};
 
@@ -47,9 +47,9 @@ namespace DefaultBlockMaker
 
     void makeGrassBlock (std::vector<Voxel>& voxels, std::vector<Colour>& colours)
     {
-        Voxel voxel_dirt = {1, VoxelType::Dirt};
-        Voxel voxel_grass = {2, VoxelType::Grass};
-        Voxel voxel_grass2 = {3, VoxelType::Grass};
+        Voxel voxel_dirt = {1, VoxelTypes::Dirt};
+        Voxel voxel_grass = {2, VoxelTypes::Grass};
+        Voxel voxel_grass2 = {3, VoxelTypes::Grass};
         std::vector<Voxel> these_voxels(BLOCK_VOLUME, voxel_dirt);
 
 
@@ -80,9 +80,9 @@ namespace DefaultBlockMaker
  
     void makeRevealEarthBlock  (std::vector<Voxel>& voxels, std::vector<Colour>& colours)
     {
-        Voxel voxel = {1, VoxelType::Dirt};
-        Voxel voxel2 = {2, VoxelType::Dirt};
-        Voxel empty_vox = {0, VoxelType::Empty};
+        Voxel voxel = {1, VoxelTypes::Dirt};
+        Voxel voxel2 = {2, VoxelTypes::Dirt};
+        Voxel empty_vox = {0, VoxelTypes::Empty};
         std::vector<Voxel> these_voxels(BLOCK_VOLUME, voxel);
         /* int y = BLOCK_SIZE-1;
 
@@ -123,8 +123,8 @@ namespace DefaultBlockMaker
 
     void makeDirtBlock  (std::vector<Voxel>& voxels, std::vector<Colour>& colours)
     {
-        Voxel voxel = {1, VoxelType::Dirt};
-        Voxel voxel2 = {2, VoxelType::Dirt};
+        Voxel voxel = {1, VoxelTypes::Dirt};
+        Voxel voxel2 = {2, VoxelTypes::Dirt};
         std::vector<Voxel> these_voxels(BLOCK_VOLUME, voxel);
         int y = BLOCK_SIZE-1;
 
@@ -147,8 +147,8 @@ namespace DefaultBlockMaker
 
     void makeTreeBlock  (std::vector<Voxel>& voxels, std::vector<Colour>& colours)
     {
-        Voxel tree_bark = {1, VoxelType::Tree};
-        Voxel tree_inside = {2, VoxelType::Tree};
+        Voxel tree_bark = {1, VoxelTypes::Tree};
+        Voxel tree_inside = {2, VoxelTypes::Tree};
         std::vector<Voxel> block_voxels(BLOCK_VOLUME, tree_bark);
         unsigned offset = BLOCK_SIZE/8;
         unsigned sz_minus_off = (BLOCK_SIZE - 1) - offset;
@@ -183,11 +183,11 @@ namespace DefaultBlockMaker
         int num_colours = rand()%7+1;
 
         std::vector<Voxel> potential_voxels(num_colours); 
-        potential_voxels[0] = {0, VoxelType::Empty};
+        potential_voxels[0] = {0, VoxelTypes::Empty};
         colours.push_back( {0,0,0,0} );
         for (int i = 1; i < num_colours; i++)
         {
-            potential_voxels[i] = { (ColourID)(rand()%num_colours), VoxelType::Debug};
+            potential_voxels[i] = { (ColourID)(rand()%num_colours), VoxelTypes::Debug};
             colours.push_back({rand()%256, rand()%256, rand()%256, 255});
         }
 
@@ -207,7 +207,7 @@ namespace DefaultBlockMaker
 
     void makeDebugBlock (std::vector<Voxel>& voxels, std::vector<Colour>& colours)
     {
-        std::vector<Voxel> these_voxels(BLOCK_VOLUME, {1, VoxelType::Debug});
+        std::vector<Voxel> these_voxels(BLOCK_VOLUME, {1, VoxelTypes::Debug});
         voxels = std::move(these_voxels);
         colours = { {0,0,0,0}, {255, 0, 255, 255} };
     }
@@ -215,7 +215,7 @@ namespace DefaultBlockMaker
     void makeLightBlock (std::vector<Voxel>& voxels, std::vector<Colour>& colours)
     {
 
-        std::vector<Voxel> these_voxels(BLOCK_VOLUME, {1, VoxelType::LightSrc});
+        std::vector<Voxel> these_voxels(BLOCK_VOLUME, {1, VoxelTypes::LightSrc});
         voxels = std::move(these_voxels);
         colours = { {0,0,0,0}, {255, 236, 178, 255} };
     }

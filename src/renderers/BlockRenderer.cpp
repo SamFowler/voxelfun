@@ -72,18 +72,18 @@ void BlockRenderer::updateSettings(Input& input)
 }
 
 
-void BlockRenderer::updateVAOs() 
+void BlockRenderer::updateVAOs(const SectorColours& sector_colours) 
 {
     for (auto block : m_blocks_to_remesh)
     {
         auto it = m_world_renderable_indexes.find(block.first);
         if (it != m_world_renderable_indexes.cend())
         {   
-            m_world_renderables[it->second] = {block.first, BlockMeshGenerator::makeBlockVAO(block.second, BlockMeshGenerator::GREEDY_MESH) };
+            m_world_renderables[it->second] = {block.first, BlockMeshGenerator::makeBlockVAO(block.second, sector_colours, BlockMeshGenerator::GREEDY_MESH) };
         }
         else
         {
-            m_world_renderables.push_back({block.first, BlockMeshGenerator::makeBlockVAO(block.second, BlockMeshGenerator::GREEDY_MESH) });
+            m_world_renderables.push_back({block.first, BlockMeshGenerator::makeBlockVAO(block.second, sector_colours, BlockMeshGenerator::GREEDY_MESH) });
             m_world_renderable_indexes.emplace(block.first, (m_world_renderables.size() - 1) );
         }
         

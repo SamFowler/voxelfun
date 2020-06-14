@@ -9,7 +9,7 @@ TerrainGenerator::TerrainGenerator(int seed)
 {
     m_simplex_generator = OpenSimplexNoise(seed);
 };
-
+/* 
 void TerrainGenerator::generateBlock(Block& block, const WorldPos& block_origin)
 {
     //OpenSimplexNoise noise_generator(m_seed);
@@ -20,10 +20,10 @@ void TerrainGenerator::generateBlock(Block& block, const WorldPos& block_origin)
     glm::vec2 block_sizes = {BLOCK_SIZE, BLOCK_SIZE};
     double noise_val;
 
-    Voxel grass(block.addColour({10, 170, 10, 255}), VoxelType::Grass);
-    Voxel snow(block.addColour({240, 240, 240, 255}), VoxelType::Grass);
-    Voxel water(block.addColour({0, 0, 130, 255}), VoxelType::Grass);
-    Voxel mountain(block.addColour({180, 180, 180, 255}), VoxelType::Grass);
+    Voxel grass(block.addColour({10, 170, 10, 255}), VoxelTypes::Grass);
+    Voxel snow(block.addColour({240, 240, 240, 255}), VoxelTypes::Grass);
+    Voxel water(block.addColour({0, 0, 130, 255}), VoxelTypes::Grass);
+    Voxel mountain(block.addColour({180, 180, 180, 255}), VoxelTypes::Grass);
     unsigned rounded_noise;
 
     // for (unsigned int z = 0; z < BLOCK_SIZE; z++)
@@ -60,7 +60,7 @@ void TerrainGenerator::generateBlock(Block& block, const WorldPos& block_origin)
 
         }
     }
-}
+} */
 
 double TerrainGenerator::getNoise(OpenSimplexNoise& simplex_gen, const glm::vec2& pos)
 {
@@ -79,8 +79,13 @@ std::vector<std::pair<const BlockPos, Block &>> TerrainGenerator::generateSector
 
     glm::uvec3 height_map_coord;
 
+    ColourID colour = sector->colours.addColour(VoxelTypes::Grass, {10, 170, 10, 255});
+    Voxel grass(colour, VoxelTypes::Grass);
+    //Voxel grass(block_pair.second.addColour({10, 170, 10, 255}), VoxelTypes::Grass);
+
+
     int height_map[512][512];
-    
+    //Voxel grass(block_pair.second.addColour({10, 170, 10, 255}), VoxelTypes::Grass);
 
     for (unsigned block_z = 0; block_z < 4; block_z++)
     {
@@ -142,7 +147,8 @@ std::vector<std::pair<const BlockPos, Block &>> TerrainGenerator::generateSector
                 BlockPos block_pos = {block_x, block_y, block_z};
                 std::pair<BlockPos, Block &> block_pair = sector->addBlock(SectorPos(block_pos), BlockMakeType::EMPTY_CHUNK);
                 block_pair.first = SectorPos(block_pos) + (sector_pos * 16);
-                Voxel grass(block_pair.second.addColour({10, 170, 10, 255}), VoxelType::Grass);
+                
+                //Voxel grass(block_pair.second.addColour({10, 170, 10, 255}), VoxelTypes::Grass);
                 for (unsigned int z = 0; z < BLOCK_SIZE; z++)
                 {
                     for (unsigned int x = 0; x < BLOCK_SIZE; x++)

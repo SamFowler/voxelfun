@@ -8,10 +8,10 @@ std::pair<const BlockPos, Block&> Sector::addBlock(const BlockPos& position, con
 
     DefaultBlockMaker::makeBlock(type, voxels, colours);
 
-    return addBlock(position, voxels, colours);
+    return addBlock(position, voxels);
 }
 
-std::pair<const BlockPos, Block&> Sector::addBlock(const BlockPos& block_pos, const std::vector<Voxel>& voxels, const std::vector<Colour>& colours)
+std::pair<const BlockPos, Block&> Sector::addBlock(const BlockPos& block_pos, const std::vector<Voxel>& voxels)
 {
 
     unsigned int block_index = getBlockIndexFromBlockPos(block_pos);
@@ -19,7 +19,7 @@ std::pair<const BlockPos, Block&> Sector::addBlock(const BlockPos& block_pos, co
     if (m_block_column_details[column_index].isBlockEmpty(block_pos.y))
     {
         
-        m_blocks[block_index] = std::make_unique<Block>(voxels, colours);
+        m_blocks[block_index] = std::make_unique<Block>(voxels);
         m_blocks[block_index]->updateAllNeighbours();
         m_blocks[block_index]->printBlock();
 
@@ -43,7 +43,7 @@ void Sector::editBlock(const BlockPos& block_pos /*, voxels/colours/changes */)
     // this is done so updates are processed all at once in each frame
     
     Block& block = getBlock(block_pos);
-    block.changeAllVoxels({255,0,255,255});
+    //block.changeAllVoxels({255,0,255,255});
 
     //m_blocks_to_update.push_back(getBlockIndexFromBlockPos(block_pos)/*, <<<changes to make>>> */);
     m_blocks_to_update.push_back(block_pos /*, <<<changes to make>>> */);
