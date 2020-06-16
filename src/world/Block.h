@@ -20,8 +20,8 @@ public:
     Block (std::vector<Voxel> voxels);
     
     // Setters
-    void setVoxels(const std::vector<VoxelPos>& voxel_coords, const VoxelType& type  );
-    void setVoxels(const std::vector<VoxelPos>& voxel_coords, const Voxel&     voxel );
+    void setVoxels(const std::vector<VoxelPos>& voxel_coords, const VoxelTypes& type  );
+    void setVoxels(const std::vector<VoxelPos>& voxel_coords, const Voxel&      voxel );
     void setVoxel (const VoxelPos& voxel_coord, const Voxel& voxel);
 
     // Getters

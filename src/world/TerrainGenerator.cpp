@@ -83,7 +83,6 @@ std::vector<std::pair<const BlockPos, Block &>> TerrainGenerator::generateSector
     Voxel grass(colour, VoxelTypes::Grass);
     //Voxel grass(block_pair.second.addColour({10, 170, 10, 255}), VoxelTypes::Grass);
 
-
     int height_map[512][512];
     //Voxel grass(block_pair.second.addColour({10, 170, 10, 255}), VoxelTypes::Grass);
 
@@ -146,7 +145,7 @@ std::vector<std::pair<const BlockPos, Block &>> TerrainGenerator::generateSector
             {
                 BlockPos block_pos = {block_x, block_y, block_z};
                 std::pair<BlockPos, Block &> block_pair = sector->addBlock(SectorPos(block_pos), BlockMakeType::EMPTY_CHUNK);
-                block_pair.first = SectorPos(block_pos) + (sector_pos * 16);
+                block_pair.first = SectorPos(block_pos) + (sector_pos * SECTOR_WIDTH);
                 
                 //Voxel grass(block_pair.second.addColour({10, 170, 10, 255}), VoxelTypes::Grass);
                 for (unsigned int z = 0; z < BLOCK_SIZE; z++)

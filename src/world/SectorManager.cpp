@@ -35,7 +35,7 @@ Voxel& SectorManager::getVoxel(const SectorPos& sector_pos, const BlockPos& bloc
 void SectorManager::updateSectors(std::vector<std::pair<const BlockPos, const Block*>> blocks_to_remesh)
 {
 
-}
+} 
 
 Sector* SectorManager::addSector(const SectorPos& sector_pos)
 {

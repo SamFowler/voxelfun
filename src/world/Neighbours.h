@@ -26,6 +26,7 @@ public:
         y: 0 0 0 0 1 1
         z: 0 0 1 1 0 0
     */
+    //Neighbours() {m_neighbours = 0x00;}
 
     uint8_t   getNeighbours() const { return m_neighbours; }
     void setNeighbours(const uint8_t& neighbours) { m_neighbours = neighbours; }

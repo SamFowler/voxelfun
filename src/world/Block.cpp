@@ -37,7 +37,7 @@ bool Block::isBlockEdge(const uint32_t& voxel_index) const
 
 
 
-void Block::setVoxels(const std::vector<VoxelPos>& voxel_coords, const VoxelType& type)
+void Block::setVoxels(const std::vector<VoxelPos>& voxel_coords, const VoxelTypes& type)
 {
     for (auto it : voxel_coords)
         m_voxel_data[ getIndex(it) ].setType(type);
@@ -59,12 +59,12 @@ void Block::updateNeighbours(const VoxelPos& pos)
 {
     Neighbours neighs;
 
-    neighs.setXMinus( (pos.x     == 0         ) ? false : (getVoxel({pos.x - 1, pos.y    , pos.z    }).isVisible()) ) ;
-    neighs.setXPlus ( (pos.x + 1 == BLOCK_SIZE) ? false : (getVoxel({pos.x + 1, pos.y    , pos.z    }).isVisible()) );
-    neighs.setYMinus( (pos.y     == 0         ) ? false : (getVoxel({pos.x    , pos.y - 1, pos.z    }).isVisible()) );
-    neighs.setYPlus ( (pos.y + 1 == BLOCK_SIZE) ? false : (getVoxel({pos.x    , pos.y + 1, pos.z    }).isVisible()) );
-    neighs.setZMinus( (pos.z     == 0         ) ? false : (getVoxel({pos.x    , pos.y    , pos.z - 1}).isVisible()) );
-    neighs.setZPlus ( (pos.z + 1 == BLOCK_SIZE) ? false : (getVoxel({pos.x    , pos.y    , pos.z + 1}).isVisible()) );
+    neighs.setXMinus( (pos.x     == 0         ) ? false : (getVoxel({pos.x - 1, pos.y    , pos.z    }).isOpaque()) ) ;
+    neighs.setXPlus ( (pos.x + 1 == BLOCK_SIZE) ? false : (getVoxel({pos.x + 1, pos.y    , pos.z    }).isOpaque()) );
+    neighs.setYMinus( (pos.y     == 0         ) ? false : (getVoxel({pos.x    , pos.y - 1, pos.z    }).isOpaque()) );
+    neighs.setYPlus ( (pos.y + 1 == BLOCK_SIZE) ? false : (getVoxel({pos.x    , pos.y + 1, pos.z    }).isOpaque()) );
+    neighs.setZMinus( (pos.z     == 0         ) ? false : (getVoxel({pos.x    , pos.y    , pos.z - 1}).isOpaque()) );
+    neighs.setZPlus ( (pos.z + 1 == BLOCK_SIZE) ? false : (getVoxel({pos.x    , pos.y    , pos.z + 1}).isOpaque()) );
     //TODO replace the "false" with a check into neighbour blocks
 
     m_voxel_neighbours[ getIndex(pos) ] = neighs;

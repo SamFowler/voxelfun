@@ -121,7 +121,7 @@ unsigned getLocalIndex(const unsigned& i, const unsigned& j)
 void meshRectangle(BlockMesh& mesh, const BlockMeshFace& rectangle, const Block& block, const unsigned& direction,const unsigned& layer,
                              const std::array<GLuint, 12>& face, unsigned& element_count, unsigned& normal_index, const SectorColours& sector_colours)
 {
-    if (rectangle.voxel.isVisible() == false)
+    if (rectangle.voxel.isEmpty())
         return;
 
     unsigned x,y,z;
@@ -257,8 +257,10 @@ void meshRectangle(BlockMesh& mesh, const BlockMeshFace& rectangle, const Block&
             mesh.vertices.push_back(face[11] + z );
         }
     }
-
+    //rectangle.voxel.setType(VoxelTypes::Grass);
     Colour colour = sector_colours.getColour(rectangle.voxel);
+    //Colour colour = {255, 0, 255, 255};
+
     for (int k = 0; k < 4; k++)
     {
         mesh.colours.push_back(colour.r/255.0f);
@@ -365,7 +367,7 @@ void processMainBody(const unsigned& i, const unsigned& j, const unsigned& layer
             {   // We fetch it if it is of the same voxel type
                 previous_rectangle = mesh_faces[getLocalIndex(i, j-1)];
 
-                if (previous_rectangle.voxel.isVisible()) // ??
+                if (!previous_rectangle.voxel.isEmpty()) // ?? should it be isOpaque?
                 {
                     previous_rectangle.run_width++; 
                 }
