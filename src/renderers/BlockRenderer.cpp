@@ -103,11 +103,12 @@ void BlockRenderer::draw(const Camera& camera)
     //glm::mat4 scale = glm::scale(model, glm::vec3(1.0, 1.0, 1.0));
     glm::mat4 scale = glm::scale(model, glm::vec3(0.4, 0.4, 0.4));
     glm::mat4 normal(0.0f);
+    glUniformMatrix4fv(uniform_vp, 1, GL_FALSE, glm::value_ptr(vp));
+
     for (auto it = m_world_renderables.begin(); it != m_world_renderables.end(); ++it)
     {   
         it->vao.getDrawable().bind();
         model = glm::translate(scale, glm::vec3(it->position) * (float)BLOCK_SIZE);
-        glUniformMatrix4fv(uniform_vp, 1, GL_FALSE, glm::value_ptr(vp));
         glUniformMatrix4fv(uniform_model, 1, GL_FALSE, glm::value_ptr(model));
 
         it->vao.getDrawable().draw();

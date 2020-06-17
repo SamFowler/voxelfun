@@ -14,6 +14,8 @@
 #include <cmath>
 #include <ctime>
 
+
+#include <list>
 #include <vector>
 #include <algorithm>
 #include <array>
