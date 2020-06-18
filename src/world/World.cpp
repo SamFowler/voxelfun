@@ -5,46 +5,6 @@ void World::init()
 {
 
 
-    /* 
-    m_block_manager.init();
-    
-    for (int i = 0; i < 8; i++)
-    {
-        for (int j = 0; j < 8; j++)
-        {
-            if((rand() % 6) == 0)
-                m_block_manager.addBlock({i,-1,j}, BlockMakeType::REVEAL_DIRT_CHUNK);
-            else
-                m_block_manager.addBlock({i,-1,j}, BlockMakeType::GRASS_CHUNK);
-
-
-            if((rand() % 60) == 0)
-            {
-                m_block_manager.addBlock({i,0,j}, BlockMakeType::TREE_CHUNK);
-                m_block_manager.addBlock({i,1,j}, BlockMakeType::TREE_CHUNK);
-                m_block_manager.addBlock({i,2,j}, BlockMakeType::TREE_CHUNK);
-                //m_block_manager.addBlock({i,3,j}, BlockMakeType::TREE_CHUNK);
-                //m_block_manager.addBlock({i,4,j}, BlockMakeType::TREE_CHUNK);
-                //m_block_manager.addBlock({i,5,j}, BlockMakeType::TREE_CHUNK);
-            }
-        }   
-    } */
-    
-
-    //m_block_manager.addBlock({1,2,1}, BlockMakeType::GRASS_CHUNK);
-    //m_block_manager.addBlock({0,0,1}, BlockMakeType::GRASS_CHUNK);
-    //m_block_manager.addBlock({1,0,0}, BlockMakeType::GRASS_CHUNK);
-    //m_block_manager.addBlock({0,0,0}, BlockMakeType::RANDOM_CHUNK);
-    //m_block_manager.addBlock({10, 15, 10}, BlockMakeType::LIGHT_CHUNK);
-    //m_block_manager.addBlock({-2, -1, -2}, BlockMakeType::RANDOM_CHUNK);
-    //m_block_manager.addBlock({-2, -1, -3}, BlockMakeType::RANDOM_CHUNK);
-    //m_block_manager.addBlock({-3, -1, -2}, BlockMakeType::RANDOM_CHUNK);
-    //m_block_manager.addBlock({-3, -1, -3}, BlockMakeType::RANDOM_CHUNK);
-    //m_block_manager.addBlock({-1, -1, -5}, BlockMakeType::DEBUG_CHUNK);
-    //m_block_manager.addBlock({-3, -1, -3}, BlockMakeType::REVEAL_DIRT_CHUNK);
-        
-    
-
     m_block_renderer.init();
 
     std::vector<std::pair<const BlockPos, Block&>>& initial_mesh_list = m_block_renderer.getRefToRemeshList();
@@ -74,25 +34,24 @@ void World::init()
 
 
     std::vector<std::pair<const BlockPos, Block &>> blocks_to_mesh = m_terrain_generator.generateSector(p_sector, sector_pos);
-    for (auto it : blocks_to_mesh)
+  /*   for (auto it : blocks_to_mesh)
     {
         initial_mesh_list.push_back(it);
-    }
+    } */
 
 
     sector_pos = {1,0,0};
     p_sector = m_sector_manager.addSector(sector_pos);
     blocks_to_mesh = m_terrain_generator.generateSector(p_sector, sector_pos);
-    for (auto it : blocks_to_mesh)
+    /* for (auto it : blocks_to_mesh)
     {
         initial_mesh_list.push_back(it);
-    }
+    } */
 
     //std::pair<const BlockPos, Block &> block_pair = p_sector->addBlock({0,0,0}, BlockMakeType::EMPTY_CHUNK);
     //m_terrain_generator.generateBlock(block_pair.second, CoordinateConversion::getWorldPos({0,0,0}, {0,0,0}, {0,0,0}));
     //initial_mesh_list.push_back(block_pair);
    
-
 
     m_selected_region = SelectedRegion({0,0,0}, {0,0,1}, {0,0,1});
     
@@ -100,27 +59,11 @@ void World::init()
 
 
 
-
-    /* m_sector = Sector();
-
-    m_block_renderer.getRefToRemeshList().push_back(m_sector.addBlock({1, 1, 1}, BlockMakeType::REVEAL_DIRT_CHUNK));
-    m_block_renderer.getRefToRemeshList().push_back(m_sector.addBlock({1, 1, 4}, BlockMakeType::GRASS_CHUNK));
-     for (int i = 0; i < 16; i++)
-    {
-        for (int j = 0; j < 16; j++)
-        {
-            m_block_renderer.getRefToRemeshList().push_back(m_sector.addBlock({i, 0, j}, BlockMakeType::GRASS_CHUNK));
-      
-        }    
-    }  */
-
-    //m_block_manager.addBlock({i,-1,j}, BlockMakeType::REVEAL_DIRT_CHUNK);
-
-
 }
  
 void World::update(Input& input, const float& timestep)
 {
+    m_sector_manager.update();
 
     // handle the voxel selector
     m_selected_region.moveRegion(input);
@@ -144,7 +87,8 @@ void World::update(Input& input, const float& timestep)
 void World::render(const Camera& camera)
 {
     m_block_renderer.draw(camera);
-
+    
+    m_sector_manager.draw({0});
 }
 
 

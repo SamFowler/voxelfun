@@ -7,7 +7,8 @@ class DrawableVAO
 {
 public:
     DrawableVAO(GLuint vao_id, GLsizei num_elements);
-
+/*     ~DrawableVAO();
+ */
     void bindAndDraw(GLenum draw_mode = GL_TRIANGLES) const;
     void bind() const;
     void draw(GLenum draw_mode = GL_TRIANGLES) const;

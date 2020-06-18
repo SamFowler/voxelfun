@@ -31,4 +31,6 @@ private:
 
     SelectedRegion m_selected_region;
 
+    //std::unique_ptr<BlockTree> m_block_tree;
+
 };

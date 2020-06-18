@@ -46,3 +46,15 @@ Sector* SectorManager::addSector(const SectorPos& sector_pos)
     }
     return nullptr;
 }
+
+void SectorManager::update()
+{
+    auto sector = m_sectors.find({0,0,0});
+    sector->second->makeMeshes();
+}
+
+void SectorManager::draw(const Uniforms& uniforms)
+{
+    auto sector = m_sectors.find({0,0,0});
+    sector->second->draw(uniforms);
+}

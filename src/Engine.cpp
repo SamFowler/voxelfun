@@ -57,7 +57,7 @@ void Engine::update()
     while (m_timer.checkDeltaTimeReached())
     {
         m_game.update(m_input, m_timer.getDeltaTime()); //TODO input here temporary
-       m_timer.endUpdateLoop();
+        m_timer.endUpdateLoop();
     }
 
 

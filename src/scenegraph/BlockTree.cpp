@@ -28,6 +28,7 @@ void BlockTree::addBlock(const BlockPos& pos, BlockNode& block_node)
     if (m_half_size.x == 1 )
     {
         m_children[octant] = std::make_unique<BlockNode>(std::move(block_node));
+        m_children[octant]->setOrigin(pos);
     }
     else if (m_children[octant] != nullptr)
     {
@@ -35,11 +36,12 @@ void BlockTree::addBlock(const BlockPos& pos, BlockNode& block_node)
     }
     else //next level of octree has not been set, set it
     {
-        glm::uvec3 new_origin;
-        new_origin.x += m_half_size.x * (octant & 1);
-        new_origin.y += m_half_size.y * (octant & 4);
-        new_origin.z += m_half_size.z * (octant & 2);
+        glm::uvec3 new_origin = m_origin;
+        new_origin.x += m_half_size.x * (octant & 1 ? 0.5f : -0.5f);
+        new_origin.y += m_half_size.y * (octant & 4 ? 0.5f : -0.5f);
+        new_origin.z += m_half_size.z * (octant & 2 ? 0.5f : -0.5f);
         m_children[octant] = std::make_unique<BlockTree>(new_origin, m_half_size/2U);
+        m_children[octant]->addBlock(pos, block_node);
     }
 }
 
@@ -47,7 +49,7 @@ void BlockTree::deleteBlock(const BlockPos& pos)
 {
     uint8_t octant = getOctantContainingPos(pos);
 
-    if ( m_half_size.x == 1  )
+    if ( m_half_size.x == 2 )
     {   // we are at leaf level of octree - delete the block
         m_children[octant].reset(nullptr);
     }

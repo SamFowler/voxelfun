@@ -13,6 +13,12 @@ DrawableVAO::DrawableVAO(GLuint vao_id, GLsizei num_elements)
     
 }
 
+/* ~DrawableVAO::DrawableVAO()
+{
+    glDeleteVertexArrays(1, &m_id);
+    //glDeleteBuffers(m_buffer_objects.size(), m_buffer_objects.data());
+} */
+
 void DrawableVAO::bindAndDraw(GLenum draw_mode) const
 {
     bind();
@@ -79,8 +85,8 @@ void VertexArrayObject::create()
 
 void VertexArrayObject::destroy()
 {
-    glDeleteVertexArrays(1, &m_id);
-    glDeleteBuffers(m_buffer_objects.size(), m_buffer_objects.data());
+    //glDeleteVertexArrays(1, &m_id);
+    //glDeleteBuffers(m_buffer_objects.size(), m_buffer_objects.data());
     reset();
 }
 

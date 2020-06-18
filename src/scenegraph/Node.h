@@ -13,10 +13,10 @@ protected:
     glm::uvec3 m_origin;
     glm::uvec3 m_half_size;
 
-    bool m_is_leaf;
-
 public:
     virtual void draw(const Uniforms& uniforms) = 0;
+
+    void setOrigin(const glm::uvec3 origin) {m_origin = origin;}
 
     virtual void addBlock(const BlockPos& pos, BlockNode& node) {};
     virtual void deleteBlock(const BlockPos& pos) {};

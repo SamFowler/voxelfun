@@ -104,7 +104,6 @@ void BlockRenderer::draw(const Camera& camera)
     glm::mat4 scale = glm::scale(model, glm::vec3(0.4, 0.4, 0.4));
     glm::mat4 normal(0.0f);
     glUniformMatrix4fv(uniform_vp, 1, GL_FALSE, glm::value_ptr(vp));
-
     for (auto it = m_world_renderables.begin(); it != m_world_renderables.end(); ++it)
     {   
         it->vao.getDrawable().bind();
@@ -115,13 +114,13 @@ void BlockRenderer::draw(const Camera& camera)
     }
 
 
-    m_wire_shader.use();
+    /* m_wire_shader.use();
     mp_wire_selector_renderable->vao.getDrawable().bind();
     model = glm::translate(scale, glm::vec3(mp_wire_selector_renderable->position));
     glUniformMatrix4fv(wire_uniform_vp, 1, GL_FALSE, glm::value_ptr(vp));
     glUniformMatrix4fv(wire_uniform_model, 1, GL_FALSE, glm::value_ptr(model));
 
-    mp_wire_selector_renderable->vao.getDrawable().drawWire();
+    mp_wire_selector_renderable->vao.getDrawable().drawWire(); */
 
 }
 

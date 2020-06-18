@@ -72,6 +72,8 @@ double TerrainGenerator::getNoise(OpenSimplexNoise& simplex_gen, const glm::vec3
     return getNoise(simplex_gen, {pos.x, pos.z});
 }
 
+
+
 std::vector<std::pair<const BlockPos, Block &>> TerrainGenerator::generateSector(Sector* sector, const SectorPos& sector_pos)
 {
     std::vector<std::pair<const BlockPos, Block &>> blocks_to_mesh;
@@ -133,7 +135,7 @@ std::vector<std::pair<const BlockPos, Block &>> TerrainGenerator::generateSector
                     if (rounded_noise > max_val)
                         max_val = rounded_noise;
 
-                    std::cout << "sector[" << voxel_x << "," << voxel_z << "], height val[" << local_height_map[voxel_z][voxel_x] << "]" << std::endl;
+                    // std::cout << "sector[" << voxel_x << "," << voxel_z << "], height val[" << local_height_map[voxel_z][voxel_x] << "]" << std::endl;
 
                 }
             }
@@ -144,6 +146,8 @@ std::vector<std::pair<const BlockPos, Block &>> TerrainGenerator::generateSector
             for (unsigned block_y = min_val; block_y <= max_val; block_y++)
             {
                 BlockPos block_pos = {block_x, block_y, block_z};
+                //auto empty = BlockMakeType::EMPTY_CHUNK;
+                //auto block = Block();
                 std::pair<BlockPos, Block &> block_pair = sector->addBlock(SectorPos(block_pos), BlockMakeType::EMPTY_CHUNK);
                 block_pair.first = SectorPos(block_pos) + (sector_pos * SECTOR_WIDTH);
                 

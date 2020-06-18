@@ -5,6 +5,7 @@
 #include "Sector.h"
 
 class Input;
+class Uniforms;
 
 class SectorManager
 {
@@ -21,9 +22,14 @@ public:
     void updateSectors(std::vector<std::pair<const BlockPos, const Block*>> blocks_to_remesh);
     Sector* addSector(const SectorPos& sector_pos);
 
+    void update();
+    void draw(const Uniforms& uniforms);
+
 private:
     std::unordered_map<SectorPos, std::unique_ptr<Sector>, PositionHash> m_sectors;
     unsigned int m_num_sectors = 0;
+
+
 
     std::vector<SectorPos> m_sectors_to_update;
 

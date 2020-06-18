@@ -9,16 +9,16 @@ class BlockNode : public Node
 {
 private:
     glm::mat4 world_transform;
-    DrawableVAO vao;
+    VertexArrayObject vao;
 public:
+    BlockNode(const glm::mat4& transform, VertexArrayObject&& drawable) : world_transform(transform), vao(std::move(drawable)) {};
+
     void draw(const Uniforms& uniforms)
     {
+        vao.getDrawable().bind();
 
-        vao.bind();
-        //model = glm::translate(scale, glm::vec3(it->position) * (float)BLOCK_SIZE);
         glUniformMatrix4fv(uniforms.model, 1, GL_FALSE, glm::value_ptr(world_transform)); 
-        
-
-        vao.draw();
+    
+        vao.getDrawable().draw();
     }
 };
