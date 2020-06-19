@@ -12,6 +12,7 @@ enum VoxelTypes
     Glass,
     Snow ,
     Water,
+    Stone,
     Debug,
     Size
 };

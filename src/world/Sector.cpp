@@ -3,9 +3,8 @@
 #include "../renderers/BlockMeshGenerator.h"
 
 #include "../scenegraph/BlockNode.h"
-//#include "../opengl_api/UniformPasser.h"
 
-std::pair<const BlockPos, Block&> Sector::addBlock(const BlockPos& position, const BlockMakeType& type)
+Block* Sector::addBlock(const BlockPos& position, const BlockMakeType& type)
 {
     std::vector<Voxel> voxels;
     voxels.reserve(sizeof(Voxel) * BLOCK_VOLUME);
@@ -16,49 +15,39 @@ std::pair<const BlockPos, Block&> Sector::addBlock(const BlockPos& position, con
     return addBlock(position, voxels);
 }
  
-std::pair<const BlockPos, Block&> Sector::addBlock(const BlockPos& block_pos, const std::vector<Voxel>& voxels)
+Block* Sector::addBlock(const BlockPos& block_pos, const std::vector<Voxel>& voxels)
 {
+    uint32_t block_index = getIndex(block_pos);
+    uint32_t column_index = getColumnIndex(block_pos);
 
-    unsigned int block_index = getBlockIndexFromBlockPos(block_pos);
-    unsigned int column_index = getBlockColumnIndexFromBlockPos(block_pos);
     if (m_block_column_details[column_index].isBlockEmpty(block_pos.y))
     {
-        
         m_blocks[block_index] = std::make_unique<Block>(voxels);
         m_blocks[block_index]->updateAllNeighbours();
 
         m_block_column_details[column_index].addBlock(block_pos.y);
 
         blocks_to_mesh.emplace(block_pos);
-
-        // glm::mat4 model = glm::scale(glm::mat4(1.0), glm::vec3(0.4, 0.4, 0.4));
-        // model = glm::translate(model, glm::vec3(block_pos) * (float)BLOCK_SIZE);
-
-        // BlockNode node = {model/* glm::mat4(1.0) */, BlockMeshGenerator::makeBlockVAO(*(m_blocks[block_index].get() ), colours, BlockMeshGenerator::GREEDY_MESH).getDrawable()};
-        // m_block_tree.addBlock(block_pos, node);
-
-       // if (m_block_column_details[column_index].addBlock(block_pos.y))
-       //     return {block_pos, *(m_blocks[block_index].get())}; // if add block is visible, return it to be meshed
     }
-    return {block_pos, *(m_blocks[block_index].get())};
-    //return std::make_pair(block_pos, nullptr);
+    return m_blocks[block_index].get();
 }
 
 void Sector::makeMeshes()
 {
+
     if (blocks_to_mesh.empty())
             return; 
     int i = 0;
     while (i < 3) 
-    {
-        
-            
+    {            
         BlockPos block_pos = blocks_to_mesh.front();
+        updateBlockNeighbours(block_pos);
+
         glm::mat4 model = glm::scale(glm::mat4(1.0), glm::vec3(0.4, 0.4, 0.4));
         model = glm::translate(model, glm::vec3(block_pos) * (float)BLOCK_SIZE);
 
         BlockNode node = {model/* glm::mat4(1.0) */, 
-                    BlockMeshGenerator::makeBlockVAO(*(m_blocks[getBlockIndexFromBlockPos(block_pos)].get() ), colours, BlockMeshGenerator::GREEDY_MESH)};
+                    BlockMeshGenerator::makeBlockVAO(*(m_blocks[getIndex(block_pos)].get() ), colours, BlockMeshGenerator::GREEDY_MESH)};
         m_block_tree.addBlock(block_pos, node);
 
         blocks_to_mesh.pop();
@@ -72,78 +61,26 @@ void Sector::makeMeshes()
 
 void Sector::updateBlockNeighbours(const BlockPos& block_pos)
 {
-    unsigned int block_index = getBlockIndexFromBlockPos(block_pos);
+    unsigned int block_index = getIndex(block_pos);
     m_blocks[block_index]->updateAllNeighbours();
 }
 
-void Sector::editBlock(const BlockPos& block_pos /*, voxels/colours/changes */)
+Block* Sector::getBlock(const BlockPos& block_pos)
 {
-    //don't actually edit the block here, add it to list of blocks to update
-    // this is done so updates are processed all at once in each frame
-    
-    Block& block = getBlock(block_pos);
-    //block.changeAllVoxels({255,0,255,255});
-
-    //m_blocks_to_update.push_back(getBlockIndexFromBlockPos(block_pos)/*, <<<changes to make>>> */);
-    m_blocks_to_update.push_back(block_pos /*, <<<changes to make>>> */);
-}
-
-void Sector::updateBlocks(std::vector<std::pair<const BlockPos, Block&>>& blocks_to_remesh)
-{
-    if (m_blocks_to_update.empty())
-        return;
-    
-    //std::sort(m_blocks_to_update.begin(), m_blocks_to_update.end()); // sort indexes to be cache friendly
-
-    for (auto block_pos : m_blocks_to_update)
-    {
-        unsigned int index = getBlockIndexFromBlockPos(block_pos);
-        /* 
-        //process block updates
-        m_blocks[index].update( --voxels/colours/etc);
-        */
-
-       //if (change actually happend)
-        blocks_to_remesh.push_back( {block_pos, *(m_blocks[index].get()) } );
-    }
-
-    m_blocks_to_update.clear();
-    m_blocks_to_update.reserve(8*sizeof(BlockPos));
-    
-}
-
-Block& Sector::getBlock(const BlockPos& block_pos)
-{
-    unsigned int column_index = getBlockColumnIndexFromBlockPos(block_pos);
+    uint32_t column_index = getColumnIndex(block_pos);
     if (m_block_column_details[column_index].isBlockEmpty(block_pos.y))
-    {
-        return addBlock(block_pos, BlockMakeType::EMPTY_CHUNK).second;
-    }
+        return addBlock(block_pos, BlockMakeType::EMPTY_CHUNK);
     else
-    {
-        return *(m_blocks[getBlockIndexFromBlockPos(block_pos)].get());
-    }
-
-   /*  Block* block_ptr = m_blocks[getBlockIndexFromBlockPos(block_pos)].get();
-    if (block_ptr != nullptr)
-    {
-        return *block_ptr;
-    }
-    else
-    {
-        //TODO load from file if exists
-        return *(addBlock(block_pos, BlockMakeType::EMPTY_CHUNK).second);
-        
-    } */
+        return m_blocks[getIndex(block_pos)].get();
 }
 
 
-unsigned int Sector::getBlockIndexFromBlockPos(const BlockPos& block_pos)
+uint32_t Sector::getIndex(const BlockPos& block_pos)
 {
     return (block_pos.z*SECTOR_WIDTH_SQ) + (block_pos.x*SECTOR_WIDTH) + block_pos.y;
 }
 
-unsigned int Sector::getBlockColumnIndexFromBlockPos(const BlockPos& block_pos)
+uint32_t Sector::getColumnIndex(const BlockPos& block_pos)
 {
     return (block_pos.z*SECTOR_WIDTH) + block_pos.x;
 }

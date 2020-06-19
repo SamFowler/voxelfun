@@ -4,60 +4,18 @@
 void World::init()
 {
 
-
     m_block_renderer.init();
 
-    std::vector<std::pair<const BlockPos, Block&>>& initial_mesh_list = m_block_renderer.getRefToRemeshList();
-
-    SectorPos sector_pos = {0,0,0};
-    Sector* p_sector = m_sector_manager.addSector(sector_pos);
-
-    /* for (int i = 0; i < 12; i++)
+    for (int z = 0; z < 4; z++)
     {
-        for (int j = 0; j < 12; j++)
-        {    
-            // if((rand() % 6) == 0)
-            //     initial_mesh_list.push_back(p_sector->addBlock({i,0,j}, BlockMakeType::REVEAL_DIRT_CHUNK));
-            // else
-            //     initial_mesh_list.push_back(p_sector->addBlock({i,0,j}, BlockMakeType::GRASS_CHUNK));
-            //initial_mesh_list.push_back(p_sector->addBlock({0,0,1}, BlockMakeType::REVEAL_DIRT_CHUNK));
-            //initial_mesh_list.push_back(p_sector->addBlock({0,0,2}, BlockMakeType::REVEAL_DIRT_CHUNK));
-            //initial_mesh_list.push_back(p_sector->addBlock({0,0,3}, BlockMakeType::REVEAL_DIRT_CHUNK));
-            BlockPos block_pos = {i,0,j};
-            std::pair<const BlockPos, Block &> block_pair = p_sector->addBlock(block_pos, BlockMakeType::EMPTY_CHUNK);
-            m_terrain_generator.generateBlock(block_pair.second, CoordinateConversion::getWorldPos(sector_pos, block_pos, {0,0,0}));
-            p_sector->updateBlockNeighbours(block_pos);
-            initial_mesh_list.push_back(block_pair);
+        for (int x = 0; x < 4; x++)
+        {
+            m_sector_manager.generateWorld({0,0,0}, {x,0,z});
         }
-    } */
+    }
 
-
-
-    std::vector<std::pair<const BlockPos, Block &>> blocks_to_mesh = m_terrain_generator.generateSector(p_sector, sector_pos);
-  /*   for (auto it : blocks_to_mesh)
-    {
-        initial_mesh_list.push_back(it);
-    } */
-
-
-    sector_pos = {1,0,0};
-    p_sector = m_sector_manager.addSector(sector_pos);
-    blocks_to_mesh = m_terrain_generator.generateSector(p_sector, sector_pos);
-    /* for (auto it : blocks_to_mesh)
-    {
-        initial_mesh_list.push_back(it);
-    } */
-
-    //std::pair<const BlockPos, Block &> block_pair = p_sector->addBlock({0,0,0}, BlockMakeType::EMPTY_CHUNK);
-    //m_terrain_generator.generateBlock(block_pair.second, CoordinateConversion::getWorldPos({0,0,0}, {0,0,0}, {0,0,0}));
-    //initial_mesh_list.push_back(block_pair);
-   
-
-    m_selected_region = SelectedRegion({0,0,0}, {0,0,1}, {0,0,1});
-    
-    m_block_renderer.addSelectorVAO(m_selected_region.getWorldPos());
-
-
+    // m_selected_region = SelectedRegion({0,0,0}, {0,0,1}, {0,0,1});
+    // m_block_renderer.addSelectorVAO(m_selected_region.getWorldPos());
 
 }
  
@@ -67,20 +25,15 @@ void World::update(Input& input, const float& timestep)
 
     // handle the voxel selector
     m_selected_region.moveRegion(input);
-    m_block_renderer.updateSelectorPosition(m_selected_region.getWorldPos());
 
     if (input.wasKeyPressed(SDLK_RETURN))
     {
         //TODO create some form of WorldEditor class to handle input for map editing
-        //Voxel& voxel = m_sector_manager.getVoxel(m_selected_region.getSectorPos(), m_selected_region.getBlockPos(), m_selected_region.getVoxelPos());
-        m_sector_manager.getSector(m_selected_region.getSectorPos()).editBlock(m_selected_region.getBlockPos());
-        m_sector_manager.getSector(m_selected_region.getSectorPos()).updateBlocks(m_block_renderer.getRefToRemeshList());
-        ///Block& block = m_sector_manager.getBlock(m_selected_region.getSectorPos(), m_selected_region.getBlockPos()).
+        // m_sector_manager.getSector(m_selected_region.getSectorPos()).editBlock(m_selected_region.getBlockPos());
+        // m_sector_manager.getSector(m_selected_region.getSectorPos()).updateBlocks(m_block_renderer.getRefToRemeshList());
     }
 
-    
     m_block_renderer.updateSettings(input);
-    m_block_renderer.updateVAOs(m_sector_manager.getSector({0,0,0}).colours /* this is temp here before renderer gets moved */);
 }
 
 
@@ -95,5 +48,4 @@ void World::render(const Camera& camera)
 void World::destroy()
 {
     m_block_renderer.destroy();    
-   // m_block_manager.destroy();
 }
