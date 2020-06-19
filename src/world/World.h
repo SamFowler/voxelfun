@@ -13,7 +13,7 @@
 class World
 {
 public:
-    World() : m_terrain_generator(1){};
+    World() {};
     void init();
     
     void update(Input& input, const float& timestep);
@@ -23,14 +23,9 @@ public:
 
 private:
 
-    TerrainGenerator m_terrain_generator;
-
     BlockRenderer m_block_renderer;
-
     SectorManager m_sector_manager;
-
     SelectedRegion m_selected_region;
 
-    //std::unique_ptr<BlockTree> m_block_tree;
 
 };

@@ -71,7 +71,6 @@ void Game::update(Input& input, const float& timestep)
 
 void Game::render()
 {
-    std::cout << "game render start" << std::endl;
     //m_world.render(m_ortho_camera_controller.getCamera()); //m_perspectiveCameraController.GetCamera());
     m_world.render(m_camera_controller->getCamera()); //m_perspectiveCameraController.GetCamera());
     

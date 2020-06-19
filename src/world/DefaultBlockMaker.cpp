@@ -38,11 +38,9 @@ namespace DefaultBlockMaker
 
     void makeEmptyBlock (std::vector<Voxel>& voxels, std::vector<Colour>& colours)
     {
-
         Voxel voxel = {0, VoxelTypes::Empty};
         voxels = std::move(std::vector<Voxel>(BLOCK_VOLUME, voxel));
         colours = { {0,0,0,0}};
-
     }
 
     void makeGrassBlock (std::vector<Voxel>& voxels, std::vector<Colour>& colours)

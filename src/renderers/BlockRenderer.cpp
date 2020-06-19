@@ -20,38 +20,6 @@ void BlockRenderer::init()
     //glUniformMatrixfv(uniform_mvp, 1, GL_FALSE, glm::value_ptr(vp * model));
 
 
-    m_wire_shader.create("wire_cube", "wire_cube");
-    m_wire_shader.use();
-    wire_uniform_vp = m_wire_shader.getUniformLocation("vp");
-    wire_uniform_model = m_wire_shader.getUniformLocation("model");
-
-
-}
- 
-/* void BlockRenderer::getNewBlockUpdates(const std::vector<const Block*> updated_blocks)
-{
-    for (auto block_ptr : updated_blocks)
-    {
-        //TODO: check to see if block is already on remesh list? 
-        m_blocks_to_remesh.push_back(block_ptr);
-    }
-} */
-
-std::vector<std::pair<const BlockPos, Block&> >& BlockRenderer::getRefToRemeshList()
-{
-    return m_blocks_to_remesh;
-}
-
-void BlockRenderer::addSelectorVAO(WorldPos renderable_pos)
-{
-    mp_wire_selector_renderable = std::make_unique<WorldRenderable>();
-    mp_wire_selector_renderable->position = renderable_pos;
-    mp_wire_selector_renderable->vao = WireframeMeshGenerator::makeBlockVAO({255, 0, 255, 0});
-}
-
-void BlockRenderer::updateSelectorPosition(const WorldPos& selector_pos)
-{
-    mp_wire_selector_renderable->position = selector_pos;
 }
 
 void BlockRenderer::updateSettings(Input& input)
@@ -72,26 +40,6 @@ void BlockRenderer::updateSettings(Input& input)
 }
 
 
-void BlockRenderer::updateVAOs(const SectorColours& sector_colours) 
-{
-    for (auto block : m_blocks_to_remesh)
-    {
-        auto it = m_world_renderable_indexes.find(block.first);
-        if (it != m_world_renderable_indexes.cend())
-        {   
-            m_world_renderables[it->second] = {block.first, BlockMeshGenerator::makeBlockVAO(block.second, sector_colours, BlockMeshGenerator::GREEDY_MESH) };
-        }
-        else
-        {
-            m_world_renderables.push_back({block.first, BlockMeshGenerator::makeBlockVAO(block.second, sector_colours, BlockMeshGenerator::GREEDY_MESH) });
-            m_world_renderable_indexes.emplace(block.first, (m_world_renderables.size() - 1) );
-        }
-        
-    }
-
-    //TODO not all meshes may get updated per frame if there are many and it takes time, so don't always clear this list
-    m_blocks_to_remesh.clear();
-}
 
 void BlockRenderer::draw(const Camera& camera)
 {
@@ -99,34 +47,16 @@ void BlockRenderer::draw(const Camera& camera)
 
     glm::mat4 vp = camera.getProjectionViewMatrix();
     
-    glm::mat4 model(1.0f);
+    //glm::mat4 model(1.0f);
     //glm::mat4 scale = glm::scale(model, glm::vec3(1.0, 1.0, 1.0));
-    glm::mat4 scale = glm::scale(model, glm::vec3(0.4, 0.4, 0.4));
-    glm::mat4 normal(0.0f);
+    //glm::mat4 scale = glm::scale(model, glm::vec3(0.4, 0.4, 0.4));
+    //glm::mat4 normal(0.0f);
     glUniformMatrix4fv(uniform_vp, 1, GL_FALSE, glm::value_ptr(vp));
-    for (auto it = m_world_renderables.begin(); it != m_world_renderables.end(); ++it)
-    {   
-        it->vao.getDrawable().bind();
-        model = glm::translate(scale, glm::vec3(it->position) * (float)BLOCK_SIZE);
-        glUniformMatrix4fv(uniform_model, 1, GL_FALSE, glm::value_ptr(model));
 
-        it->vao.getDrawable().draw();
-    }
-
-
-    /* m_wire_shader.use();
-    mp_wire_selector_renderable->vao.getDrawable().bind();
-    model = glm::translate(scale, glm::vec3(mp_wire_selector_renderable->position));
-    glUniformMatrix4fv(wire_uniform_vp, 1, GL_FALSE, glm::value_ptr(vp));
-    glUniformMatrix4fv(wire_uniform_model, 1, GL_FALSE, glm::value_ptr(model));
-
-    mp_wire_selector_renderable->vao.getDrawable().drawWire(); */
 
 }
 
 void BlockRenderer::destroy()
 {
-    m_blocks_to_remesh.clear();
-    m_world_renderables.clear();
     m_shader.destroy();
 }
