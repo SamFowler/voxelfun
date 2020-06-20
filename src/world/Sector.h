@@ -31,7 +31,7 @@ public:
 
     void makeMeshes();
 
-    void draw(const Uniforms& uniforms);
+    void draw(const Frustum& frustum, const Uniforms& uniforms, uint32_t& num_draws);
 
 private:
     uint32_t getIndex      (const BlockPos& block_pos);

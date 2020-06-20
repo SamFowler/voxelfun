@@ -1,5 +1,6 @@
 #include "World.h"
 
+#include "../renderers/Frustum.h"
 
 void World::init()
 {
@@ -41,7 +42,12 @@ void World::render(const Camera& camera)
 {
     m_block_renderer.draw(camera);
     
-    m_sector_manager.draw({0});
+    Frustum frustum;
+    frustum.getPlanes(camera.getProjectionViewMatrix());
+
+    uint32_t num_draws = 0;
+    m_sector_manager.draw(frustum, {0}, num_draws);
+    std::cout << "num_draws: " << num_draws << std::endl;
 }
 
 

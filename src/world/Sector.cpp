@@ -42,8 +42,9 @@ void Sector::makeMeshes()
     {            
         BlockPos block_pos = blocks_to_mesh.front();
         updateBlockNeighbours(block_pos);
-
-        glm::mat4 model = glm::scale(glm::mat4(1.0), glm::vec3(0.4, 0.4, 0.4));
+ 
+        //glm::mat4 model = glm::scale(glm::mat4(1.0), glm::vec3(0.4, 0.4, 0.4));
+        glm::mat4 model = glm::scale(glm::mat4(1.0), glm::vec3(1.0, 1.0, 1.0));
         model = glm::translate(model, glm::vec3(block_pos) * (float)BLOCK_SIZE);
 
         BlockNode node = {model/* glm::mat4(1.0) */, 
@@ -85,7 +86,7 @@ uint32_t Sector::getColumnIndex(const BlockPos& block_pos)
     return (block_pos.z*SECTOR_WIDTH) + block_pos.x;
 }
 
-void Sector::draw(const Uniforms& uniforms)
+void Sector::draw(const Frustum& frustum, const Uniforms& uniforms, uint32_t& num_draws)
 {
-    m_block_tree.draw(uniforms);
+    m_block_tree.draw(frustum, uniforms, num_draws);
 }

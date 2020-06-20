@@ -28,7 +28,7 @@ public:
     void generateWorld(const SectorPos& sector_pos, const BlockPos& block_pos);
 
     void update();
-    void draw(const Uniforms& uniforms);
+    void draw(const Frustum& frustum, const Uniforms& uniforms, uint32_t& num_draws);
 
 private:
     std::unordered_map<SectorPos, std::unique_ptr<Sector>, PositionHash> m_sectors;

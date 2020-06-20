@@ -16,7 +16,7 @@ private:
 public:
     BlockTree(const glm::uvec3& origin, const glm::uvec3& half_size) { m_origin = origin; m_half_size = half_size; };
 
-    void draw(const Uniforms& uniforms) ;
+    void draw(const Frustum& frustum, const Uniforms& uniforms, uint32_t& num_draws) ;
 
     uint8_t getOctantContainingPos(const BlockPos& pos) const;
     void addBlock(const BlockPos& pos, BlockNode& block_node);

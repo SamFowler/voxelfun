@@ -69,9 +69,9 @@ void SectorManager::update()
     sector->second->makeMeshes();
 }
 
-void SectorManager::draw(const Uniforms& uniforms)
+void SectorManager::draw(const Frustum& frustum, const Uniforms& uniforms, uint32_t& num_draws)
 {
     auto sector = m_sectors.find({0,0,0});
-    sector->second->draw(uniforms);
+    sector->second->draw(frustum, uniforms, num_draws);
 } 
 

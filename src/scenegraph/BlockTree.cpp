@@ -12,12 +12,14 @@ uint8_t BlockTree::getOctantContainingPos(const BlockPos& pos) const
 }
 
 
-void BlockTree::draw(const Uniforms& uniforms) 
+void BlockTree::draw(const Frustum& frustum, const Uniforms& uniforms, uint32_t& num_draws) 
 {
+
+
     for (int i = 0; i < 8; ++i)
     {
         if (m_children[i] != nullptr)
-            m_children[i]->draw(uniforms);
+            m_children[i]->draw(frustum, uniforms, num_draws);
     }
 };
 
