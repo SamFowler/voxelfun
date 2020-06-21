@@ -4,6 +4,8 @@
 
 #include "../scenegraph/BlockNode.h"
 
+#include "SectorManager.h"
+
 Block* Sector::addBlock(const BlockPos& position, const BlockMakeType& type)
 {
     std::vector<Voxel> voxels;
@@ -17,22 +19,17 @@ Block* Sector::addBlock(const BlockPos& position, const BlockMakeType& type)
  
 Block* Sector::addBlock(const BlockPos& block_pos, const std::vector<Voxel>& voxels)
 {
-    uint32_t block_index = getIndex(block_pos);
-    uint32_t column_index = getColumnIndex(block_pos);
-
-    if (m_block_column_details[column_index].isBlockEmpty(block_pos.y))
+    auto it = m_blocks.find(block_pos);
+    if ( it == m_blocks.cend() )
     {
-        m_blocks[block_index] = std::make_unique<Block>(voxels);
-        m_blocks[block_index]->updateAllNeighbours();
-
-        m_block_column_details[column_index].addBlock(block_pos.y);
-
         blocks_to_mesh.emplace(block_pos);
+        return m_blocks.emplace(block_pos, std::make_unique<Block>(voxels)).first->second.get();
     }
-    return m_blocks[block_index].get();
+    return nullptr;
+
 }
 
-void Sector::makeMeshes()
+void Sector::makeMeshes(const SectorManager* sector_manager, const SectorPos& sector_pos)
 {
 
     if (blocks_to_mesh.empty())
@@ -41,14 +38,14 @@ void Sector::makeMeshes()
     while (i < 3) 
     {            
         BlockPos block_pos = blocks_to_mesh.front();
-        updateBlockNeighbours(block_pos);
- 
+        m_blocks[block_pos]->updateAllNeighbours( sector_manager->getBlockNeighbours(sector_pos, block_pos) );
+        
         //glm::mat4 model = glm::scale(glm::mat4(1.0), glm::vec3(0.4, 0.4, 0.4));
         glm::mat4 model = glm::scale(glm::mat4(1.0), glm::vec3(1.0, 1.0, 1.0));
         model = glm::translate(model, glm::vec3(block_pos) * (float)BLOCK_SIZE);
 
         BlockNode node = {model/* glm::mat4(1.0) */, 
-                    BlockMeshGenerator::makeBlockVAO(*(m_blocks[getIndex(block_pos)].get() ), colours, BlockMeshGenerator::GREEDY_MESH)};
+                    BlockMeshGenerator::makeBlockVAO(*(m_blocks[block_pos].get() ), colours, BlockMeshGenerator::GREEDY_MESH)};
         m_block_tree.addBlock(block_pos, node);
 
         blocks_to_mesh.pop();
@@ -60,19 +57,14 @@ void Sector::makeMeshes()
 
 }
 
-void Sector::updateBlockNeighbours(const BlockPos& block_pos)
-{
-    unsigned int block_index = getIndex(block_pos);
-    m_blocks[block_index]->updateAllNeighbours();
-}
 
 Block* Sector::getBlock(const BlockPos& block_pos)
 {
-    uint32_t column_index = getColumnIndex(block_pos);
-    if (m_block_column_details[column_index].isBlockEmpty(block_pos.y))
-        return addBlock(block_pos, BlockMakeType::EMPTY_CHUNK);
+    auto it = m_blocks.find(block_pos);
+    if ( it != m_blocks.cend() )
+        return it->second.get();
     else
-        return m_blocks[getIndex(block_pos)].get();
+        return nullptr;
 }
 
 

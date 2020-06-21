@@ -7,9 +7,9 @@ void World::init()
 
     m_block_renderer.init();
 
-    for (int z = 0; z < 4; z++)
+    for (int z = 0; z < 8; z++)
     {
-        for (int x = 0; x < 4; x++)
+        for (int x = 0; x < 8; x++)
         {
             m_sector_manager.generateWorld({0,0,0}, {x,0,z});
         }

@@ -55,22 +55,24 @@ void Block::setVoxel(const VoxelPos& voxel_coord, const Voxel& voxel)
 }
 
 
-void Block::updateNeighbours(const VoxelPos& pos)
+
+void Block::updateNeighbours(const VoxelPos& pos, const std::array<const Block*, 6> block_neighbours)
 {
     Neighbours neighs;
 
-    neighs.setXMinus( (pos.x     == 0         ) ? false : (getVoxel({pos.x - 1, pos.y    , pos.z    }).isOpaque()) ) ;
-    neighs.setXPlus ( (pos.x + 1 == BLOCK_SIZE) ? false : (getVoxel({pos.x + 1, pos.y    , pos.z    }).isOpaque()) );
-    neighs.setYMinus( (pos.y     == 0         ) ? false : (getVoxel({pos.x    , pos.y - 1, pos.z    }).isOpaque()) );
-    neighs.setYPlus ( (pos.y + 1 == BLOCK_SIZE) ? false : (getVoxel({pos.x    , pos.y + 1, pos.z    }).isOpaque()) );
-    neighs.setZMinus( (pos.z     == 0         ) ? false : (getVoxel({pos.x    , pos.y    , pos.z - 1}).isOpaque()) );
-    neighs.setZPlus ( (pos.z + 1 == BLOCK_SIZE) ? false : (getVoxel({pos.x    , pos.y    , pos.z + 1}).isOpaque()) );
+    neighs.setXMinus( (pos.x     == 0         ) ? block_neighbours[0]->getVoxel({BLOCK_SIZE-1, pos.y       ,        pos.z}).isOpaque() : (getVoxel({pos.x - 1, pos.y    , pos.z    }).isOpaque()) ) ;
+    neighs.setXPlus ( (pos.x + 1 == BLOCK_SIZE) ? block_neighbours[1]->getVoxel({0           , pos.y       ,        pos.z}).isOpaque() : (getVoxel({pos.x + 1, pos.y    , pos.z    }).isOpaque()) );
+    neighs.setYMinus( (pos.y     == 0         ) ? block_neighbours[2]->getVoxel({pos.x       , BLOCK_SIZE-1,        pos.z}).isOpaque() : (getVoxel({pos.x    , pos.y - 1, pos.z    }).isOpaque()) );
+    neighs.setYPlus ( (pos.y + 1 == BLOCK_SIZE) ? block_neighbours[3]->getVoxel({pos.x       , 0           ,        pos.z}).isOpaque() : (getVoxel({pos.x    , pos.y + 1, pos.z    }).isOpaque()) );
+    neighs.setZMinus( (pos.z     == 0         ) ? block_neighbours[4]->getVoxel({pos.x       , pos.y       , BLOCK_SIZE-1}).isOpaque() : (getVoxel({pos.x    , pos.y    , pos.z - 1}).isOpaque()) );
+    neighs.setZPlus ( (pos.z + 1 == BLOCK_SIZE) ? block_neighbours[5]->getVoxel({pos.x       , pos.y       ,            0}).isOpaque() : (getVoxel({pos.x    , pos.y    , pos.z + 1}).isOpaque()) );
+    
     //TODO replace the "false" with a check into neighbour blocks
 
     m_voxel_neighbours[ getIndex(pos) ] = neighs;
 }
 
-void Block::updateAllNeighbours()
+void Block::updateAllNeighbours(const std::array<const Block*, 6> block_neighbours)
 {
     std::cout << "updating neighbours" << std::endl;
     //TODO test performance when looping 3 times like this or instead iterating through voxel vector
@@ -78,6 +80,6 @@ void Block::updateAllNeighbours()
     for (unsigned int y = 0; y < BLOCK_SIZE; y++)
         for (unsigned int z = 0; z < BLOCK_SIZE; z++)
             for (unsigned int x = 0; x < BLOCK_SIZE; x++)
-                updateNeighbours({x,y,z});
+                updateNeighbours({x,y,z}, block_neighbours);
 
 }

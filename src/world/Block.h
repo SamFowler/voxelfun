@@ -39,8 +39,8 @@ public:
     bool isBlockEdge  (const VoxelPos& voxel_coord) const; //TODO not sure this is needed
     bool isBlockEdge  (const uint32_t& voxel_index) const; //TODO not sure this is needed
 
-    void updateNeighbours(const VoxelPos& voxel_coord);
-    void updateAllNeighbours();
+    void updateNeighbours(const VoxelPos& voxel_coord, const std::array<const Block*, 6> block_neighbours);
+    void updateAllNeighbours(const std::array<const Block*, 6> block_neighbours);
 
 private:
     uint32_t getIndex   (const VoxelPos& voxel_coord) const;

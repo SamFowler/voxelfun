@@ -8,12 +8,13 @@
 
 #include "../scenegraph/BlockTree.h"
 
+class SectorManager;
 class Uniforms;
 
 class Sector
 {
 private:
-    std::array<std::unique_ptr<Block>, SECTOR_WIDTH*SECTOR_WIDTH*SECTOR_WIDTH> m_blocks; //16*8*16 [x,y,z]
+    std::unordered_map<BlockPos, std::unique_ptr<Block>, PositionHash> m_blocks; //16*8*16 [x,y,z]
     std::array<BlockColumnInfo, 256> m_block_column_details; //16*16 - each entry represents 1 column of voxels
 
     BlockTree m_block_tree = { {SECTOR_WIDTH/2, SECTOR_HEIGHT/2, SECTOR_WIDTH/2}, {SECTOR_WIDTH/2, SECTOR_HEIGHT/2, SECTOR_WIDTH/2} };
@@ -25,11 +26,10 @@ public:
 public:
     Block*  addBlock(const BlockPos& position, const BlockMakeType&);
     Block*  addBlock(const BlockPos& block_pos, const std::vector<Voxel>& voxels);
-    void updateBlockNeighbours(const BlockPos& block_pos);
 
     Block* getBlock(const BlockPos& block_pos);
 
-    void makeMeshes();
+    void makeMeshes(const SectorManager* sector_manager, const SectorPos& sector_pos);
 
     void draw(const Frustum& frustum, const Uniforms& uniforms, uint32_t& num_draws);
 

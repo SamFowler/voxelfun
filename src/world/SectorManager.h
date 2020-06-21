@@ -11,7 +11,10 @@ class Uniforms;
 class SectorManager
 {
 public:
-    SectorManager() : m_terrain_generator(WORLD_SEED) {};
+    SectorManager() : m_terrain_generator(WORLD_SEED) 
+    {
+        m_empty_block = std::make_unique<Block>(std::vector<Voxel>(BLOCK_VOLUME, {0, VoxelTypes::Empty}));
+    };
 
     void loadWorld(/* std::string file_name */);
     void loadSector(const SectorPos& sector_pos);
@@ -19,11 +22,13 @@ public:
     void editSectors(Input& input);
 
     Sector* addSector(const SectorPos& sector_pos);
-    Sector* getSector(const SectorPos& sector_pos);
+    Sector* getSector(const SectorPos& sector_pos) const;
     Sector* createSector(const SectorPos& sector_pos);
 
-    Block* getBlock (const SectorPos& sector_pos, const BlockPos& block_pos);
-    Voxel& getVoxel(const SectorPos& sector_pos, const BlockPos& block_pos, const VoxelPos& voxel_pos);
+    std::array<const Block*, 6> getBlockNeighbours(const SectorPos& sector_pos, const BlockPos& block_pos) const;
+
+    Block* getBlock (const SectorPos& sector_pos, const BlockPos& block_pos) const;
+    Voxel& getVoxel(const SectorPos& sector_pos, const BlockPos& block_pos, const VoxelPos& voxel_pos) const;
 
     void generateWorld(const SectorPos& sector_pos, const BlockPos& block_pos);
 
@@ -38,5 +43,6 @@ private:
 
     TerrainGenerator m_terrain_generator;
 
+    std::unique_ptr<Block> m_empty_block;
 
 };
