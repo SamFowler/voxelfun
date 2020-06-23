@@ -126,7 +126,7 @@ void meshRectangle(BlockMesh& mesh, const BlockMeshFace& rectangle, const Block&
 
     unsigned x,y,z;
 
-
+    std::array<uint8_t, 12> vertex_positions;
 
     if (direction == 0)
     {
@@ -135,39 +135,34 @@ void meshRectangle(BlockMesh& mesh, const BlockMeshFace& rectangle, const Block&
         z = rectangle.origin_j;
         if (normal_index == Y_MINUS_NORMAL_INDEX)
         {
-            mesh.vertices.push_back(face[0] + x );
-            mesh.vertices.push_back(face[1] + y);
-            mesh.vertices.push_back(face[2] + z  + rectangle.run_width-1 );
-
-            mesh.vertices.push_back(face[3] + x);
-            mesh.vertices.push_back(face[4] + y);
-            mesh.vertices.push_back(face[5] + z);
-
-            mesh.vertices.push_back(face[6] + x + rectangle.run_length-1 );
-            mesh.vertices.push_back(face[7] + y);
-            mesh.vertices.push_back(face[8] + z );
-
-            mesh.vertices.push_back(face[9]  + x + rectangle.run_length-1 );
-            mesh.vertices.push_back(face[10] + y);
-            mesh.vertices.push_back(face[11] + z + rectangle.run_width-1);
+            vertex_positions[0] = (face[0] + x );
+            vertex_positions[1] = (face[1] + y);
+            vertex_positions[2] = (face[2] + z  + rectangle.run_width-1 );
+            vertex_positions[3] = (face[3] + x);
+            vertex_positions[4] = (face[4] + y);
+            vertex_positions[5] = (face[5] + z);
+            vertex_positions[6] = (face[6] + x + rectangle.run_length-1 );
+            vertex_positions[7] = (face[7] + y);
+            vertex_positions[8] = (face[8] + z );
+            vertex_positions[9] = (face[9]  + x + rectangle.run_length-1 );
+            vertex_positions[10] = (face[10] + y);
+            vertex_positions[11] = (face[11] + z + rectangle.run_width-1);
         }
         else if (normal_index == Y_PLUS_NORMAL_INDEX)
         {
-            mesh.vertices.push_back(face[0] + x + rectangle.run_length-1 );
-            mesh.vertices.push_back(face[1] + y);
-            mesh.vertices.push_back(face[2] + z );
+            vertex_positions[0] = (face[0] + x + rectangle.run_length-1 );
+            vertex_positions[1] = (face[1] + y);
+            vertex_positions[2] = (face[2] + z );
+            vertex_positions[3] = (face[3] + x);
+            vertex_positions[4] = (face[4] + y);
+            vertex_positions[5] = (face[5] + z);
+            vertex_positions[6] = (face[6] + x );
+            vertex_positions[7] = (face[7] + y);
+            vertex_positions[8] = (face[8] + z + rectangle.run_width-1);
+            vertex_positions[9] = (face[9]  + x + rectangle.run_length-1 );
+            vertex_positions[10] = (face[10] + y);
+            vertex_positions[11] = (face[11] + z  + rectangle.run_width-1 );
 
-            mesh.vertices.push_back(face[3] + x);
-            mesh.vertices.push_back(face[4] + y);
-            mesh.vertices.push_back(face[5] + z);
-
-            mesh.vertices.push_back(face[6] + x );
-            mesh.vertices.push_back(face[7] + y);
-            mesh.vertices.push_back(face[8] + z + rectangle.run_width-1);
-
-            mesh.vertices.push_back(face[9]  + x + rectangle.run_length-1 );
-            mesh.vertices.push_back(face[10] + y);
-            mesh.vertices.push_back(face[11] + z  + rectangle.run_width-1 );
         }
     }
     else if (direction == 1)
@@ -178,40 +173,35 @@ void meshRectangle(BlockMesh& mesh, const BlockMeshFace& rectangle, const Block&
 
         if (normal_index == X_MINUS_NORMAL_INDEX)
         {
-            mesh.vertices.push_back(face[0] + x );  
-            mesh.vertices.push_back(face[1] + y );
-            mesh.vertices.push_back(face[2] + z + rectangle.run_length-1 );
 
-            mesh.vertices.push_back(face[3] + x );
-            mesh.vertices.push_back(face[4] + y + rectangle.run_width-1 );
-            mesh.vertices.push_back(face[5] + z + rectangle.run_length-1 );
-
-            mesh.vertices.push_back(face[6] + x );
-            mesh.vertices.push_back(face[7] + y + rectangle.run_width-1 );
-            mesh.vertices.push_back(face[8] + z );
-
-            mesh.vertices.push_back(face[9]  + x );
-            mesh.vertices.push_back(face[10] + y  );
-            mesh.vertices.push_back(face[11] + z );
+            vertex_positions[0] = (face[0] + x );  
+            vertex_positions[1] = (face[1] + y );
+            vertex_positions[2] = (face[2] + z + rectangle.run_length-1 );
+            vertex_positions[3] = (face[3] + x );
+            vertex_positions[4] = (face[4] + y + rectangle.run_width-1 );
+            vertex_positions[5] = (face[5] + z + rectangle.run_length-1 );
+            vertex_positions[6] = (face[6] + x );
+            vertex_positions[7] = (face[7] + y + rectangle.run_width-1 );
+            vertex_positions[8] = (face[8] + z );
+            vertex_positions[9] = (face[9]  + x );
+            vertex_positions[10] = (face[10] + y  );
+            vertex_positions[11] = (face[11] + z );
         } 
         else if (normal_index == X_PLUS_NORMAL_INDEX)
         {
 
-            mesh.vertices.push_back(face[0] + x );  
-            mesh.vertices.push_back(face[1] + y );
-            mesh.vertices.push_back(face[2] + z );
-
-            mesh.vertices.push_back(face[3] + x );
-            mesh.vertices.push_back(face[4] + y + rectangle.run_width-1 );
-            mesh.vertices.push_back(face[5] + z );
-
-            mesh.vertices.push_back(face[6] + x );
-            mesh.vertices.push_back(face[7] + y + rectangle.run_width-1 );
-            mesh.vertices.push_back(face[8] + z + rectangle.run_length-1 );
-
-            mesh.vertices.push_back(face[9]  + x );
-            mesh.vertices.push_back(face[10] + y  );
-            mesh.vertices.push_back(face[11] + z + rectangle.run_length-1 );
+            vertex_positions[0] = (face[0] + x );  
+            vertex_positions[1] = (face[1] + y );
+            vertex_positions[2] = (face[2] + z );
+            vertex_positions[3] = (face[3] + x );
+            vertex_positions[4] = (face[4] + y + rectangle.run_width-1 );
+            vertex_positions[5] = (face[5] + z );
+            vertex_positions[6] = (face[6] + x );
+            vertex_positions[7] = (face[7] + y + rectangle.run_width-1 );
+            vertex_positions[8] = (face[8] + z + rectangle.run_length-1 );
+            vertex_positions[9] = (face[9]  + x );
+            vertex_positions[10] = (face[10] + y  );
+            vertex_positions[11] = (face[11] + z + rectangle.run_length-1 );
         }
     }
     else if (direction == 2)
@@ -222,55 +212,46 @@ void meshRectangle(BlockMesh& mesh, const BlockMeshFace& rectangle, const Block&
 
         if (normal_index == Z_MINUS_NORMAL_INDEX)
         {
-            mesh.vertices.push_back(face[0] + x );
-            mesh.vertices.push_back(face[1] + y  );
-            mesh.vertices.push_back(face[2] + z );
 
-            mesh.vertices.push_back(face[3] + x );
-            mesh.vertices.push_back(face[4] + y + rectangle.run_width-1);
-            mesh.vertices.push_back(face[5] + z );
-
-            mesh.vertices.push_back(face[6] + x + rectangle.run_length-1);
-            mesh.vertices.push_back(face[7] + y + rectangle.run_width-1);
-            mesh.vertices.push_back(face[8] + z );
-
-            mesh.vertices.push_back(face[9]  + x + rectangle.run_length-1 );
-            mesh.vertices.push_back(face[10] + y );
-            mesh.vertices.push_back(face[11] + z );
+            vertex_positions[0] = (face[0] + x );
+            vertex_positions[1] = (face[1] + y  );
+            vertex_positions[2] = (face[2] + z );
+            vertex_positions[3] = (face[3] + x );
+            vertex_positions[4] = (face[4] + y + rectangle.run_width-1);
+            vertex_positions[5] = (face[5] + z );
+            vertex_positions[6] = (face[6] + x + rectangle.run_length-1);
+            vertex_positions[7] = (face[7] + y + rectangle.run_width-1);
+            vertex_positions[8] = (face[8] + z );
+            vertex_positions[9] = (face[9]  + x + rectangle.run_length-1 );
+            vertex_positions[10] = (face[10] + y );
+            vertex_positions[11] = (face[11] + z );
         }
         else if (normal_index == Z_PLUS_NORMAL_INDEX)
         {
-            mesh.vertices.push_back(face[0] + x + rectangle.run_length-1);
-            mesh.vertices.push_back(face[1] + y  + rectangle.run_width-1 );
-            mesh.vertices.push_back(face[2] + z );
-
-            mesh.vertices.push_back(face[3] + x );
-            mesh.vertices.push_back(face[4] + y + rectangle.run_width-1);
-            mesh.vertices.push_back(face[5] + z );
-
-            mesh.vertices.push_back(face[6] + x );
-            mesh.vertices.push_back(face[7] + y );
-            mesh.vertices.push_back(face[8] + z );
-
-            mesh.vertices.push_back(face[9]  + x + rectangle.run_length-1 );
-            mesh.vertices.push_back(face[10] + y );
-            mesh.vertices.push_back(face[11] + z );
+            
+            vertex_positions[0] = (face[0] + x + rectangle.run_length-1);
+            vertex_positions[1] = (face[1] + y  + rectangle.run_width-1 );
+            vertex_positions[2] = (face[2] + z );
+            vertex_positions[3] = (face[3] + x );
+            vertex_positions[4] = (face[4] + y + rectangle.run_width-1);
+            vertex_positions[5] = (face[5] + z );
+            vertex_positions[6] = (face[6] + x );
+            vertex_positions[7] = (face[7] + y );
+            vertex_positions[8] = (face[8] + z );
+            vertex_positions[9] = (face[9]  + x + rectangle.run_length-1 );
+            vertex_positions[10] = (face[10] + y );
+            vertex_positions[11] = (face[11] + z );
         }
     }
-    //rectangle.voxel.setType(VoxelTypes::Grass);
-    Colour colour = sector_colours.getColour(rectangle.voxel);
-    //Colour colour = {255, 0, 255, 255};
 
     for (int k = 0; k < 4; k++)
     {
-        mesh.colours.push_back(colour.r/255.0f);
-        mesh.colours.push_back(colour.g/255.0f);
-        mesh.colours.push_back(colour.b/255.0f);
-        mesh.colours.push_back(colour.a/255.0f);
+        GLuint vertex_data = 
+            vertex_positions[k*3] | vertex_positions[(k*3)+1] << 6 | vertex_positions[(k*3)+2] << 12 | 
+            rectangle.voxel.getColourId() << 18 | rectangle.voxel.getType() << 24 | normal_index << 29;
 
-        mesh.normals.push_back(normal_index); 
+        mesh.vertex_data.push_back(vertex_data);
     }
-
 
     mesh.elements.push_back(element_count);
     mesh.elements.push_back(element_count + 1);
@@ -637,16 +618,16 @@ void addFace(BlockMesh& mesh, const Voxel& voxel, const VoxelPos& voxel_pos, con
         int index = 0;
         for (int i = 0; i < 4; i++)
         {
-            mesh.vertices.push_back(face_verts[index++] + voxel_pos.x);
-            mesh.vertices.push_back(face_verts[index++] + voxel_pos.y);
-            mesh.vertices.push_back(face_verts[index++] + voxel_pos.z);
+            // mesh.vertices.push_back(face_verts[index++] + voxel_pos.x);
+            // mesh.vertices.push_back(face_verts[index++] + voxel_pos.y);
+            // mesh.vertices.push_back(face_verts[index++] + voxel_pos.z);
 
-            mesh.colours.push_back(voxel_colour.r/255.0f);
-            mesh.colours.push_back(voxel_colour.g/255.0f);
-            mesh.colours.push_back(voxel_colour.b/255.0f);
-            mesh.colours.push_back(voxel_colour.a/255.0f);
+            // mesh.colours.push_back(voxel_colour.r/255.0f);
+            // mesh.colours.push_back(voxel_colour.g/255.0f);
+            // mesh.colours.push_back(voxel_colour.b/255.0f);
+            // mesh.colours.push_back(voxel_colour.a/255.0f);
 
-            mesh.normals.push_back(normal_index);          
+            // mesh.normals.push_back(normal_index);          
         }
 
         // add elements for two polygons representing the voxel face

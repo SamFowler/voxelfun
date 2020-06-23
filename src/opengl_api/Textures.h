@@ -1,4 +1,5 @@
 /* 
+Adapted from:
 https://github.com/Hopson97/open-builder/blob/master/LICENSE
 MIT License
 
@@ -28,51 +29,27 @@ SOFTWARE.
 
 #include "../pch/pch_std.h"
 
+class SectorColours;
 
-class DrawableVAO 
-{
-public:
-    DrawableVAO(GLuint vao_id, GLsizei num_elements);
-/*     ~DrawableVAO();
- */
-    void bindAndDraw(GLenum draw_mode = GL_TRIANGLES) const;
-    void bind() const;
-    void draw(GLenum draw_mode = GL_TRIANGLES) const;
-    void drawWire() const;
-private:
-    const GLuint m_id = 0;
-    const GLsizei m_num_elements = 0;
-};
+class Texture2d {
+    public:
+    Texture2d();
+    ~Texture2d();
 
-class VertexArrayObject 
-{
-public:
-    VertexArrayObject();
-    ~VertexArrayObject();
+    Texture2d(Texture2d&& other);
+    Texture2d& operator=(Texture2d&& other);
 
-    VertexArrayObject(VertexArrayObject&& other);
-    VertexArrayObject& operator=(VertexArrayObject&& other);
+    Texture2d(const Texture2d&) = delete;
+    Texture2d& operator=(const Texture2d&) = delete;
 
-    VertexArrayObject(const VertexArrayObject&) = delete;
-    VertexArrayObject& operator=(const VertexArrayObject&) = delete;
-
-    void create();
+    void create(const SectorColours& sector_colours);
     void destroy();
     void bind() const;
-    void draw(GLenum draw_mode = GL_TRIANGLES) const;
-
-    DrawableVAO getDrawable() const;
-
-    void addVertexBuffer(int num_elements_per_vertex, const std::vector<GLfloat>& vertices);
-    void addVertexBuffer(int num_elements_per_vertex, const std::vector<GLuint>& vertices);
-
-    void addElementBuffer(const std::vector<GLuint>& vertex_data);
+    bool textureExists() const;
 
 private:
     void reset();
 
-    GLuint m_id = 0;
-    GLsizei m_num_elements = 0;
-    std::vector<GLuint> m_buffer_objects;
-
+    GLuint m_handle = 0;
+    bool m_has_texture = false;
 };

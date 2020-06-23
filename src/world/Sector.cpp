@@ -80,5 +80,6 @@ uint32_t Sector::getColumnIndex(const BlockPos& block_pos)
 
 void Sector::draw(const Frustum& frustum, const Uniforms& uniforms, uint32_t& num_draws)
 {
+    colours.texture.bind();
     m_block_tree.draw(frustum, uniforms, num_draws);
 }

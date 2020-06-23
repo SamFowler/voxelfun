@@ -12,9 +12,6 @@ public:
     VertexArrayObject createBuffer();
     VertexArrayObject createWireBuffer();
 
-    std::vector<GLuint> vertices;
-    std::vector<GLfloat> colours;
-    std::vector<GLuint> normals;
-
+    std::vector<GLuint> vertex_data;
     std::vector<GLuint> elements;
 };

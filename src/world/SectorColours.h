@@ -4,6 +4,7 @@
 
 #include "Colour.h"
 #include "Voxel.h"
+#include "../opengl_api/Textures.h"
 
 class SectorColours
 {
@@ -13,7 +14,8 @@ private:
 
     //pair for each voxel type holding whether there is a cleared colour id to be filled, or if not the max colour id to use
     std::vector<std::queue<ColourID> > m_next_colour_ids;
-
+public:
+    Texture2d texture;
 
 public:
     SectorColours()
@@ -23,6 +25,16 @@ public:
 
         addColour(VoxelTypes::Empty, {0, 0, 0, 0});
         addColour(VoxelTypes::Debug, {255, 0, 255, 255});
+    }
+
+    void createTexture()
+    {
+        texture.create(*this);
+    }
+
+    const std::vector< std::vector< Colour> >& getColoursRef() const
+    {
+        return m_colours;
     }
 
     ColourID addColour(const VoxelTypes& voxel_type, const Colour& colour) 
@@ -61,6 +73,8 @@ public:
     {
         return m_colours[voxel.getType()][voxel.getColourId()];
     }
+
+
 
 private:
     bool inBounds(const Voxel& voxel) const

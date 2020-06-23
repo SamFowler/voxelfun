@@ -18,7 +18,7 @@ double TerrainGenerator::getNoise(OpenSimplexNoise& simplex_gen, const glm::vec2
 double TerrainGenerator::getNoise(OpenSimplexNoise& simplex_gen, const glm::vec3& pos)
 {
     return getNoise(simplex_gen, {pos.x, pos.z});
-}
+} 
 
 void TerrainGenerator::addWorldColours(Sector& sector)
 {
@@ -26,6 +26,8 @@ void TerrainGenerator::addWorldColours(Sector& sector)
     sector.colours.addColour(VoxelTypes::Snow,  {240, 240, 240, 255});
     sector.colours.addColour(VoxelTypes::Water, {0, 0, 130, 255}    );
     sector.colours.addColour(VoxelTypes::Stone, {180, 180, 180, 255});
+ 
+    sector.colours.createTexture();
 }
 
 void TerrainGenerator::generateColumn(Sector& sector, const SectorPos& sector_pos, const BlockPos& block_pos)
@@ -102,6 +104,7 @@ void TerrainGenerator::generateColumn(Sector& sector, const SectorPos& sector_po
     }
  
     uint32_t height_of_block;
+    uint32_t voxel_height;
     uint32_t voxel_y;
     Block *block, *below_block;
     int32_t block_height_index;
@@ -111,21 +114,33 @@ void TerrainGenerator::generateColumn(Sector& sector, const SectorPos& sector_po
         for (uint32_t x = 0; x < BLOCK_SIZE; x++)
         {
 
-            height_of_block = block_height_map[z][x] / BLOCK_SIZE;
+            voxel_height = block_height_map[z][x];    
+
+            height_of_block = voxel_height / BLOCK_SIZE;
 
             block_height_index = height_of_block - min_val;
 
             block = column_blocks[block_height_index];
 
-            voxel_y = block_height_map[z][x] % BLOCK_SIZE;
+            voxel_y = voxel_height % BLOCK_SIZE;
             for (uint32_t y = 0; y <= voxel_y; y++)
-                block->setVoxel({x,y,z}, grass);
+            {   
+                if (voxel_height > 150)
+                    block->setVoxel({x,y,z}, snow);
+                else if (voxel_height <= 150)
+                    block->setVoxel({x,y,z}, grass);
+            }
 
             while (--block_height_index >= 0)
             {
                 block = column_blocks[block_height_index];
                 for (uint32_t y = 0; y < BLOCK_SIZE; y++)
-                    block->setVoxel({x,y,z}, grass);
+                {
+                    if (voxel_height > 150)
+                        block->setVoxel({x,y,z}, snow);
+                    else if (voxel_height <= 150)
+                        block->setVoxel({x,y,z}, grass);
+                }
             }
 
         } // end x voxel loop

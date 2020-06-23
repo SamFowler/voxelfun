@@ -58,7 +58,7 @@ public:
     */
     void setColourId  (const ColourID colour_id)       { data = (data & ~0x3F)      | colour_id;                       } // colour is bits 0-5
     void setType      (const VoxelTypes voxel_type)    { 
-        data = (data & ~0xFC0)     | (voxel_type << 6); 
+        data = (data & ~0x7C0)     | (voxel_type << 6); 
         setFlags(voxel_type);
         } // type is bits 6-11
     void setEmpty     (const bool is_empty)            { is_empty     ? data |= (1 << 12) : data &= ~(1 << 12); } // empty is 12th bit
@@ -114,7 +114,7 @@ public:
 
     //uint16_t       getColourHash() const { return data &      0xFFF; }
     const ColourID       getColourId  () const { return data &       0x3F; }
-    const VoxelType      getType      () const { return (data &      0xFC0) >> 6; }
+    const VoxelType      getType      () const { return (data &      0x7C0) >> 6; } //Spare bit at 0x800 
     const bool           isEmpty      () const { return data &     0x1000; }
     const bool           isCollidable () const { return data &     0x2000; }
     const bool           isOpaque     () const { return data &     0x4000; }
